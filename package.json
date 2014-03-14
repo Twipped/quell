@@ -1,0 +1,39 @@
+{
+  "name": "seaquell",
+  "version": "0.1.2",
+  "description": "A no-frills active record implementation for node-mysql.",
+  "main": "seaquell.js",
+  "scripts": {
+    "test": "istanbul cover nodeunit -- tests",
+    "docs": "node makedocs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChiperSoft/seaquell.git"
+  },
+  "keywords": [
+    "sql",
+    "mysql",
+    "query",
+    "query-builder",
+    "parameter"
+  ],
+  "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChiperSoft/seaquell/issues"
+  },
+  "homepage": "https://github.com/ChiperSoft/seaquell",
+  "devDependencies": {
+    "nodeunit": "~0.8.2",
+    "docdown": "git://github.com/ChiperSoft/docdown.git#master",
+    "nodeunit-dataprovider": "0.0.1",
+    "istanbul": "^0.2.6"
+  },
+  "dependencies": {
+    "queryize": "^0.1.2",
+    "moment": "^2.5.1",
+    "proxmis": "^0.1.1",
+    "es6-promise": "^0.1.1"
+  }
+}
