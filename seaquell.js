@@ -59,56 +59,6 @@ var modelBase = seaquell._model = function (data, options) {
 
 util.inherits(modelBase, EventEmitter);
 
-modelBase.find = function (where) {
-	var model = this;
-	var q = queryize().select().from(this.tablename);
-	if (where) {
-		q.where(where);
-	}
-
-	var run = q.run;
-	q.run = function (conn, callback) {
-		switch (arguments.length) {
-		case 2:
-			break;
-		case 1:
-			if (typeof conn === 'function') {
-				callback = conn;
-				conn = undefined;
-			}
-			break;
-		case 0:
-			conn = model.connection || seaquell.connection;
-			break;
-		}
-
-		if (!conn) {
-			throw new Error('You must provide a node-mysql connection or pool for this query to use.');
-		}
-
-		var defer = proxmis();
-		run.call(q, conn || model.connection || seaquell.connection, defer);
-
-		return defer.then(function (results) {
-			results = results.map(function (row) {
-				return new model(row);
-			});
-
-			if (callback) {
-				callback(null, results);
-			}
-			return results;
-		}).catch(function (err) {
-			if (callback) {
-				callback(err);
-			}
-			return Promise.reject(err);
-		});
-	};
-
-	return q;
-};
-
 extend(modelBase.prototype, {
 	data: null,
 	exists: null,
@@ -190,23 +140,27 @@ extend(modelBase.prototype, {
 		return this;
 	},
 	unset: function (field, options) {
-		return this.set(attr, void 0, _.extend({}, options, {unset: true}));
+		return this.set(field, void 0, extend({}, options, {unset: true}));
 	},
 	has: function (field) {
-		return this.get('field', false) !== undefined;
+		return this.get(field, false) !== undefined;
 	},
 	load: function (value, field, callback) {
 		switch (arguments.length) {
 		case 3:
 			break;
 		case 2:
-			callback = field;
-			field = undefined;
+			if (typeof field === 'function') {
+				callback = field;
+				field = undefined;
+			}
 			break;
 		case 1:
-			callback = value;
-			value = undefined;
-			field = undefined;
+			if (typeof value === 'function') {
+				callback = value;
+				value = undefined;
+				field = undefined;
+			}
 		}
 
 		var defer;
@@ -234,7 +188,7 @@ extend(modelBase.prototype, {
 	},
 
 	save: function (options, callback) {
-		var defer;
+		var defer, self = this;
 
 		if (typeof options === 'function') {
 			callback = options;
@@ -245,7 +199,7 @@ extend(modelBase.prototype, {
 		}
 
 		if (options.replace) {
-			var ai = this._schemaIsAutoIncrementing();
+			var ai = this.schema && this.schema.autoincrement;
 			if (ai) {
 				this.unset(ai);
 			}
@@ -254,12 +208,12 @@ extend(modelBase.prototype, {
 
 		}
 
-		return Promise.cast(this.exists === null ? this._promiseIfExists() : this.exists)
+		return Promise.cast(self.exists === null ? self._promiseIfExists() : self.exists)
 			.then(function (exists) {
 				if (exists) {
-					return this.update(options);
+					return self.update(options, callback);
 				} else {
-					return this.insert(options);
+					return self.insert(options, callback);
 				}
 			});
 	},
@@ -274,7 +228,7 @@ extend(modelBase.prototype, {
 		}
 
 		var self = this;
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			var write = {},
 				fields = Object.keys(self.data),
 				field, type,
@@ -322,7 +276,7 @@ extend(modelBase.prototype, {
 		}
 
 		var self = this;
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			var lookup = {},
 				write = {},
 				fields = Object.keys(self.data),
@@ -378,7 +332,7 @@ extend(modelBase.prototype, {
 		}
 
 		var self = this;
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			var lookup = {},
 				fields = Object.keys(self.data),
 				field, type,
@@ -417,7 +371,7 @@ extend(modelBase.prototype, {
 
 
 	_loadWithExisting: function () {
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			if (!self.schema.primaries.length) {
 				throw new Error('Could not load seaquell model using existing data; table has no primary keys.');
 			}
@@ -442,7 +396,7 @@ extend(modelBase.prototype, {
 	},
 
 	_loadWithPrimaryKey: function (value) {
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			if (!self.schema.primaries.length) {
 				throw new Error('Could not load seaquell model using existing data; table has no primary keys.');
 			}
@@ -462,7 +416,7 @@ extend(modelBase.prototype, {
 	},
 
 	_loadWithSingleColumn: function (value, field) {
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			var type = self.schema.columns[field],
 				lookup = {};
 
@@ -477,7 +431,7 @@ extend(modelBase.prototype, {
 	},
 
 	_loadWithMultiColumn: function (search) {
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			if (typeof search !== 'object' || !Object.keys(search).length) {
 				throw new Error('Could not load seaquell model; provided data was empty or not an object.');
 			}
@@ -511,7 +465,9 @@ extend(modelBase.prototype, {
 			// If no results were returned, then the row wasn't found and we resolve with false.
 			if (results.length) {
 				self.exists = true;
-				return self.set(results[0]);
+				self.set(results[0]);
+				self.changed = {};
+				return self;
 			} else {
 				return false;
 			}
@@ -533,7 +489,7 @@ extend(modelBase.prototype, {
 
 	_promiseIfExists: function () {
 		var self = this;
-		return this._promiseSchema().then(function () {
+		return this._promiseValidateSchema().then(function () {
 			var lookup = {},
 				key,
 				i = 0,
@@ -569,8 +525,12 @@ extend(modelBase.prototype, {
 		});
 	},
 
-	_promiseSchema: function () {
+	_promiseValidateSchema: function () {
 		var self = this;
+
+		if (!this.connection) {
+			throw new Error('Seaquell model does not have a MySQL connection or pool defined.');
+		}
 
 		// if we have a schema already marked as good, just continue the callback chain
 		if (this.schema && this.schema.loaded) {
@@ -594,10 +554,6 @@ extend(modelBase.prototype, {
 		} else {
 			return Promise.resolve();
 		}
-	},
-
-	_schemaIsAutoIncrementing: function () {
-		return this.schema && this.schema.autoincrement;
 	}
 });
 
@@ -645,14 +601,9 @@ seaquell._promiseQueryRun = function (query, data, mysql) {
 
 
 seaquell._promiseTableSchema = function (tablename, mysql) {
-	var defer = proxmis(callback);
+	var defer = proxmis();
 
-	// if we received an array, assume this is a pre-fetched DESCRIBE call
-	if (Array.isArray(tablename)) {
-		defer(null, tablename);
-	} else {
-		mysql.query('DESCRIBE '+tablename, defer);
-	}
+	mysql.query('DESCRIBE '+tablename, defer);
 
 	return defer.then(function (results) {
 		var schema = {
@@ -675,14 +626,14 @@ seaquell._promiseTableSchema = function (tablename, mysql) {
 			}
 			
 			else if ((matches = row.Type.match(/^(decimal|float|double)\((\d+),(\d+)\)/))) {
-				column.length = parseInt(matches[2], 10);
+				column.size = parseInt(matches[2], 10);
 				column.precision = parseInt(matches[3], 10);
 				column.unsigned = row.Type.indexOf('unsigned') >= 0;
 				column = types[matches[1].toUpperCase()](column);
 			}
 
-			else if ((matches = row.Type.match(/^((?:big|medium|small|tiny)?int(?:eger))\((\d+)\)/))) {
-				column.length = parseInt(matches[2], 10);
+			else if ((matches = row.Type.match(/^((?:big|medium|small|tiny)?int(?:eger)?)\((\d+)\)/))) {
+				column.size = parseInt(matches[2], 10);
 				column.unsigned = row.Type.indexOf('unsigned') >= 0;
 				column = types[matches[1].toUpperCase()](column);
 			}
@@ -693,14 +644,18 @@ seaquell._promiseTableSchema = function (tablename, mysql) {
 			}
 
 			else if ((matches = row.Type.match(/^((?:var)?char)\((\d+)\)/))) {
-				column.length = parseInt(matches[2], 10);
+				column.size = parseInt(matches[2], 10);
 				column = types[matches[1].toUpperCase()](column);
 			}
 
 			//didn't find a known type. Split the type field by opening parens to get the type name without other info.
 			else {
-				column.type = row.Type.split('(')[0];
-				column = types.UNKNOWN(column);
+				column.type = row.Type.split('(')[0].toUpperCase();
+				if (types[column.type]) {
+					column = types[column.type](column);
+				} else {
+					column = types.UNKNOWN(column);
+				}
 			}
 
 			schema.columns[row.Field] = column;
@@ -716,6 +671,56 @@ seaquell._promiseTableSchema = function (tablename, mysql) {
 
 		return schema;
 	});
+};
+
+modelBase.find = function (where) {
+	var model = this;
+	var q = queryize().select().from(this.tablename);
+	if (where) {
+		q.where(where);
+	}
+
+	var run = q.run;
+	q.run = function (conn, callback) {
+		switch (arguments.length) {
+		case 2:
+			break;
+		case 1:
+			if (typeof conn === 'function') {
+				callback = conn;
+				conn = undefined;
+			}
+			break;
+		case 0:
+			conn = model.connection || seaquell.connection;
+			break;
+		}
+
+		if (!conn) {
+			throw new Error('You must provide a node-mysql connection or pool for this query to use.');
+		}
+
+		var defer = proxmis();
+		run.call(q, conn || model.connection || seaquell.connection, defer);
+
+		return defer.then(function (results) {
+			results = results.map(function (row) {
+				return new model(row);
+			});
+
+			if (callback) {
+				callback(null, results);
+			}
+			return results;
+		}).catch(function (err) {
+			if (callback) {
+				callback(err);
+			}
+			return Promise.reject(err);
+		});
+	};
+
+	return q;
 };
 
 /** Utility Functions *******************************************************************************************/
