@@ -1,4 +1,4 @@
-var seaquell = require('../seaquell');
+var quell = require('../quell');
 var assign = require('lodash-node/modern/objects/assign');
 var each = require('lodash-node/modern/collections/forEach');
 var Promise = require('es6-promise').Promise;
@@ -40,25 +40,25 @@ exports['_promiseTableSchema 1'] = function (test) {
 
 	var expected = {
 		columns: {
-			member_id: seaquell.INT({
+			member_id: quell.INT({
 				size: 11,
 				unsigned: true,
 				NULL: false
 			}),
-			email: seaquell.VARCHAR({
+			email: quell.VARCHAR({
 				size: 255,
 				NULL: false
 			}),
-			username: seaquell.VARCHAR(200),
-			fullname: seaquell.TINYTEXT(),
-			website: seaquell.TEXT(),
-			last_updated: seaquell.TIMESTAMP(),
-			last_login: seaquell.DATETIME(),
-			validated: seaquell.TINYINT({
+			username: quell.VARCHAR(200),
+			fullname: quell.TINYTEXT(),
+			website: quell.TEXT(),
+			last_updated: quell.TIMESTAMP(),
+			last_login: quell.DATETIME(),
+			validated: quell.TINYINT({
 				NULL: false
 			}),
-			membership_type: seaquell.ENUM('Free','None','Credited','Monthly','Yearly'),
-			balance: seaquell.DECIMAL(8,4)
+			membership_type: quell.ENUM('Free','None','Credited','Monthly','Yearly'),
+			balance: quell.DECIMAL(8,4)
 		},
 
 		primaries: ['member_id'],
@@ -66,7 +66,7 @@ exports['_promiseTableSchema 1'] = function (test) {
 		loaded: true
 	};
 
-	seaquell._promiseTableSchema('TABLENAME', mockConnection).then(function (actual) {
+	quell._promiseTableSchema('TABLENAME', mockConnection).then(function (actual) {
 		test.deepEqual(Object.keys(actual.columns), Object.keys(expected.columns));
 		each(actual.columns, function (actualColumn, columnName) {
 			test.deepEqual(flattenObject(actualColumn), flattenObject(expected.columns[columnName]), columnName);
@@ -96,18 +96,18 @@ exports['_promiseTableSchema 2'] = function (test) {
 
 	var expected = {
 		columns: {
-			member_id: seaquell.INT({
+			member_id: quell.INT({
 				size: 11,
 				unsigned: true,
 				NULL: false
 			}),
-			type: seaquell.ENUM({options: ['Profile','Billing','Shipping','Other'], NULL: false}),
-			address_1: seaquell.TINYTEXT(),
-			address_2: seaquell.TINYTEXT(),
-			city: seaquell.VARCHAR(100),
-			state: seaquell.VARCHAR(10),
-			zip: seaquell.VARCHAR(5),
-			zip4: seaquell.VARCHAR(4)
+			type: quell.ENUM({options: ['Profile','Billing','Shipping','Other'], NULL: false}),
+			address_1: quell.TINYTEXT(),
+			address_2: quell.TINYTEXT(),
+			city: quell.VARCHAR(100),
+			state: quell.VARCHAR(10),
+			zip: quell.VARCHAR(5),
+			zip4: quell.VARCHAR(4)
 		},
 
 		primaries: ['member_id', 'type'],
@@ -115,7 +115,7 @@ exports['_promiseTableSchema 2'] = function (test) {
 		loaded: true
 	};
 
-	seaquell._promiseTableSchema('TABLENAME', mockConnection).then(function (actual) {
+	quell._promiseTableSchema('TABLENAME', mockConnection).then(function (actual) {
 		test.deepEqual(Object.keys(actual.columns), Object.keys(expected.columns));
 		each(actual.columns, function (actualColumn, columnName) {
 			test.deepEqual(flattenObject(actualColumn), flattenObject(expected.columns[columnName]), columnName);
@@ -135,7 +135,7 @@ exports['_promiseTableSchema 2'] = function (test) {
 
 exports['_promiseValidateSchema, missing connection'] = function (test) {
 
-	var Model = seaquell('users');
+	var Model = quell('users');
 
 	var model = new Model();
 
@@ -155,16 +155,16 @@ exports['_promiseValidateSchema, valid'] = function (test) {
 		}
 	};
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		connection: mockConnection,
 		schema: {
 			columns: {
-				id: seaquell.INT({
+				id: quell.INT({
 					size: 11,
 					unsigned: true,
 					NULL: false
 				}),
-				name: seaquell.VARCHAR(100)
+				name: quell.VARCHAR(100)
 			},
 			primaries: ['id'],
 			autoincrement: 'id'
@@ -191,16 +191,16 @@ exports['_promiseValidateSchema, valid (generated)'] = function (test) {
 		}
 	};
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		connection: mockConnection,
 		schema: {
 			columns: {
-				id: seaquell.INT({
+				id: quell.INT({
 					size: 11,
 					unsigned: true,
 					NULL: false
 				}),
-				name: seaquell.VARCHAR(100)
+				name: quell.VARCHAR(100)
 			},
 			primaries: ['id'],
 			autoincrement: 'id',
@@ -222,16 +222,16 @@ exports['_promiseValidateSchema, valid (generated)'] = function (test) {
 
 exports['_promiseValidateSchema, invalid'] = {
 	setUp: function (done) {
-		this._promiseTableSchemaBackup = seaquell._promiseTableSchema;
-		seaquell._promiseTableSchema = function () {
+		this._promiseTableSchemaBackup = quell._promiseTableSchema;
+		quell._promiseTableSchema = function () {
 			return Promise.resolve({
 				columns: {
-					id: seaquell.INT({
+					id: quell.INT({
 						size: 11,
 						unsigned: true,
 						NULL: false
 					}),
-					name: seaquell.VARCHAR(100)
+					name: quell.VARCHAR(100)
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -250,16 +250,16 @@ exports['_promiseValidateSchema, invalid'] = {
 			}
 		};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT({
+					id: quell.INT({
 						size: 11,
 						unsigned: true,
 						NULL: false
 					}),
-					name: seaquell.VARCHAR(100)
+					name: quell.VARCHAR(100)
 				}
 			}
 		});
@@ -284,7 +284,7 @@ exports['_promiseValidateSchema, invalid'] = {
 			}
 		};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {}
 		});
@@ -309,7 +309,7 @@ exports['_promiseValidateSchema, invalid'] = {
 			}
 		};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection
 		});
 
@@ -326,7 +326,7 @@ exports['_promiseValidateSchema, invalid'] = {
 	},
 
 	tearDown: function (done) {
-		seaquell._promiseTableSchema = this._promiseTableSchemaBackup;
+		quell._promiseTableSchema = this._promiseTableSchemaBackup;
 		done();
 	}
 };

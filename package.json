@@ -1,29 +1,31 @@
 {
-  "name": "seaquell",
-  "version": "0.1.2",
+  "name": "quell",
+  "version": "0.1.0",
   "description": "A no-frills active record implementation for node-mysql.",
-  "main": "seaquell.js",
+  "main": "quell.js",
   "scripts": {
     "test": "istanbul cover nodeunit -- tests",
     "docs": "node makedocs"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChiperSoft/seaquell.git"
+    "url": "https://github.com/ChiperSoft/quell.git"
   },
   "keywords": [
     "sql",
     "mysql",
     "query",
     "query-builder",
-    "parameter"
+    "orm",
+    "active-record",
+    "activerecord"
   ],
   "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ChiperSoft/seaquell/issues"
+    "url": "https://github.com/ChiperSoft/quell/issues"
   },
-  "homepage": "https://github.com/ChiperSoft/seaquell",
+  "homepage": "https://github.com/ChiperSoft/quell",
   "devDependencies": {
     "nodeunit": "~0.8.2",
     "docdown": "git://github.com/ChiperSoft/docdown.git#master",

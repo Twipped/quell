@@ -1,4 +1,4 @@
-var seaquell = require('../seaquell');
+var quell = require('../quell');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
@@ -12,13 +12,13 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 };
 
 exports['loads and is function'] = function (test) {
-	test.equal(typeof seaquell, 'function');
-	test.equal(typeof seaquell._model, 'function');
+	test.equal(typeof quell, 'function');
+	test.equal(typeof quell._model, 'function');
 	test.done();
 };
 
 exports['create model'] = function (test) {
-	var m = seaquell('users');
+	var m = quell('users');
 
 	test.equal(typeof m, 'function');
 	test.equal(typeof m.find, 'function');
@@ -30,7 +30,7 @@ exports['create model'] = function (test) {
 
 exports['create model without tablename'] = function (test) {
 	test.throws(function () {
-		seaquell();
+		quell();
 	}, 'Tablename must be a string.');
 
 	test.done();
@@ -38,7 +38,7 @@ exports['create model without tablename'] = function (test) {
 
 exports['create model with object without tablename'] = function (test) {
 	test.throws(function () {
-		seaquell({});
+		quell({});
 	}, 'Tablename must be a string.');
 
 	test.done();
@@ -46,14 +46,14 @@ exports['create model with object without tablename'] = function (test) {
 
 exports['create model with empty tablename'] = function (test) {
 	test.throws(function () {
-		seaquell('');
+		quell('');
 	}, 'Tablename must be a string.');
 
 	test.done();
 };
 
 exports['initialize model'] = function (test) {
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		connection: mockConnection(),
 		initialize: function () {
 			test.ok(true, 'Initialized');
@@ -73,7 +73,7 @@ exports['initialize model'] = function (test) {
 
 exports['initialize model with static connection'] = function (test) {
 
-	var Model = seaquell('users');
+	var Model = quell('users');
 	Model.connection = mockConnection();
 
 	var model = new Model();
@@ -81,19 +81,19 @@ exports['initialize model with static connection'] = function (test) {
 	test.done();
 };
 
-exports['initialize model with seaquell connection'] = function (test) {
-	seaquell.connection = mockConnection();
-	var Model = seaquell('users');
+exports['initialize model with quell connection'] = function (test) {
+	quell.connection = mockConnection();
+	var Model = quell('users');
 
 	var model = new Model();
 
 	test.done();
 
-	seaquell.connection = undefined;
+	quell.connection = undefined;
 };
 
 exports['initialize model with connection via options'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 
 	var model = new Model({}, {connection: mockConnection()});
 
@@ -101,7 +101,7 @@ exports['initialize model with connection via options'] = function (test) {
 };
 
 exports['model initialize with plain object'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	test.strictEqual(model.data.id, 1);
@@ -114,7 +114,7 @@ exports['model initialize with plain object'] = function (test) {
 };
 
 exports['model set plain object'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model();
 
 	model.set({id:1, name:'john doe'});
@@ -129,7 +129,7 @@ exports['model set plain object'] = function (test) {
 };
 
 exports['model initialized with plain object sets new values'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model.set('name', 'jane doe');
@@ -144,7 +144,7 @@ exports['model initialized with plain object sets new values'] = function (test)
 };
 
 exports['model initialized with plain object sets nothing'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model.set();
@@ -159,7 +159,7 @@ exports['model initialized with plain object sets nothing'] = function (test) {
 };
 
 exports['model initialized with plain object unsets value'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model.unset('name');
@@ -174,7 +174,7 @@ exports['model initialized with plain object unsets value'] = function (test) {
 };
 
 exports['model initialized with plain object sets null value'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model.set('name', null);
@@ -189,7 +189,7 @@ exports['model initialized with plain object sets null value'] = function (test)
 };
 
 exports['model initialized with plain object sets same value, silently'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model.set('name', 'john doe', {silent: true});
@@ -204,7 +204,7 @@ exports['model initialized with plain object sets same value, silently'] = funct
 };
 
 exports['model initialized with plain object, gets value'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	test.strictEqual(model.get('name'), 'john doe');
@@ -217,7 +217,7 @@ exports['model initialized with plain object, gets value'] = function (test) {
 };
 
 exports['model initialized with plain object checks for value existence'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	test.strictEqual(model.has('name'), true);

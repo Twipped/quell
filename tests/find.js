@@ -1,4 +1,4 @@
-var seaquell = require('../seaquell');
+var quell = require('../quell');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
@@ -12,7 +12,7 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 };
 
 exports['model.find with promise and connection'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [1], [{id: 1, name: 'john doe'}]);
 
 	test.expect(5);
@@ -29,7 +29,7 @@ exports['model.find with promise and connection'] = function (test) {
 };
 
 exports['model.find with promise and implicit connection'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [1], [{id: 1, name: 'john doe'}]);
 
 	test.expect(5);
@@ -47,7 +47,7 @@ exports['model.find with promise and implicit connection'] = function (test) {
 };
 
 exports['model.find with promise and no connection'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 
 	test.expect(1);
 	test.throws(function () {
@@ -58,7 +58,7 @@ exports['model.find with promise and no connection'] = function (test) {
 };
 
 exports['model.find with callback and connection'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [1], [{id: 1, name: 'john doe'}]);
 
 	test.expect(6);
@@ -72,7 +72,7 @@ exports['model.find with callback and connection'] = function (test) {
 };
 
 exports['model.find with callback and implicit connection'] = function (test) {
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [1], [{id: 1, name: 'john doe'}]);
 
 	test.expect(6);

@@ -7,7 +7,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 var modelBase;
-var seaquell = module.exports = function (tablename, options) {
+var quell = module.exports = function (tablename, options) {
 
 	if (typeof tablename === 'object') {
 		options = tablename;
@@ -31,22 +31,22 @@ var seaquell = module.exports = function (tablename, options) {
 	extend(model.prototype, options);
 
 	model.prototype.tablename = model.tablename = tablename;
-	model.connection = model.prototype.connection = options.connection || seaquell.connection || false;
+	model.connection = model.prototype.connection = options.connection || quell.connection || false;
 
 	return model;
 };
 
-extend(seaquell, types);
+extend(quell, types);
 
 
-modelBase = seaquell._model = function (data, options) {
+modelBase = quell._model = function (data, options) {
 	data = data || {};
 	options = options || {};
 
 	if (options.connection) {
 		this.connection = options.connection;
-	} else if (seaquell.connection) {
-		this.connection = seaquell.connection;
+	} else if (quell.connection) {
+		this.connection = quell.connection;
 	}
 
 	this.data = {};
@@ -244,9 +244,9 @@ extend(modelBase.prototype, {
 				}
 			}
 
-			return seaquell._buildInsertQuery(self.tablename, write, options.replace);
+			return quell._buildInsertQuery(self.tablename, write, options.replace);
 		}).then(function (query) {
-			return seaquell._promiseQueryRun(query.query, query.data, self.connection || options.connection || seaquell.connection);
+			return quell._promiseQueryRun(query.query, query.data, self.connection || options.connection || quell.connection);
 		}).then(function (result) {
 			if (self.schema.autoincrement && result && result.insertId !== undefined) {
 				self.data[self.schema.autoincrement] = result.insertId;
@@ -288,7 +288,7 @@ extend(modelBase.prototype, {
 				type = self.schema.columns[field];
 
 				if (!self.has(field)) {
-					throw new Error('Could not update seaquell record, required primary key value was absent: ' + field);
+					throw new Error('Could not update quell record, required primary key value was absent: ' + field);
 				} else {
 					lookup[field] = type.prepare(self.data[field]);
 				}
@@ -303,9 +303,9 @@ extend(modelBase.prototype, {
 				}
 			}
 
-			return seaquell._buildUpdateQuery(self.tablename, write, lookup);
+			return quell._buildUpdateQuery(self.tablename, write, lookup);
 		}).then(function (query) {
-			return seaquell._promiseQueryRun(query.query, query.data, self.connection || options.connection || seaquell.connection);
+			return quell._promiseQueryRun(query.query, query.data, self.connection || options.connection || quell.connection);
 		}).then(function () {
 			if (options.callback) {
 				options.callback(null, self);
@@ -347,7 +347,7 @@ extend(modelBase.prototype, {
 					type = self.schema.columns[field];
 
 					if (!self.has(field)) {
-						throw new Error('Could not delete seaquell record, required primary key value was absent: ' + field);
+						throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
 					} else {
 						lookup[field] = type.prepare(self.data[field]);
 						lookupCount++;
@@ -369,13 +369,13 @@ extend(modelBase.prototype, {
 			}
 
 			if (!lookupCount) {
-				throw new Error('Could not delete seaquell record, no data was available to delete against.');
+				throw new Error('Could not delete quell record, no data was available to delete against.');
 			}
 
 
-			return seaquell._buildDeleteQuery(self.tablename, lookup);
+			return quell._buildDeleteQuery(self.tablename, lookup);
 		}).then(function (query) {
-			return seaquell._promiseQueryRun(query.query, query.data, self.connection || options.connection || seaquell.connection);
+			return quell._promiseQueryRun(query.query, query.data, self.connection || options.connection || quell.connection);
 		}).then(function () {
 			self.exists = false;
 
@@ -398,7 +398,7 @@ extend(modelBase.prototype, {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			if (!self.schema.primaries || !self.schema.primaries.length) {
-				throw new Error('Could not load seaquell model using existing data; table has no primary keys.');
+				throw new Error('Could not load quell model using existing data; table has no primary keys.');
 			}
 
 			var lookup = {},
@@ -410,7 +410,7 @@ extend(modelBase.prototype, {
 				type = self.schema.columns[field];
 
 				if (!self.has(field)) {
-					throw new Error('Could not load seaquell record, required primary key value was absent: ' + field);
+					throw new Error('Could not load quell record, required primary key value was absent: ' + field);
 				} else {
 					lookup[field] = type.prepare(self.data[field]);
 				}
@@ -424,11 +424,11 @@ extend(modelBase.prototype, {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			if (!self.schema.primaries.length) {
-				throw new Error('Could not load seaquell model using existing data; schema has no primary keys.');
+				throw new Error('Could not load quell model using existing data; schema has no primary keys.');
 			}
 
 			if (self.schema.primaries.length > 1) {
-				throw new Error('Could not load seaquell model using single primary key, schema has more than one primary key.');
+				throw new Error('Could not load quell model using single primary key, schema has more than one primary key.');
 			}
 
 			var key = self.schema.primaries[0],
@@ -448,7 +448,7 @@ extend(modelBase.prototype, {
 				lookup = {};
 
 			if (!type) {
-				throw new Error('Could not load seaquell model, ' + field + ' does not exist in the table schema.');
+				throw new Error('Could not load quell model, ' + field + ' does not exist in the table schema.');
 			}
 
 			lookup[field] = type.prepare(value);
@@ -461,7 +461,7 @@ extend(modelBase.prototype, {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			if (typeof search !== 'object' || !Object.keys(search).length) {
-				throw new Error('Could not load seaquell model; provided data was empty or not an object.');
+				throw new Error('Could not load quell model; provided data was empty or not an object.');
 			}
 
 			var lookup = {},
@@ -474,7 +474,7 @@ extend(modelBase.prototype, {
 				type = self.schema.columns[field];
 
 				if (!type) {
-					throw new Error('Could not load seaquell model, ' + field + ' does not exist in the table schema.');
+					throw new Error('Could not load quell model, ' + field + ' does not exist in the table schema.');
 				} else {
 					lookup[field] = type.prepare(search[field]);
 				}
@@ -487,9 +487,9 @@ extend(modelBase.prototype, {
 
 	_loadUsing: function (lookup) {
 		var self = this;
-		var query = seaquell._buildSelectQuery(self.tablename, lookup);
+		var query = quell._buildSelectQuery(self.tablename, lookup);
 
-		return seaquell._promiseQueryRun(query.query, query.data, self.connection).then(function (results) {
+		return quell._promiseQueryRun(query.query, query.data, self.connection).then(function (results) {
 			// If results are returned, then we found the row and can map the data onto the model
 			// If no results were returned, then the row wasn't found and we resolve with false.
 			if (results.length) {
@@ -532,9 +532,9 @@ extend(modelBase.prototype, {
 				}
 			}
 
-			var query = seaquell._buildSelectQuery(self.tablename, lookup, self.schema.primaries);
+			var query = quell._buildSelectQuery(self.tablename, lookup, self.schema.primaries);
 
-			return seaquell._promiseQueryRun(query.query, query.data, self.connection).then(function (results) {
+			return quell._promiseQueryRun(query.query, query.data, self.connection).then(function (results) {
 				self.exists = !!results.length;
 				return self.exists;
 			});
@@ -546,7 +546,7 @@ extend(modelBase.prototype, {
 		var self = this;
 
 		if (!this.connection) {
-			throw new Error('Seaquell model does not have a MySQL connection or pool defined.');
+			throw new Error('quell model does not have a MySQL connection or pool defined.');
 		}
 
 		// if we have a schema already marked as good, just continue the callback chain
@@ -563,7 +563,7 @@ extend(modelBase.prototype, {
 		;
 
 		if (!valid) {
-			return seaquell._promiseTableSchema(this.tablename, this.connection).then(function (schema) {
+			return quell._promiseTableSchema(this.tablename, this.connection).then(function (schema) {
 				self.schema = schema;
 			});
 		} else {
@@ -574,7 +574,7 @@ extend(modelBase.prototype, {
 
 
 
-seaquell._buildSelectQuery = function (tablename, lookup, select) {
+quell._buildSelectQuery = function (tablename, lookup, select) {
 	var q = queryize()
 		.select(select || undefined)
 		.from(tablename)
@@ -583,14 +583,14 @@ seaquell._buildSelectQuery = function (tablename, lookup, select) {
 	return q.compile();
 };
 
-seaquell._buildInsertQuery = function (tablename, write, replace) {
+quell._buildInsertQuery = function (tablename, write, replace) {
 	var q = queryize()[replace ? 'replace' : 'insert'](write)
 		.into(tablename);
 
 	return q.compile();
 };
 
-seaquell._buildUpdateQuery = function (tablename, write, lookup) {
+quell._buildUpdateQuery = function (tablename, write, lookup) {
 	var q = queryize()
 		.update(tablename)
 		.set(write)
@@ -599,7 +599,7 @@ seaquell._buildUpdateQuery = function (tablename, write, lookup) {
 	return q.compile();
 };
 
-seaquell._buildDeleteQuery = function (tablename, lookup) {
+quell._buildDeleteQuery = function (tablename, lookup) {
 	var q = queryize()
 		.deleteFrom(tablename)
 		.where(lookup);
@@ -607,7 +607,7 @@ seaquell._buildDeleteQuery = function (tablename, lookup) {
 	return q.compile();
 };
 
-seaquell._promiseQueryRun = function (query, data, mysql) {
+quell._promiseQueryRun = function (query, data, mysql) {
 	var callback = proxmis();
 	mysql.query(query, data, callback);
 	return callback;
@@ -615,7 +615,7 @@ seaquell._promiseQueryRun = function (query, data, mysql) {
 
 
 
-seaquell._promiseTableSchema = function (tablename, mysql) {
+quell._promiseTableSchema = function (tablename, mysql) {
 	var defer = proxmis();
 
 	mysql.query('DESCRIBE ' + tablename, defer);
@@ -706,11 +706,11 @@ modelBase.find = function (where) {
 		case 1:
 			if (typeof conn === 'function') {
 				callback = conn;
-				conn = self.connection || seaquell.connection || undefined;
+				conn = self.connection || quell.connection || undefined;
 			}
 			break;
 		case 0:
-			conn = self.connection || seaquell.connection;
+			conn = self.connection || quell.connection;
 			break;
 		}
 

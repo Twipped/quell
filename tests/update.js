@@ -1,5 +1,5 @@
 var assign = require('lodash-node/compat/objects/assign');
-var seaquell = require('../seaquell');
+var quell = require('../quell');
 var Promise = require('es6-promise').Promise;
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
@@ -15,19 +15,19 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 
 exports.update = {
 	setUp: function (done) {
-		this.backup = assign({}, seaquell);
+		this.backup = assign({}, quell);
 		done();
 	},
 
 	'using promise': function (test) {
 		test.expect(11);
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -36,7 +36,7 @@ exports.update = {
 
 		var model = new Model({id: 5, name: 'john doe'});
 
-		seaquell._buildUpdateQuery = function (tablename, write, lookup) {
+		quell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, {name: 'john doe'}, 'written data');
 			test.deepEqual(lookup, {id: 5});
@@ -44,7 +44,7 @@ exports.update = {
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, Model.connection);
@@ -74,12 +74,12 @@ exports.update = {
 	'using callback': function (test) {
 		test.expect(12);
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -88,7 +88,7 @@ exports.update = {
 
 		var model = new Model({id: 5, name: 'john doe'});
 
-		seaquell._buildUpdateQuery = function (tablename, write, lookup) {
+		quell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, {name: 'john doe'}, 'written data');
 			test.deepEqual(lookup, {id: 5});
@@ -96,7 +96,7 @@ exports.update = {
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, Model.connection);
@@ -121,12 +121,12 @@ exports.update = {
 	'passes sql error through from _promiseValidateSchema': function (test) {
 		test.expect(4);
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -136,12 +136,12 @@ exports.update = {
 		var model = new Model({id: 5, name: 'john doe'});
 		var mockError = {error: 'THIS IS AN ERROR'};
 
-		seaquell._buildUpdateQuery = function () {
+		quell._buildUpdateQuery = function () {
 			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function () {
+		quell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
 			return Promise.resolve();
 		};
@@ -163,12 +163,12 @@ exports.update = {
 	'passes sql error through from _promiseQueryRun': function (test) {
 		test.expect(8);
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -178,12 +178,12 @@ exports.update = {
 		var model = new Model({id: 5, name: 'john doe'});
 		var mockError = {error: 'THIS IS AN ERROR'};
 
-		seaquell._buildUpdateQuery = function (tablename, write, replace) {
+		quell._buildUpdateQuery = function (tablename, write, replace) {
 			test.ok(true, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, Model.connection);
@@ -207,12 +207,12 @@ exports.update = {
 	'missing primary key': function (test) {
 		test.expect(3);
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id']
 			}
@@ -220,12 +220,12 @@ exports.update = {
 
 		var model = new Model({name: 'john doe'});
 
-		seaquell._buildUpdateQuery = function () {
+		quell._buildUpdateQuery = function () {
 			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function () {
+		quell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
 			return Promise.resolve();
 		};
@@ -236,7 +236,7 @@ exports.update = {
 		};
 
 		model.update(function (err, result) {
-			test.equal(err.message, 'Could not update seaquell record, required primary key value was absent: id');
+			test.equal(err.message, 'Could not update quell record, required primary key value was absent: id');
 			test.ok(true, 'callback invoked');
 			test.done();
 		});
@@ -246,12 +246,12 @@ exports.update = {
 	'ignores non-schema data and autoincrement fields': function (test) {
 		test.expect(13);
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -260,7 +260,7 @@ exports.update = {
 
 		var model = new Model({id: 5, name: 'john doe', city: 'San Diego'});
 
-		seaquell._buildUpdateQuery = function (tablename, write, lookup) {
+		quell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, {name: 'john doe'}, 'written data');
 			test.deepEqual(lookup, {id: 5});
@@ -268,7 +268,7 @@ exports.update = {
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, Model.connection);
@@ -294,7 +294,7 @@ exports.update = {
 
 
 	tearDown: function (done) {
-		assign(seaquell, this.backup);
+		assign(quell, this.backup);
 		done();
 	}
 };

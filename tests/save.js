@@ -1,5 +1,5 @@
 var assign = require('lodash-node/compat/objects/assign');
-var seaquell = require('../seaquell');
+var quell = require('../quell');
 var Promise = require('es6-promise').Promise;
 
 function logError (err) {
@@ -9,7 +9,7 @@ function logError (err) {
 
 exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
 	test.expect(2);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id: 1, name: 'john doe'});
 
 	model._promiseIfExists = function () {
@@ -38,7 +38,7 @@ exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
 
 exports['save, no arguments, exists true'] = function (test) {
 	test.expect(2);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = true;
 
@@ -69,7 +69,7 @@ exports['save, no arguments, exists true'] = function (test) {
 
 exports['save, no arguments, exists false'] = function (test) {
 	test.expect(2);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = false;
 
@@ -100,7 +100,7 @@ exports['save, no arguments, exists false'] = function (test) {
 
 exports['save, callback, exists false'] = function (test) {
 	test.expect(5);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = false;
 
@@ -131,7 +131,7 @@ exports['save, callback, exists false'] = function (test) {
 
 exports['save, options object, replace true, exists undefined'] = function (test) {
 	test.expect(3);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id: 1, name: 'john doe'});
 	// model.exists = true;
 
@@ -163,7 +163,7 @@ exports['save, options object, replace true, exists undefined'] = function (test
 
 exports._promiseIfExists = {
 	setUp: function (done) {
-		this.backup = assign({}, seaquell);
+		this.backup = assign({}, quell);
 		done();
 	},
 
@@ -172,12 +172,12 @@ exports._promiseIfExists = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id']
 			}
@@ -185,7 +185,7 @@ exports._promiseIfExists = {
 
 		var model = new Model({id: 5, name: 'john doe'});
 
-		seaquell._buildSelectQuery = function (tablename, lookup, select) {
+		quell._buildSelectQuery = function (tablename, lookup, select) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, {id: 5});
 			test.deepEqual(select, ['id']);
@@ -193,7 +193,7 @@ exports._promiseIfExists = {
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, mockConnection);
@@ -220,12 +220,12 @@ exports._promiseIfExists = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id']
 			}
@@ -233,7 +233,7 @@ exports._promiseIfExists = {
 
 		var model = new Model({id: 5, name: 'john doe'});
 
-		seaquell._buildSelectQuery = function (tablename, lookup, select) {
+		quell._buildSelectQuery = function (tablename, lookup, select) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, {id: 5});
 			test.deepEqual(select, ['id']);
@@ -241,7 +241,7 @@ exports._promiseIfExists = {
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, mockConnection);
@@ -265,12 +265,12 @@ exports._promiseIfExists = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id']
 			}
@@ -278,12 +278,12 @@ exports._promiseIfExists = {
 
 		var model = new Model();
 
-		seaquell._buildSelectQuery = function () {
+		quell._buildSelectQuery = function () {
 			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function () {
+		quell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
 			return Promise.resolve([]);
 		};
@@ -304,12 +304,12 @@ exports._promiseIfExists = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: []
 			}
@@ -317,12 +317,12 @@ exports._promiseIfExists = {
 
 		var model = new Model();
 
-		seaquell._buildSelectQuery = function () {
+		quell._buildSelectQuery = function () {
 			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function () {
+		quell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
 			return Promise.resolve([]);
 		};
@@ -343,12 +343,12 @@ exports._promiseIfExists = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: []
 			}
@@ -357,12 +357,12 @@ exports._promiseIfExists = {
 		var model = new Model();
 		model.exists = true;
 
-		seaquell._buildSelectQuery = function () {
+		quell._buildSelectQuery = function () {
 			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function () {
+		quell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
 			return Promise.resolve([]);
 		};
@@ -380,7 +380,7 @@ exports._promiseIfExists = {
 	},
 
 	tearDown: function (done) {
-		assign(seaquell, this.backup);
+		assign(quell, this.backup);
 		done();
 	}
 };

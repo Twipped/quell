@@ -1,5 +1,5 @@
 var assign = require('lodash-node/compat/objects/assign');
-var seaquell = require('../seaquell');
+var quell = require('../quell');
 var Promise = require('es6-promise').Promise;
 
 function logError (err) {
@@ -10,7 +10,7 @@ function logError (err) {
 
 exports['load, 3 arg'] = function (test) {
 	test.expect(5);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithPrimaryKey = function () {
@@ -34,7 +34,7 @@ exports['load, 3 arg'] = function (test) {
 
 exports['load, 2 arg, no callback'] = function (test) {
 	test.expect(4);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithPrimaryKey = function () {
@@ -60,7 +60,7 @@ exports['load, 2 arg, no callback'] = function (test) {
 
 exports['load, 2 arg with callback'] = function (test) {
 	test.expect(4);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
@@ -83,7 +83,7 @@ exports['load, 2 arg with callback'] = function (test) {
 
 exports['load, 1 arg, no callback'] = function (test) {
 	test.expect(3);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
@@ -108,7 +108,7 @@ exports['load, 1 arg, no callback'] = function (test) {
 
 exports['load, 1 arg, no callback, plain object'] = function (test) {
 	test.expect(3);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithPrimaryKey = model._loadWithSingleColumn = function () {
@@ -133,7 +133,7 @@ exports['load, 1 arg, no callback, plain object'] = function (test) {
 
 exports['load, 1 arg with callback'] = function (test) {
 	test.expect(3);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model._loadWithPrimaryKey = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
@@ -155,7 +155,7 @@ exports['load, 1 arg with callback'] = function (test) {
 
 exports['load, no arguments'] = function (test) {
 	test.expect(2);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model._loadWithPrimaryKey = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
@@ -179,7 +179,7 @@ exports['load, no arguments'] = function (test) {
 
 exports['save, no arguments, exist unset, pIE returns false'] = function (test) {
 	test.expect(2);
-	var Model = seaquell('users');
+	var Model = quell('users');
 	var model = new Model({id:1, name:'john doe'});
 
 	model._promiseIfExists = function () {
@@ -209,11 +209,11 @@ exports['save, no arguments, exist unset, pIE returns false'] = function (test) 
 exports['_loadWithExisting - fails without primaries'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: []
 		}
@@ -235,7 +235,7 @@ exports['_loadWithExisting - fails without primaries'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model using existing data; table has no primary keys.');
+		test.equal(err.message, 'Could not load quell model using existing data; table has no primary keys.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -244,11 +244,11 @@ exports['_loadWithExisting - fails without primaries'] = function (test) {
 exports['_loadWithExisting - fails without primary data'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -270,7 +270,7 @@ exports['_loadWithExisting - fails without primary data'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell record, required primary key value was absent: id');
+		test.equal(err.message, 'Could not load quell record, required primary key value was absent: id');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -279,11 +279,11 @@ exports['_loadWithExisting - fails without primary data'] = function (test) {
 exports['_loadWithExisting - ok'] = function (test) {
 	test.expect(4);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -314,11 +314,11 @@ exports['_loadWithExisting - ok'] = function (test) {
 exports['_loadWithPrimaryKey - ok'] = function (test) {
 	test.expect(4);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -349,11 +349,11 @@ exports['_loadWithPrimaryKey - ok'] = function (test) {
 exports['_loadWithPrimaryKey - no primaries'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: []
 		}
@@ -376,7 +376,7 @@ exports['_loadWithPrimaryKey - no primaries'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model using existing data; schema has no primary keys.');
+		test.equal(err.message, 'Could not load quell model using existing data; schema has no primary keys.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -385,11 +385,11 @@ exports['_loadWithPrimaryKey - no primaries'] = function (test) {
 exports['_loadWithPrimaryKey - too many primaries'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id', 'city']
 		}
@@ -412,7 +412,7 @@ exports['_loadWithPrimaryKey - too many primaries'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model using single primary key, schema has more than one primary key.');
+		test.equal(err.message, 'Could not load quell model using single primary key, schema has more than one primary key.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -422,11 +422,11 @@ exports['_loadWithPrimaryKey - too many primaries'] = function (test) {
 exports['_loadWithSingleColumn - ok'] = function (test) {
 	test.expect(4);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -457,11 +457,11 @@ exports['_loadWithSingleColumn - ok'] = function (test) {
 exports['_loadWithSingleColumn - bad column'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -484,7 +484,7 @@ exports['_loadWithSingleColumn - bad column'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model, city does not exist in the table schema.');
+		test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -493,11 +493,11 @@ exports['_loadWithSingleColumn - bad column'] = function (test) {
 exports['_loadWithMultiColumn - ok'] = function (test) {
 	test.expect(4);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -528,11 +528,11 @@ exports['_loadWithMultiColumn - ok'] = function (test) {
 exports['_loadWithMultiColumn - bad value'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -555,7 +555,7 @@ exports['_loadWithMultiColumn - bad value'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model; provided data was empty or not an object.');
+		test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -564,11 +564,11 @@ exports['_loadWithMultiColumn - bad value'] = function (test) {
 exports['_loadWithMultiColumn - bad value 2'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -591,7 +591,7 @@ exports['_loadWithMultiColumn - bad value 2'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model; provided data was empty or not an object.');
+		test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -600,11 +600,11 @@ exports['_loadWithMultiColumn - bad value 2'] = function (test) {
 exports['_loadWithMultiColumn - invalid column'] = function (test) {
 	test.expect(3);
 
-	var Model = seaquell('users', {
+	var Model = quell('users', {
 		schema: {
 			columns: {
-				id: seaquell.INT(),
-				name: seaquell.VARCHAR()
+				id: quell.INT(),
+				name: quell.VARCHAR()
 			},
 			primaries: ['id']
 		}
@@ -627,7 +627,7 @@ exports['_loadWithMultiColumn - invalid column'] = function (test) {
 		test.ok(false, 'promise resolved');
 		test.done();
 	}, function (err) {
-		test.equal(err.message, 'Could not load seaquell model, city does not exist in the table schema.');
+		test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
 		test.ok(true, 'promise rejected');
 		test.done();
 	});
@@ -636,7 +636,7 @@ exports['_loadWithMultiColumn - invalid column'] = function (test) {
 
 exports._loadUsing = {
 	setUp: function (done) {
-		this.backup = assign({}, seaquell);
+		this.backup = assign({}, quell);
 		done();
 	},
 
@@ -644,12 +644,12 @@ exports._loadUsing = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -658,14 +658,14 @@ exports._loadUsing = {
 
 		var model = new Model();
 
-		seaquell._buildSelectQuery = function (tablename, lookup) {
+		quell._buildSelectQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, {id: 5, name: 'john doe'});
 			test.ok(true, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, mockConnection);
@@ -691,12 +691,12 @@ exports._loadUsing = {
 
 		var mockConnection = {query: true};
 
-		var Model = seaquell('users', {
+		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
+					id: quell.INT(),
+					name: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
@@ -705,14 +705,14 @@ exports._loadUsing = {
 
 		var model = new Model();
 
-		seaquell._buildSelectQuery = function (tablename, lookup) {
+		quell._buildSelectQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, {id: 5, name: 'john doe'});
 			test.ok(true, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
+		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [22]);
 			test.equal(mysql, mockConnection);
@@ -733,7 +733,7 @@ exports._loadUsing = {
 	},
 
 	tearDown: function (done) {
-		assign(seaquell, this.backup);
+		assign(quell, this.backup);
 		done();
 	}
 };
