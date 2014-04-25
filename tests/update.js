@@ -13,13 +13,65 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	};
 };
 
-exports.insert = {
+exports.update = {
 	setUp: function (done) {
 		this.backup = assign({}, seaquell);
 		done();
 	},
 
 	'using promise': function (test) {
+		test.expect(11);
+
+		var Model = seaquell('users', {
+			connection: mockConnection(),
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: ['id'],
+				autoincrement: 'id',
+			}
+		});
+
+		var model = new Model({id: 5, name: 'john doe'});
+
+		seaquell._buildUpdateQuery = function (tablename, write, lookup) {
+			test.strictEqual(tablename, 'users');
+			test.deepEqual(write, {name: 'john doe'}, 'written data');
+			test.deepEqual(lookup, {id: 5});
+			test.ok(true, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [22]);
+			test.equal(mysql, Model.connection);
+			test.ok(true, 'query ran');
+			return Promise.resolve({insertId: 5});
+		};
+
+		model._promiseValidateSchema = function () {
+			test.ok(true, '_promiseValidateSchema ran');
+			return Promise.resolve();
+		};
+
+
+
+		model.update().then(function (result) {
+			test.equal(result, model);
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function (err) {
+			console.error(err);
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+
+	},
+
+	'using callback': function (test) {
 		test.expect(12);
 
 		var Model = seaquell('users', {
@@ -34,12 +86,12 @@ exports.insert = {
 			}
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({id: 5, name: 'john doe'});
 
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
+		seaquell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, {name: 'john doe'}, 'written data');
-			test.equal(replace, undefined);
+			test.deepEqual(lookup, {id: 5});
 			test.ok(true, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
@@ -57,63 +109,9 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-
-
-		model.insert().then(function (result) {
-			test.equal(result, model);
-			test.equal(result.get('id'), 5);
-			test.ok(true, 'promise resolved');
-			test.done();
-		}, function (err) {
-			console.error(err);
-			test.ok(false, 'promise rejected');
-			test.done();
-		});
-
-	},
-
-	'using callback': function (test) {
-		test.expect(13);
-
-		var Model = seaquell('users', {
-			connection: mockConnection(),
-			schema: {
-				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
-				},
-				primaries: ['id'],
-				autoincrement: 'id',
-			}
-		});
-
-		var model = new Model({name: 'john doe'});
-
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
-			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {name: 'john doe'}, 'written data');
-			test.equal(replace, undefined);
-			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
-		};
-
-		seaquell._promiseQueryRun = function (query, data, mysql) {
-			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
-			test.equal(mysql, Model.connection);
-			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
-		};
-
-		model._promiseValidateSchema = function () {
-			test.ok(true, '_promiseValidateSchema ran');
-			return Promise.resolve();
-		};
-
-		model.insert(function (err, result) {
+		model.update(function (err, result) {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
 			test.ok(true, 'callback invoked');
 			test.done();
 		});
@@ -135,17 +133,17 @@ exports.insert = {
 			}
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({id: 5, name: 'john doe'});
 		var mockError = {error: 'THIS IS AN ERROR'};
 
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
+		seaquell._buildUpdateQuery = function () {
 			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
 		seaquell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve();
 		};
 
 		model._promiseValidateSchema = function () {
@@ -153,7 +151,7 @@ exports.insert = {
 			return Promise.reject(mockError);
 		};
 
-		model.insert(function (err, result) {
+		model.update(function (err, result) {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
@@ -177,10 +175,10 @@ exports.insert = {
 			}
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({id: 5, name: 'john doe'});
 		var mockError = {error: 'THIS IS AN ERROR'};
 
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
+		seaquell._buildUpdateQuery = function (tablename, write, replace) {
 			test.ok(true, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
@@ -197,7 +195,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert(function (err, result) {
+		model.update(function (err, result) {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
@@ -206,8 +204,8 @@ exports.insert = {
 
 	},
 
-	'without autoincrement': function (test) {
-		test.expect(13);
+	'missing primary key': function (test) {
+		test.expect(3);
 
 		var Model = seaquell('users', {
 			connection: mockConnection(),
@@ -222,20 +220,14 @@ exports.insert = {
 
 		var model = new Model({name: 'john doe'});
 
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
-			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {name: 'john doe'}, 'written data');
-			test.equal(replace, undefined);
-			test.ok(true, 'build ran');
+		seaquell._buildUpdateQuery = function () {
+			test.ok(false, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
 
-		seaquell._promiseQueryRun = function (query, data, mysql) {
-			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
-			test.equal(mysql, Model.connection);
-			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+		seaquell._promiseQueryRun = function () {
+			test.ok(false, 'query ran');
+			return Promise.resolve();
 		};
 
 		model._promiseValidateSchema = function () {
@@ -243,10 +235,8 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert(function (err, result) {
-			test.equal(err, null);
-			test.equal(result, model);
-			test.equal(result.get('id'), undefined);
+		model.update(function (err, result) {
+			test.equal(err.message, 'Could not update seaquell record, required primary key value was absent: id');
 			test.ok(true, 'callback invoked');
 			test.done();
 		});
@@ -270,58 +260,10 @@ exports.insert = {
 
 		var model = new Model({id: 5, name: 'john doe', city: 'San Diego'});
 
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
+		seaquell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, {name: 'john doe'}, 'written data');
-			test.equal(replace, undefined);
-			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
-		};
-
-		seaquell._promiseQueryRun = function (query, data, mysql) {
-			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
-			test.equal(mysql, Model.connection);
-			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
-		};
-
-		model._promiseValidateSchema = function () {
-			test.ok(true, '_promiseValidateSchema ran');
-			return Promise.resolve();
-		};
-
-		model.insert(function (err, result) {
-			test.equal(err, null);
-			test.equal(result, model);
-			test.equal(result.get('id'), 5);
-			test.ok(true, 'callback invoked');
-			test.done();
-		});
-
-	},
-
-	'as replace': function (test) {
-		test.expect(13);
-
-		var Model = seaquell('users', {
-			connection: mockConnection(),
-			schema: {
-				columns: {
-					id: seaquell.INT(),
-					name: seaquell.VARCHAR()
-				},
-				primaries: ['id'],
-				autoincrement: 'id',
-			}
-		});
-
-		var model = new Model({id: 5, name: 'john doe'});
-
-		seaquell._buildInsertQuery = function (tablename, write, replace) {
-			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {id: 5, name: 'john doe'}, 'written data');
-			test.equal(replace, true);
+			test.deepEqual(lookup, {id: 5});
 			test.ok(true, 'build ran');
 			return {query: "QUERY", data: [22]};
 		};
@@ -339,7 +281,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert({replace: true}, function (err, result) {
+		model.update(function (err, result) {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -348,6 +290,7 @@ exports.insert = {
 		});
 
 	},
+
 
 
 	tearDown: function (done) {

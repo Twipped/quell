@@ -1,12 +1,10 @@
-var provider = require('nodeunit-dataprovider');
 var seaquell = require('../seaquell');
-var Promise = require('es6-promise').Promise;
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
 		query: function (query, data, callback) {
-			if (expectedQuery !== undefined) test.strictEqual(query, expectedQuery);
-			if (expectedData !== undefined) test.deepEqual(data, expectedData);
+			if (expectedQuery !== undefined) {test.strictEqual(query, expectedQuery);}
+			if (expectedData !== undefined) {test.deepEqual(data, expectedData);}
 			test.ok(true, 'Mysql query was called');
 			callback(null, returnValue);
 		}
@@ -32,7 +30,7 @@ exports['create model'] = function (test) {
 
 exports['create model without tablename'] = function (test) {
 	test.throws(function () {
-		var m = seaquell();
+		seaquell();
 	}, 'Tablename must be a string.');
 
 	test.done();
@@ -40,7 +38,7 @@ exports['create model without tablename'] = function (test) {
 
 exports['create model with object without tablename'] = function (test) {
 	test.throws(function () {
-		var m = seaquell({});
+		seaquell({});
 	}, 'Tablename must be a string.');
 
 	test.done();
@@ -48,7 +46,7 @@ exports['create model with object without tablename'] = function (test) {
 
 exports['create model with empty tablename'] = function (test) {
 	test.throws(function () {
-		var m = seaquell('');
+		seaquell('');
 	}, 'Tablename must be a string.');
 
 	test.done();
@@ -100,23 +98,6 @@ exports['initialize model with connection via options'] = function (test) {
 	var model = new Model({}, {connection: mockConnection()});
 
 	test.done();
-};
-
-exports['model.find'] = function (test) {
-	var Model = seaquell('users');
-	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [1], [{id:1, name:'john doe'}]);
-
-	test.expect(5);
-	Model.find({id:1}).run(con).then(function (actual) {
-		test.deepEqual(actual[0].data, {id:1, name:'john doe'});
-		test.ok(true);
-		test.done();
-	}, function (err) {
-		console.error(err);
-		test.ok(false, 'Promise rejected');
-		test.done();
-	});
-
 };
 
 exports['model initialize with plain object'] = function (test) {

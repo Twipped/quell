@@ -1,12 +1,16 @@
-var provider = require('nodeunit-dataprovider');
+var assign = require('lodash-node/compat/objects/assign');
 var seaquell = require('../seaquell');
 var Promise = require('es6-promise').Promise;
 
+function logError (err) {
+	var error = { error: assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
+	console.log(error);
+}
 
 exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
 	test.expect(2);
 	var Model = seaquell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 
 	model._promiseIfExists = function () {
 		return Promise.resolve(true);
@@ -35,7 +39,7 @@ exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
 exports['save, no arguments, exists true'] = function (test) {
 	test.expect(2);
 	var Model = seaquell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = true;
 
 	model._promiseIfExists = function () {
@@ -66,7 +70,7 @@ exports['save, no arguments, exists true'] = function (test) {
 exports['save, no arguments, exists false'] = function (test) {
 	test.expect(2);
 	var Model = seaquell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = false;
 
 	model._promiseIfExists = function () {
@@ -97,7 +101,7 @@ exports['save, no arguments, exists false'] = function (test) {
 exports['save, callback, exists false'] = function (test) {
 	test.expect(5);
 	var Model = seaquell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = false;
 
 	model._promiseIfExists = function () {
@@ -128,7 +132,7 @@ exports['save, callback, exists false'] = function (test) {
 exports['save, options object, replace true, exists undefined'] = function (test) {
 	test.expect(3);
 	var Model = seaquell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 	// model.exists = true;
 
 	model._promiseIfExists = function () {
@@ -156,3 +160,228 @@ exports['save, options object, replace true, exists undefined'] = function (test
 	});
 
 };
+
+exports._promiseIfExists = {
+	setUp: function (done) {
+		this.backup = assign({}, seaquell);
+		done();
+	},
+
+	'ok - found': function (test) {
+		test.expect(11);
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: ['id']
+			}
+		});
+
+		var model = new Model({id: 5, name: 'john doe'});
+
+		seaquell._buildSelectQuery = function (tablename, lookup, select) {
+			test.strictEqual(tablename, 'users');
+			test.deepEqual(lookup, {id: 5});
+			test.deepEqual(select, ['id']);
+			test.ok(true, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [22]);
+			test.equal(mysql, mockConnection);
+			test.ok(true, 'query ran');
+			return Promise.resolve([
+				{id: 5}
+			]);
+		};
+
+		model._promiseIfExists().then(function (result) {
+			test.equal(result, true);
+			test.equal(model.exists, true);
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function (err) {
+			logError(err);
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	'ok - not found': function (test) {
+		test.expect(11);
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: ['id']
+			}
+		});
+
+		var model = new Model({id: 5, name: 'john doe'});
+
+		seaquell._buildSelectQuery = function (tablename, lookup, select) {
+			test.strictEqual(tablename, 'users');
+			test.deepEqual(lookup, {id: 5});
+			test.deepEqual(select, ['id']);
+			test.ok(true, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [22]);
+			test.equal(mysql, mockConnection);
+			test.ok(true, 'query ran');
+			return Promise.resolve([]);
+		};
+
+		model._promiseIfExists().then(function (result) {
+			test.equal(result, false);
+			test.equal(model.exists, false);
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function (err) {
+			logError(err);
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	'missing primaries': function (test) {
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: ['id']
+			}
+		});
+
+		var model = new Model();
+
+		seaquell._buildSelectQuery = function () {
+			test.ok(false, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function () {
+			test.ok(false, 'query ran');
+			return Promise.resolve([]);
+		};
+
+		model._promiseIfExists().then(function (result) {
+			test.strictEqual(result, false);
+			test.strictEqual(model.exists, false);
+			test.deepEqual(model.changed, {});
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function () {
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	'no primaries, unknown state': function (test) {
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: []
+			}
+		});
+
+		var model = new Model();
+
+		seaquell._buildSelectQuery = function () {
+			test.ok(false, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function () {
+			test.ok(false, 'query ran');
+			return Promise.resolve([]);
+		};
+
+		model._promiseIfExists().then(function (result) {
+			test.strictEqual(result, false);
+			test.strictEqual(model.exists, null);
+			test.deepEqual(model.changed, {});
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function () {
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	'no primaries, known exists': function (test) {
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: []
+			}
+		});
+
+		var model = new Model();
+		model.exists = true;
+
+		seaquell._buildSelectQuery = function () {
+			test.ok(false, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function () {
+			test.ok(false, 'query ran');
+			return Promise.resolve([]);
+		};
+
+		model._promiseIfExists().then(function (result) {
+			test.strictEqual(result, true);
+			test.strictEqual(model.exists, true);
+			test.deepEqual(model.changed, {});
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function () {
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	tearDown: function (done) {
+		assign(seaquell, this.backup);
+		done();
+	}
+};
+

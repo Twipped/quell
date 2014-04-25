@@ -1,6 +1,11 @@
-var provider = require('nodeunit-dataprovider');
+var assign = require('lodash-node/compat/objects/assign');
 var seaquell = require('../seaquell');
 var Promise = require('es6-promise').Promise;
+
+function logError (err) {
+	var error = { error: assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
+	console.log(error);
+}
 
 
 exports['load, 3 arg'] = function (test) {
@@ -194,9 +199,541 @@ exports['save, no arguments, exist unset, pIE returns false'] = function (test) 
 		test.equal(actual, model);
 		test.done();
 	}, function (err) {
-		console.error(err);
+		logError(err);
 		test.ok(false, 'promise rejected');
 		test.done();
 	});
 
+};
+
+exports['_loadWithExisting - fails without primaries'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: []
+		}
+	});
+
+	var model = new Model({id: 1, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function () {
+		test.ok(false, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithExisting().then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model using existing data; table has no primary keys.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithExisting - fails without primary data'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model();
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function () {
+		test.ok(false, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithExisting().then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell record, required primary key value was absent: id');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithExisting - ok'] = function (test) {
+	test.expect(4);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model({id: 5, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 5});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithExisting().then(function () {
+		test.ok(true, 'promise resolved');
+		test.done();
+	}, function () {
+		test.ok(false, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithPrimaryKey - ok'] = function (test) {
+	test.expect(4);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model({id: 5, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 10});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithPrimaryKey(10).then(function () {
+		test.ok(true, 'promise resolved');
+		test.done();
+	}, function () {
+		test.ok(false, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithPrimaryKey - no primaries'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: []
+		}
+	});
+
+	var model = new Model({id: 5, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 10});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithPrimaryKey().then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model using existing data; schema has no primary keys.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithPrimaryKey - too many primaries'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id', 'city']
+		}
+	});
+
+	var model = new Model({id: 5, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 10});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithPrimaryKey().then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model using single primary key, schema has more than one primary key.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+
+exports['_loadWithSingleColumn - ok'] = function (test) {
+	test.expect(4);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model({id: 5, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 10});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithSingleColumn(10, 'id').then(function () {
+		test.ok(true, 'promise resolved');
+		test.done();
+	}, function () {
+		test.ok(false, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithSingleColumn - bad column'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model({id: 5, name: 'john doe'});
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 10});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithSingleColumn('San Diego', 'city').then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model, city does not exist in the table schema.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithMultiColumn - ok'] = function (test) {
+	test.expect(4);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model();
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 5, name: 'john doe'});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithMultiColumn({id: 5, name: 'john doe'}).then(function () {
+		test.ok(true, 'promise resolved');
+		test.done();
+	}, function () {
+		test.ok(false, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithMultiColumn - bad value'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model();
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 5, name: 'john doe'});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithMultiColumn().then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model; provided data was empty or not an object.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithMultiColumn - bad value 2'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model();
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 5, name: 'john doe'});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithMultiColumn({}).then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model; provided data was empty or not an object.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+exports['_loadWithMultiColumn - invalid column'] = function (test) {
+	test.expect(3);
+
+	var Model = seaquell('users', {
+		schema: {
+			columns: {
+				id: seaquell.INT(),
+				name: seaquell.VARCHAR()
+			},
+			primaries: ['id']
+		}
+	});
+
+	var model = new Model();
+
+	model._promiseValidateSchema = function () {
+		test.ok(true, '_promiseValidateSchema ran');
+		return Promise.resolve();
+	};
+
+	model._loadUsing = function (lookup) {
+		test.deepEqual(lookup, {id: 5, name: 'john doe'});
+		test.ok(true, 'called _loadUsing');
+		return Promise.resolve();
+	};
+
+	model._loadWithMultiColumn({city: 'San Diego'}).then(function () {
+		test.ok(false, 'promise resolved');
+		test.done();
+	}, function (err) {
+		test.equal(err.message, 'Could not load seaquell model, city does not exist in the table schema.');
+		test.ok(true, 'promise rejected');
+		test.done();
+	});
+};
+
+
+exports._loadUsing = {
+	setUp: function (done) {
+		this.backup = assign({}, seaquell);
+		done();
+	},
+
+	'with results': function (test) {
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: ['id'],
+				autoincrement: 'id',
+			}
+		});
+
+		var model = new Model();
+
+		seaquell._buildSelectQuery = function (tablename, lookup) {
+			test.strictEqual(tablename, 'users');
+			test.deepEqual(lookup, {id: 5, name: 'john doe'});
+			test.ok(true, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [22]);
+			test.equal(mysql, mockConnection);
+			test.ok(true, 'query ran');
+			return Promise.resolve([
+				{id: 5, name: 'john doe'}
+			]);
+		};
+
+		model._loadUsing({id: 5, name: 'john doe'}).then(function (result) {
+			test.equal(result, model);
+			test.equal(model.exists, true);
+			test.deepEqual(model.changed, {});
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function () {
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	'without results': function (test) {
+
+		var mockConnection = {query: true};
+
+		var Model = seaquell('users', {
+			connection: mockConnection,
+			schema: {
+				columns: {
+					id: seaquell.INT(),
+					name: seaquell.VARCHAR()
+				},
+				primaries: ['id'],
+				autoincrement: 'id',
+			}
+		});
+
+		var model = new Model();
+
+		seaquell._buildSelectQuery = function (tablename, lookup) {
+			test.strictEqual(tablename, 'users');
+			test.deepEqual(lookup, {id: 5, name: 'john doe'});
+			test.ok(true, 'build ran');
+			return {query: "QUERY", data: [22]};
+		};
+
+		seaquell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [22]);
+			test.equal(mysql, mockConnection);
+			test.ok(true, 'query ran');
+			return Promise.resolve([]);
+		};
+
+		model._loadUsing({id: 5, name: 'john doe'}).then(function (result) {
+			test.equal(result, false);
+			test.equal(model.exists, false);
+			test.deepEqual(model.changed, {});
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function () {
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	tearDown: function (done) {
+		assign(seaquell, this.backup);
+		done();
+	}
 };
