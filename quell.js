@@ -93,6 +93,7 @@ util.inherits(modelBase, EventEmitter);
 assign(modelBase.prototype, {
 	/**
 	 * The raw model data.
+	 * @memberOf Record
 	 * @internal Not intended for direct access.  Use Record.get() and Record.set() instead.
 	 * @type {object}
 	 */
@@ -100,6 +101,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Indicates if the record already exists in the database.  Will be null if existence is unknown.
+	 * @memberOf Record
 	 * @type {boolean}
 	 */
 	exists: null,
@@ -206,6 +208,7 @@ assign(modelBase.prototype, {
 	/**
 	 * Remove an attribute by deleting it from the internal attributes hash.
 	 * Fires a "change" event unless silent is passed as an option.
+	 * @memberOf Record
 	 * @param  {string} field
 	 * @param  {object} [options]
 	 */
@@ -215,6 +218,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Returns `true` if the attribute is set to a non-null or non-undefined value.
+	 * @memberOf Record
 	 * @param  {string}  field
 	 * @return {Boolean}
 	 */

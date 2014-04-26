@@ -23,40 +23,12 @@
 
 ## `Record`
 * [`Record`](#prototype)
+* [`Record.data`](#recorddata)
+* [`Record.exists`](#recordexists)
 * [`Record.get`](#recordgetfield--formatted)
 * [`Record.set`](#recordsetfield--value-options)
-
-<!-- /div -->
-
-
-<!-- div -->
-
-## `data`
-* [`data`](#data)
-
-<!-- /div -->
-
-
-<!-- div -->
-
-## `exists`
-* [`exists`](#exists)
-
-<!-- /div -->
-
-
-<!-- div -->
-
-## `unset`
-* [`unset`](#unsetfield--options)
-
-<!-- /div -->
-
-
-<!-- div -->
-
-## `has`
-* [`has`](#hasfield)
+* [`Record.unset`](#recordunsetfield--options)
+* [`Record.has`](#recordhasfield)
 
 <!-- /div -->
 
@@ -133,8 +105,32 @@ var User = new Quell('users')     var userRecord = new User();
 
 <!-- div -->
 
+### <a id="recorddata"></a>`Record.data`
+<a href="#recorddata">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L100 "View in source") [&#x24C9;][1]
+
+*(object)*: The raw model data.
+
+* * *
+
+<!-- /div -->
+
+
+<!-- div -->
+
+### <a id="recordexists"></a>`Record.exists`
+<a href="#recordexists">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L107 "View in source") [&#x24C9;][1]
+
+*(boolean)*: Indicates if the record already exists in the database.  Will be null if existence is unknown.
+
+* * *
+
+<!-- /div -->
+
+
+<!-- div -->
+
 ### <a id="recordgetfield--formatted"></a>`Record.get(field [, formatted])`
-<a href="#recordgetfield--formatted">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L121 "View in source") [&#x24C9;][1]
+<a href="#recordgetfield--formatted">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L123 "View in source") [&#x24C9;][1]
 
 Gets the current value of a column from the Record.
 
@@ -150,7 +146,7 @@ Gets the current value of a column from the Record.
 <!-- div -->
 
 ### <a id="recordsetfield--value-options"></a>`Record.set(field [, value, options])`
-<a href="#recordsetfield--value-options">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L138 "View in source") [&#x24C9;][1]
+<a href="#recordsetfield--value-options">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L140 "View in source") [&#x24C9;][1]
 
 Set a hash of attributes *(one or many)* on the model.
 	 * If any of the attributes change the model's state, a "change" event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.
@@ -165,55 +161,10 @@ Set a hash of attributes *(one or many)* on the model.
 <!-- /div -->
 
 
-<!-- /div -->
-
-
 <!-- div -->
 
-## `data`
-
-<!-- div -->
-
-### <a id="data"></a>`data`
-<a href="#data">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L99 "View in source") [&#x24C9;][1]
-
-*(object)*: The raw model data.
-
-* * *
-
-<!-- /div -->
-
-
-<!-- /div -->
-
-
-<!-- div -->
-
-## `exists`
-
-<!-- div -->
-
-### <a id="exists"></a>`exists`
-<a href="#exists">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L105 "View in source") [&#x24C9;][1]
-
-*(boolean)*: Indicates if the record already exists in the database.  Will be null if existence is unknown.
-
-* * *
-
-<!-- /div -->
-
-
-<!-- /div -->
-
-
-<!-- div -->
-
-## `unset`
-
-<!-- div -->
-
-### <a id="unsetfield--options"></a>`unset(field [, options])`
-<a href="#unsetfield--options">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L212 "View in source") [&#x24C9;][1]
+### <a id="recordunsetfield--options"></a>`Record.unset(field [, options])`
+<a href="#recordunsetfield--options">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L215 "View in source") [&#x24C9;][1]
 
 Remove an attribute by deleting it from the internal attributes hash.
 	 * Fires a "change" event unless silent is passed as an option.
@@ -227,17 +178,10 @@ Remove an attribute by deleting it from the internal attributes hash.
 <!-- /div -->
 
 
-<!-- /div -->
-
-
 <!-- div -->
 
-## `has`
-
-<!-- div -->
-
-### <a id="hasfield"></a>`has(field)`
-<a href="#hasfield">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L221 "View in source") [&#x24C9;][1]
+### <a id="recordhasfield"></a>`Record.has(field)`
+<a href="#recordhasfield">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L225 "View in source") [&#x24C9;][1]
 
 Returns `true` if the attribute is set to a non-null or non-undefined value.
 
