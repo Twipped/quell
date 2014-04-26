@@ -7,6 +7,18 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 var modelBase;
+
+/**
+ * Creates a model object using provided the tablename and/or prototype.
+ * All properties of the options object will applied to the model's prototype as initial values.
+ *
+ * @name  quell
+ * @typedef Quell
+ * @constructor
+ * @param  {string} [tablename]
+ * @param  {object} [options]
+ * @return {Model}
+ */
 var quell = module.exports = function (tablename, options) {
 
 	if (typeof tablename === 'object') {
@@ -28,7 +40,7 @@ var quell = module.exports = function (tablename, options) {
 	model.find = modelBase.find;
 	model.prototype = Object.create(modelBase.prototype);
 
-	extend(model.prototype, options);
+	assign(model.prototype, options);
 
 	model.prototype.tablename = model.tablename = tablename;
 	model.connection = model.prototype.connection = options.connection || quell.connection || false;
@@ -36,9 +48,22 @@ var quell = module.exports = function (tablename, options) {
 	return model;
 };
 
-extend(quell, types);
+assign(quell, types);
 
-
+/**
+ * Model constructor used to create a new record.
+ * Takes the default data contents of the model.
+ *
+ *     var User = new Quell('users')
+ *     var userRecord = new User();
+ *
+ * @name Model
+ * @typedef Model
+ * @constructor
+ * @param  {object} [data]
+ * @param  {object} [options]
+ * @return {Record}
+ */
 modelBase = quell._model = function (data, options) {
 	data = data || {};
 	options = options || {};
@@ -59,11 +84,40 @@ modelBase = quell._model = function (data, options) {
 
 util.inherits(modelBase, EventEmitter);
 
-extend(modelBase.prototype, {
+
+/**
+ * @name Record
+ * @typedef Record
+ * @type {Object}
+ */
+assign(modelBase.prototype, {
+	/**
+	 * The raw model data.
+	 * @internal Not intended for direct access.  Use Record.get() and Record.set() instead.
+	 * @type {object}
+	 */
 	data: null,
+
+	/**
+	 * Indicates if the record already exists in the database.  Will be null if existence is unknown.
+	 * @type {boolean}
+	 */
 	exists: null,
 
+	/**
+	 * Function called at model initialization.  Receives all arguments passed to `new Model()`.
+	 * @memberOf Record
+	 */
 	initialize: function () {},
+
+
+	/**
+	 * Gets the current value of a column from the Record.
+	 * @memberOf Record
+	 * @param  {string} field The column to retrieve.
+	 * @param  {boolean} [formatted] Indicates if the data should be returned in the format MySQL would store it in. Defaults to true.
+	 * @return {[type]}
+	 */
 	get: function (field, formatted) {
 		// default to formatted unless the user passed false
 		if ((formatted || formatted === undefined) && this.schema && this.schema.columns && this.schema.columns[field]) {
@@ -72,6 +126,15 @@ extend(modelBase.prototype, {
 			return this.data[field];
 		}
 	},
+
+	/**
+	 * Set a hash of attributes (one or many) on the model.
+	 * If any of the attributes change the model's state, a "change" event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.
+	 * @memberOf Record
+	 * @param {string|object} field
+	 * @param {mixed} [value]
+	 * @param {object} [options]
+	 */
 	set: function (field, value, options) {
 		var attr, attrs, unset, changes, silent, changing, prev, current;
 		if (!field) {
@@ -139,12 +202,26 @@ extend(modelBase.prototype, {
 		this._changing = false;
 		return this;
 	},
+
+	/**
+	 * Remove an attribute by deleting it from the internal attributes hash.
+	 * Fires a "change" event unless silent is passed as an option.
+	 * @param  {string} field
+	 * @param  {object} [options]
+	 */
 	unset: function (field, options) {
-		return this.set(field, void 0, extend({}, options, {unset: true}));
+		return this.set(field, void 0, assign({}, options, {unset: true}));
 	},
+
+	/**
+	 * Returns `true` if the attribute is set to a non-null or non-undefined value.
+	 * @param  {string}  field
+	 * @return {Boolean}
+	 */
 	has: function (field) {
 		return this.get(field, false) !== undefined;
 	},
+
 	load: function (value, field, callback) {
 		switch (arguments.length) {
 		case 3:
