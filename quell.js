@@ -1,4 +1,4 @@
-var extend = require('./lib/extend');
+var assign = require('lodash.assign');
 var types = require('./lib/types');
 var queryize = require('queryize');
 var Promise = require('es6-promise').Promise;

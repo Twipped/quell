@@ -31,12 +31,13 @@
     "docdown": "git://github.com/ChiperSoft/docdown.git#master",
     "nodeunit-dataprovider": "0.0.1",
     "istanbul": "^0.2.6",
-    "lodash-node": "^2.4.1"
+    "lodash.foreach": "^2.4.1"
   },
   "dependencies": {
     "queryize": "^0.1.2",
     "moment": "^2.5.1",
     "proxmis": "^0.1.1",
-    "es6-promise": "^0.1.1"
+    "es6-promise": "^0.1.1",
+    "lodash.assign": "^2.4.1"
   }
 }

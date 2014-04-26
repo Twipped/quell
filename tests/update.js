@@ -1,4 +1,4 @@
-var assign = require('lodash-node/compat/objects/assign');
+var assign = require('lodash.assign');
 var quell = require('../quell');
 var Promise = require('es6-promise').Promise;
 
