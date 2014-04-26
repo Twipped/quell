@@ -37,12 +37,16 @@ var quell = module.exports = function (tablename, options) {
 		modelBase.apply(this, arguments);
 	};
 
-	model.find = modelBase.find;
+	// Copy over the Model members
+	assign(model, modelBase);
+
+	// Create the new Model prototype
 	model.prototype = Object.create(modelBase.prototype);
 
+	// Apply any overrides
 	assign(model.prototype, options);
 
-	model.prototype.tablename = model.tablename = tablename;
+	model.prototype.tablename = model.tablename = options.tablename;
 	model.connection = model.prototype.connection = options.connection || quell.connection || false;
 
 	return model;
@@ -811,7 +815,7 @@ modelBase.find = function (where) {
 				callback(null, results);
 			}
 			return results;
-		}).catch(function (err) {
+		}, function (err) {
 			if (callback) {
 				callback(err);
 			}
@@ -820,6 +824,37 @@ modelBase.find = function (where) {
 	};
 
 	return q;
+};
+
+/**
+ * Pre-loads the schema details for the model.
+ * @memberOf Model
+ * @param  {object}   [options]
+ * @param  {Function} [callback]
+ * @return {Promise}
+ */
+modelBase.loadSchema = function (options, callback) {
+	if (typeof options === 'function') {
+		callback = options;
+		options = {callback: callback};
+	} else {
+		options = options || {};
+		options.callback = options.callback || callback;
+	}
+
+	var self = this;
+	return quell._promiseTableSchema(this.tablename, (options && options.connection) || self.connection || quell.connection).then(function (schema) {
+		self.schema = schema;
+		if (options.callback) {
+			callback(null, self);
+		}
+		return self;
+	}, function (err) {
+		if (callback) {
+			callback(err);
+		}
+		return Promise.reject(err);
+	});
 };
 
 /** Utility Functions *******************************************************************************************/

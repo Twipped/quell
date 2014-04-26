@@ -1,4 +1,10 @@
 var quell = require('../quell');
+var Promise = require('es6-promise').Promise;
+
+function logError (err) {
+	var error = { error: assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
+	console.log(error);
+}
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
@@ -84,4 +90,55 @@ exports['model.find with callback and implicit connection'] = function (test) {
 		test.done();
 	});
 
+};
+
+
+exports['model.loadSchema'] = {
+	setUp: function (done) {
+		this._promiseTableSchemaBackup = quell._promiseTableSchema;
+
+		done();
+	},
+
+	'using promise': function (test) {
+
+		var mockConnection = {
+			query: function () {
+				test.ok(false, 'Query should not have been called');
+			}
+		};
+
+		var mockSchema = {
+			columns: {
+				id: quell.INT(),
+				name: quell.VARCHAR()
+			},
+			primaries: ['id'],
+			autoincrement: 'id',
+		};
+
+		quell._promiseTableSchema = function () {
+			return Promise.resolve(mockSchema);
+		};
+
+		var Model = quell('users', {
+			connection: mockConnection
+		});
+
+		Model.loadSchema().then(function (result) {
+			test.equal(result, Model);
+			test.deepEqual(Model.schema, mockSchema);
+			test.ok(true, 'promise resolved');
+			test.done();
+		}, function (err) {
+			logError(err);
+			test.ok(false, 'promise rejected');
+			test.done();
+		});
+	},
+
+	tearDown: function (done) {
+		quell._promiseTableSchema = this._promiseTableSchemaBackup;
+		done();
+	}
 };
