@@ -52,6 +52,7 @@ exports['load, 2 arg, no callback'] = function (test) {
 		test.equal(actual, model);
 		test.done();
 	}, function (err) {
+		logError(err);
 		test.ok(false, 'promise rejected');
 		test.done();
 	});
@@ -100,6 +101,7 @@ exports['load, 1 arg, no callback'] = function (test) {
 		test.equal(actual, model);
 		test.done();
 	}, function (err) {
+		logError(err);
 		test.ok(false, 'promise rejected');
 		test.done();
 	});
@@ -117,14 +119,15 @@ exports['load, 1 arg, no callback, plain object'] = function (test) {
 
 	model._loadWithMultiColumn = function (value) {
 		test.ok(true, 'Called correct load method');
-		test.deepEqual(value, {id:1, name:'john doe'});
+		test.deepEqual(value, {id: 1, name: 'john doe'});
 		return Promise.resolve(model);
 	};
 
-	model.load({id:1, name:'john doe'}).then(function (actual) {
+	model.load({id: 1, name: 'john doe'}).then(function (actual) {
 		test.equal(actual, model);
 		test.done();
 	}, function (err) {
+		logError(err);
 		test.ok(false, 'promise rejected');
 		test.done();
 	});
@@ -134,7 +137,7 @@ exports['load, 1 arg, no callback, plain object'] = function (test) {
 exports['load, 1 arg with callback'] = function (test) {
 	test.expect(3);
 	var Model = quell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 
 	model._loadWithPrimaryKey = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
 		test.ok(false, 'Called wrong load method');
@@ -156,7 +159,7 @@ exports['load, 1 arg with callback'] = function (test) {
 exports['load, no arguments'] = function (test) {
 	test.expect(2);
 	var Model = quell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 
 	model._loadWithPrimaryKey = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
 		test.ok(false, 'Called wrong load method');
@@ -171,6 +174,7 @@ exports['load, no arguments'] = function (test) {
 		test.equal(actual, model);
 		test.done();
 	}, function (err) {
+		logError(err);
 		test.ok(false, 'promise rejected');
 		test.done();
 	});
@@ -180,7 +184,7 @@ exports['load, no arguments'] = function (test) {
 exports['save, no arguments, exist unset, pIE returns false'] = function (test) {
 	test.expect(2);
 	var Model = quell('users');
-	var model = new Model({id:1, name:'john doe'});
+	var model = new Model({id: 1, name: 'john doe'});
 
 	model._promiseIfExists = function () {
 		return Promise.resolve(false);

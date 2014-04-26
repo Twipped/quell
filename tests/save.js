@@ -104,6 +104,8 @@ exports['save, callback, exists false'] = function (test) {
 	var model = new Model({id: 1, name: 'john doe'});
 	model.exists = false;
 
+	var cb;
+
 	model._promiseIfExists = function () {
 		test.ok(false, 'Should not have called promiseIfExists');
 		return Promise.reject();
@@ -115,13 +117,13 @@ exports['save, callback, exists false'] = function (test) {
 
 	model.insert = function (options, callback) {
 		test.ok(true, 'Called correct save method');
-		test.deepEqual(options, {});
+		test.deepEqual(options, {callback: callback});
 		test.strictEqual(typeof callback, 'function');
 		callback(null, model);
 		return Promise.resolve(model);
 	};
 
-	model.save(function (err, actual) {
+	model.save(cb = function (err, actual) {
 		test.strictEqual(err, null);
 		test.equal(actual, model);
 		test.done();

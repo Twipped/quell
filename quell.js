@@ -58,8 +58,10 @@ assign(quell, types);
  * Model constructor used to create a new record.
  * Takes the default data contents of the model.
  *
- *     var User = new Quell('users')
- *     var userRecord = new User();
+ * @example
+ *
+ * var User = new Quell('users')
+ * var userRecord = new User();
  *
  * @name Model
  * @typedef Model
@@ -94,9 +96,10 @@ util.inherits(modelBase, EventEmitter);
  * @typedef Record
  * @type {Object}
  */
-assign(modelBase.prototype, {
+var Record = {
 	/**
 	 * The raw model data.
+	 *
 	 * @memberOf Record
 	 * @internal Not intended for direct access.  Use Record.get() and Record.set() instead.
 	 * @type {object}
@@ -105,6 +108,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Indicates if the record already exists in the database.  Will be null if existence is unknown.
+	 *
 	 * @memberOf Record
 	 * @type {boolean}
 	 */
@@ -112,6 +116,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Function called at model initialization.  Receives all arguments passed to `new Model()`.
+	 *
 	 * @memberOf Record
 	 */
 	initialize: function () {},
@@ -119,6 +124,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Gets the current value of a column from the Record.
+	 *
 	 * @memberOf Record
 	 * @param  {string} field The column to retrieve.
 	 * @param  {boolean} [formatted] Indicates if the data should be returned in the format MySQL would store it in. Defaults to true.
@@ -135,7 +141,9 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Set a hash of attributes (one or many) on the model.
+	 *
 	 * If any of the attributes change the model's state, a "change" event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.
+	 *
 	 * @memberOf Record
 	 * @param {string|object} field
 	 * @param {mixed} [value]
@@ -211,6 +219,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Remove an attribute by deleting it from the internal attributes hash.
+	 *
 	 * Fires a "change" event unless silent is passed as an option.
 	 * @memberOf Record
 	 * @param  {string} field
@@ -222,6 +231,7 @@ assign(modelBase.prototype, {
 
 	/**
 	 * Returns `true` if the attribute is set to a non-null or non-undefined value.
+	 *
 	 * @memberOf Record
 	 * @param  {string}  field
 	 * @return {Boolean}
@@ -230,13 +240,54 @@ assign(modelBase.prototype, {
 		return this.get(field, false) !== undefined;
 	},
 
-	load: function (value, field, callback) {
+	/**
+	 * Fetches a record from the database.
+	 *
+	 * Load may be called in a variety of ways depending on the object state. The following are all
+	 * methods that may be used to load a record from a table primary keyed on an 'id' column.
+	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+	 * If the response is false, a record could not be found matching the keys requested.
+	 *
+	 * If no schema is defined on the model, Quell will load the schema from the database before
+	 * performing the select.
+	 *
+	 * @example
+	 * var record = new Model({id: 16});
+	 * record.load(); // Load using existing data already in the
+	 *
+	 * record.load(16); // Load using primary key (note, does not work for tables with multiple primaries)
+	 *
+	 * record.load(16, 'id'); // Load using a specific column value (column does not need to be a primary key)
+	 *
+	 * record.load({id: 16}); // Load using multiple column values, or a column hash.
+	 *
+	 * @memberOf Record
+	 * @param  {mixed}    [value]
+	 * @param  {string}   [field]
+	 * @param  {object}   [options]
+	 * @param  {Function} [callback]
+	 * @return {Promise}
+	 */
+	load: function (value, field, options, callback) {
 		switch (arguments.length) {
+		case 4:
+			break;
 		case 3:
+			if (typeof options === 'function') {
+				callback = options;
+				options = {callback: callback};
+			} else {
+				options = options || {};
+				options.callback = options.callback || callback;
+			}
 			break;
 		case 2:
 			if (typeof field === 'function') {
 				callback = field;
+				field = undefined;
+			}
+			if (typeof field === 'object') {
+				options = field || {};
 				field = undefined;
 			}
 			break;
@@ -244,20 +295,19 @@ assign(modelBase.prototype, {
 			if (typeof value === 'function') {
 				callback = value;
 				value = undefined;
-				field = undefined;
 			}
 		}
 
 		var defer;
 		if (value === undefined) {
-			defer = this._loadWithExisting();
+			defer = this._loadWithExisting(options);
 		} else if (typeof value === 'object') {
-			defer = this._loadWithMultiColumn(value);
+			defer = this._loadWithMultiColumn(value, options);
 		} else if (isScalar(value)) {
 			if (field === undefined) {
-				defer = this._loadWithPrimaryKey(value);
+				defer = this._loadWithPrimaryKey(value, options);
 			} else {
-				defer = this._loadWithSingleColumn(value, field);
+				defer = this._loadWithSingleColumn(value, field, options);
 			}
 		}
 
@@ -272,12 +322,31 @@ assign(modelBase.prototype, {
 		}
 	},
 
+	/**
+	 * Intelligently saves the record contents to the database.
+	 *
+	 * `Record.save()` attempts to ascertain if the record already exists in the database
+	 * by performing a query for the primary keys. This query is skipped if it is already known
+	 * if the record exists due to a fetch or `Record.exists` being set to `true` or `false`.
+	 *
+	 * If the record exists, an update is performed, otherwise a fresh insert is done.
+	 * If the options object contains a truthy `replace` option, the save will always be a REPLACE.
+	 *
+	 * See `Record.update` and `Record.insert` for details of those behaviors.
+	 *
+	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+	 *
+	 * @memberOf Record
+	 * @param  {object}   [options]
+	 * @param  {Function} [callback]
+	 * @return {Promise}
+	 */
 	save: function (options, callback) {
 		var self = this;
 
 		if (typeof options === 'function') {
 			callback = options;
-			options = {};
+			options = {callback: callback};
 		} else {
 			options = options || {};
 			options.callback = options.callback || callback;
@@ -293,7 +362,7 @@ assign(modelBase.prototype, {
 
 		}
 
-		return Promise.cast(self.exists === null ? self._promiseIfExists() : self.exists)
+		return Promise.cast(self.exists === null ? self._promiseIfExists(options) : self.exists)
 			.then(function (exists) {
 				if (exists) {
 					return self.update(options, callback);
@@ -303,6 +372,25 @@ assign(modelBase.prototype, {
 			});
 	},
 
+	/**
+	 * Inserts the record into the database as a new row.
+	 *
+	 * If the table has an auto-incrementing id, that field on the record will be updated to the new id,
+	 * overwriting any existing value.
+	 *
+	 * If the options object contains a truthy `replace` option, the save will always be a REPLACE using
+	 * the existing primary keys (including an auto-incrementing key).
+	 *
+	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+	 *
+	 * If no schema is defined on the model, Quell will load the schema from the database before
+	 * performing the insert.
+
+	 * @memberOf Record
+	 * @param  {object}   [options]
+	 * @param  {Function} [callback]
+	 * @return {Promise}
+	 */
 	insert: function (options, callback) {
 		if (typeof options === 'function') {
 			callback = options;
@@ -331,7 +419,7 @@ assign(modelBase.prototype, {
 
 			return quell._buildInsertQuery(self.tablename, write, options.replace);
 		}).then(function (query) {
-			return quell._promiseQueryRun(query.query, query.data, self.connection || options.connection || quell.connection);
+			return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
 		}).then(function (result) {
 			if (self.schema.autoincrement && result && result.insertId !== undefined) {
 				self.data[self.schema.autoincrement] = result.insertId;
@@ -351,6 +439,25 @@ assign(modelBase.prototype, {
 		});
 	},
 
+	/**
+	 * Updates the database with the current contents of the record.
+	 *
+	 * By default the update operation uses the primary keys of the record as the `WHERE` clause of the
+	 * `UPDATE` query, and will throw an error if all of the primary keys do not contain values.  This
+	 * behavior can be overridden by providing a `using` hash object in the update options which defines
+	 * what column values to use for the update. This is the only way to perform an update if the table
+	 * schema does not define any primary keys.
+	 *
+	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+	 *
+	 * If no schema is defined on the model, Quell will load the schema from the database before
+	 * performing the update.
+	 *
+	 * @memberOf Record
+	 * @param  {object}   [options]
+	 * @param  {Function} [callback]
+	 * @return {Promise}
+	 */
 	update: function (options, callback) {
 		if (typeof options === 'function') {
 			callback = options;
@@ -363,20 +470,33 @@ assign(modelBase.prototype, {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			var lookup = {},
+				lookupCount = 0,
 				write = {},
 				fields = Object.keys(self.data),
 				field, type,
 				i,c;
 
-			for (i = 0, c = self.schema.primaries.length;i < c;i++) {
-				field = self.schema.primaries[i];
-				type = self.schema.columns[field];
+			if (typeof options.using === 'object') {
+				lookup = options.using;
+				lookupCount = Object.keys(lookup).length;
+			} else {
 
-				if (!self.has(field)) {
-					throw new Error('Could not update quell record, required primary key value was absent: ' + field);
-				} else {
-					lookup[field] = type.prepare(self.data[field]);
+				for (i = 0, c = self.schema.primaries.length;i < c;i++) {
+					field = self.schema.primaries[i];
+					type = self.schema.columns[field];
+
+					if (!self.has(field)) {
+						throw new Error('Could not update quell record, required primary key value was absent: ' + field);
+					} else {
+						lookup[field] = type.prepare(self.data[field]);
+						lookupCount++;
+					}
 				}
+
+			}
+
+			if (!lookupCount) {
+				throw new Error('Could not update quell record, no primary keys was available to update against.');
 			}
 
 			for (i = 0, c = fields.length;i < c;i++) {
@@ -390,7 +510,7 @@ assign(modelBase.prototype, {
 
 			return quell._buildUpdateQuery(self.tablename, write, lookup);
 		}).then(function (query) {
-			return quell._promiseQueryRun(query.query, query.data, self.connection || options.connection || quell.connection);
+			return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
 		}).then(function () {
 			if (options.callback) {
 				options.callback(null, self);
@@ -406,7 +526,26 @@ assign(modelBase.prototype, {
 		});
 	},
 
-
+	/**
+	 * Deletes the record from the database.
+	 *
+	 * By default the delete operation uses the primary keys of the record as the `WHERE` clause of the
+	 * `DELETE` query, and will throw an error if all of the primary keys do not contain values.  If the
+	 * table schema does not define any primary keys, Quell will use all data on the record to conduct the
+	 * query.  This behavior can be overridden by providing a `using` hash object in the delete options
+	 * which defines what column values to use for the delete. An error will be thrown if no values exist
+	 * to perform the delete with, so as to avoid deleting everything.
+	 *
+	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+	 *
+	 * If no schema is defined on the model, Quell will load the schema from the database before
+	 * performing the delete.
+	 *
+	 * @memberOf Record
+	 * @param  {object}   [options]
+	 * @param  {Function} [callback]
+	 * @return {Promise}
+	 */
 	delete: function (options, callback) {
 		if (typeof options === 'function') {
 			callback = options;
@@ -425,32 +564,39 @@ assign(modelBase.prototype, {
 				i = 0,
 				c = fields.length;
 
-			// If the schema has no primary keys, use any column data we have.
-			if (c) {
-				for (;i < c;i++) {
-					field = fields[i];
-					type = self.schema.columns[field];
-
-					if (!self.has(field)) {
-						throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
-					} else {
-						lookup[field] = type.prepare(self.data[field]);
-						lookupCount++;
-					}
-				}
+			if (typeof options.using === 'object') {
+				lookup = options.using;
+				lookupCount = Object.keys(lookup).length;
 			} else {
-				fields = Object.keys(self.schema.columns);
-				c = fields.length;
 
-				for (;i < c;i++) {
-					field = fields[i];
-					type = self.schema.columns[field];
+				// If the schema has no primary keys, use any column data we have.
+				if (c) {
+					for (;i < c;i++) {
+						field = fields[i];
+						type = self.schema.columns[field];
 
-					if (self.has(field)) {
-						lookup[field] = type.prepare(self.data[field]);
-						lookupCount++;
+						if (!self.has(field)) {
+							throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
+						} else {
+							lookup[field] = type.prepare(self.data[field]);
+							lookupCount++;
+						}
+					}
+				} else {
+					fields = Object.keys(self.schema.columns);
+					c = fields.length;
+
+					for (;i < c;i++) {
+						field = fields[i];
+						type = self.schema.columns[field];
+
+						if (self.has(field)) {
+							lookup[field] = type.prepare(self.data[field]);
+							lookupCount++;
+						}
 					}
 				}
+
 			}
 
 			if (!lookupCount) {
@@ -460,7 +606,7 @@ assign(modelBase.prototype, {
 
 			return quell._buildDeleteQuery(self.tablename, lookup);
 		}).then(function (query) {
-			return quell._promiseQueryRun(query.query, query.data, self.connection || options.connection || quell.connection);
+			return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
 		}).then(function () {
 			self.exists = false;
 
@@ -479,7 +625,13 @@ assign(modelBase.prototype, {
 	},
 
 
-	_loadWithExisting: function () {
+	/**
+	 * Loads a record from the database using the existing primary key data.
+	 * @private
+	 * @memberOf Record
+	 * @return {Promise}
+	 */
+	_loadWithExisting: function (options) {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			if (!self.schema.primaries || !self.schema.primaries.length) {
@@ -501,11 +653,19 @@ assign(modelBase.prototype, {
 				}
 			}
 
-			return self._loadUsing(lookup);
+			return self._loadUsing(lookup, options);
 		});
 	},
 
-	_loadWithPrimaryKey: function (value) {
+	/**
+	 * Loads a record from the database using a single primary key.
+	 *
+	 * @private
+	 * @memberOf Record
+	 * @param  {mixed} value
+	 * @return {Promise}
+	 */
+	_loadWithPrimaryKey: function (value, options) {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			if (!self.schema.primaries.length) {
@@ -522,11 +682,20 @@ assign(modelBase.prototype, {
 
 			lookup[key] = type.prepare(value);
 
-			return self._loadUsing(lookup);
+			return self._loadUsing(lookup, options);
 		});
 	},
 
-	_loadWithSingleColumn: function (value, field) {
+	/**
+	 * Loads a record from the database using a single column value.
+	 *
+	 * @private
+	 * @memberOf Record
+	 * @param  {mixed} value
+	 * @param  {string} field
+	 * @return {Promise}
+	 */
+	_loadWithSingleColumn: function (value, field, options) {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			var type = self.schema.columns[field],
@@ -538,11 +707,19 @@ assign(modelBase.prototype, {
 
 			lookup[field] = type.prepare(value);
 
-			return self._loadUsing(lookup);
+			return self._loadUsing(lookup, options);
 		});
 	},
 
-	_loadWithMultiColumn: function (search) {
+	/**
+	 * Loads a record from the database using one or more column values from an object hash.
+	 *
+	 * @private
+	 * @memberOf Record
+	 * @param  {object} search
+	 * @return {Promise}
+	 */
+	_loadWithMultiColumn: function (search, options) {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			if (typeof search !== 'object' || !Object.keys(search).length) {
@@ -565,16 +742,22 @@ assign(modelBase.prototype, {
 				}
 			}
 
-			return self._loadUsing(lookup);
+			return self._loadUsing(lookup, options);
 		});
 	},
 
-
-	_loadUsing: function (lookup) {
+	/**
+	 * Loads a record from the database using pre-validated data.
+	 * @private
+	 * @memberOf Record
+	 * @param  {[type]} lookup
+	 * @return {[type]}
+	 */
+	_loadUsing: function (lookup, options) {
 		var self = this;
 		var query = quell._buildSelectQuery(self.tablename, lookup);
 
-		return quell._promiseQueryRun(query.query, query.data, self.connection).then(function (results) {
+		return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection).then(function (results) {
 			// If results are returned, then we found the row and can map the data onto the model
 			// If no results were returned, then the row wasn't found and we resolve with false.
 			if (results.length) {
@@ -589,7 +772,14 @@ assign(modelBase.prototype, {
 		});
 	},
 
-	_promiseIfExists: function () {
+	/**
+	 * Checks to see if the record already exists in the database using the primary keys.
+	 *
+	 * @private
+	 * @memberOf Record
+	 * @return {Promise}
+	 */
+	_promiseIfExists: function (options) {
 		var self = this;
 		return this._promiseValidateSchema().then(function () {
 			var lookup = {},
@@ -619,7 +809,7 @@ assign(modelBase.prototype, {
 
 			var query = quell._buildSelectQuery(self.tablename, lookup, self.schema.primaries);
 
-			return quell._promiseQueryRun(query.query, query.data, self.connection).then(function (results) {
+			return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection).then(function (results) {
 				self.exists = !!results.length;
 				return self.exists;
 			});
@@ -627,6 +817,13 @@ assign(modelBase.prototype, {
 		});
 	},
 
+	/**
+	 * Validates the schema data for the model, loading the schema from the database if needed.
+	 *
+	 * @private
+	 * @memberOf Record
+	 * @return {Promise}
+	 */
 	_promiseValidateSchema: function () {
 		var self = this;
 
@@ -655,10 +852,19 @@ assign(modelBase.prototype, {
 			return Promise.resolve();
 		}
 	}
-});
+};
 
+assign(modelBase.prototype, Record);
 
-
+/**
+ * Constructs the query for a SELECT request.
+ * @private
+ * @memberOf quell
+ * @param  {string} tablename
+ * @param  {object} lookup
+ * @param  {array} [select]
+ * @return {object}
+ */
 quell._buildSelectQuery = function (tablename, lookup, select) {
 	var q = queryize()
 		.select(select || undefined)
@@ -668,6 +874,15 @@ quell._buildSelectQuery = function (tablename, lookup, select) {
 	return q.compile();
 };
 
+/**
+ * Constructs the query for an INSERT request.
+ * @private
+ * @memberOf quell
+ * @param  {string} tablename
+ * @param  {object} write
+ * @param  {boolean} [replace]
+ * @return {object}
+ */
 quell._buildInsertQuery = function (tablename, write, replace) {
 	var q = queryize()[replace ? 'replace' : 'insert'](write)
 		.into(tablename);
@@ -675,6 +890,15 @@ quell._buildInsertQuery = function (tablename, write, replace) {
 	return q.compile();
 };
 
+/**
+ * Constructs the query for an UPDATE request.
+ * @private
+ * @memberOf quell
+ * @param  {string} tablename
+ * @param  {object} write
+ * @param  {object} lookup
+ * @return {object}
+ */
 quell._buildUpdateQuery = function (tablename, write, lookup) {
 	var q = queryize()
 		.update(tablename)
@@ -684,6 +908,14 @@ quell._buildUpdateQuery = function (tablename, write, lookup) {
 	return q.compile();
 };
 
+/**
+ * Constructs the query for a DELETE request.
+ * @private
+ * @memberOf quell
+ * @param  {string} tablename
+ * @param  {object} lookup
+ * @return {object}
+ */
 quell._buildDeleteQuery = function (tablename, lookup) {
 	var q = queryize()
 		.deleteFrom(tablename)
@@ -692,14 +924,34 @@ quell._buildDeleteQuery = function (tablename, lookup) {
 	return q.compile();
 };
 
+/**
+ * Runs an arbitrary query.  Attempts to use prepared statements when available.
+ * @private
+ * @memberOf quell
+ * @param  {string} query
+ * @param  {array} data
+ * @param  {object} mysql
+ * @return {Promise}
+ */
 quell._promiseQueryRun = function (query, data, mysql) {
 	var callback = proxmis();
-	mysql.query(query, data, callback);
+	if (typeof mysql.execute === 'function') {
+		mysql.execute(query, data, callback);
+	} else {
+		mysql.query(query, data, callback);
+	}
 	return callback;
 };
 
 
-
+/**
+ * Loads the schema for a table from the database and parses for use.
+ * @private
+ * @memberOf quell
+ * @param  {string} tablename
+ * @param  {object} mysql
+ * @return {Promise}
+ */
 quell._promiseTableSchema = function (tablename, mysql) {
 	var defer = proxmis();
 
@@ -776,6 +1028,17 @@ quell._promiseTableSchema = function (tablename, mysql) {
 	});
 };
 
+/**
+ * Creates a Queryize chain for loading multiple records.
+ *
+ * Overrides the `exec` function to pre-wrap all results with Quell models.
+ *
+ * See QueryizeJS documentation for more details.
+ *
+ * @memberOf Model
+ * @param  {object} [where] An object hash of all columns to search against. Shortcut to calling .find().where()
+ * @return {[type]}
+ */
 modelBase.find = function (where) {
 	var self = this;
 	var q = queryize().select().from(this.tablename);
