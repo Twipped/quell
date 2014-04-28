@@ -155,7 +155,6 @@ Pre-loads the schema details for the model.
 <a href="#recorddata">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L107 "View in source") [&#x24C9;][1]
 
 *(object)*: The raw model data.
-	 *
 
 * * *
 
@@ -168,7 +167,6 @@ Pre-loads the schema details for the model.
 <a href="#recordexists">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L115 "View in source") [&#x24C9;][1]
 
 *(boolean)*: Indicates if the record already exists in the database.  Will be null if existence is unknown.
-	 *
 
 * * *
 
@@ -181,7 +179,6 @@ Pre-loads the schema details for the model.
 <a href="#recordgetfield--formatted">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L133 "View in source") [&#x24C9;][1]
 
 Gets the current value of a column from the Record.
-	 *
 
 #### Arguments
 1. `field` *(string)*: The column to retrieve.
@@ -198,9 +195,8 @@ Gets the current value of a column from the Record.
 <a href="#recordsetfield--value-options">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L152 "View in source") [&#x24C9;][1]
 
 Set a hash of attributes *(one or many)* on the model.
-	 *
-	 * If any of the attributes change the model's state, a "change" event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.
-	 *
+
+If any of the attributes change the model's state, a "change" event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.
 
 #### Arguments
 1. `field` *(string|object)*:
@@ -218,8 +214,8 @@ Set a hash of attributes *(one or many)* on the model.
 <a href="#recordunsetfield--options">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L228 "View in source") [&#x24C9;][1]
 
 Remove an attribute by deleting it from the internal attributes hash.
-	 *
-	 * Fires a "change" event unless silent is passed as an option.
+
+Fires a "change" event unless silent is passed as an option.
 
 #### Arguments
 1. `field` *(string)*:
@@ -236,7 +232,6 @@ Remove an attribute by deleting it from the internal attributes hash.
 <a href="#recordhasfield">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L239 "View in source") [&#x24C9;][1]
 
 Returns `true` if the attribute is set to a non-null or non-undefined value.
-	 *
 
 #### Arguments
 1. `field` *(string)*:
@@ -252,15 +247,10 @@ Returns `true` if the attribute is set to a non-null or non-undefined value.
 <a href="#recordloadvalue-field-options-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L271 "View in source") [&#x24C9;][1]
 
 Fetches a record from the database.
-	 *
-	 * Load may be called in a variety of ways depending on the object state. The following are all
-	 * methods that may be used to load a record from a table primary keyed on an 'id' column.
-	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
-	 * If the response is false, a record could not be found matching the keys requested.
-	 *
-	 * If no schema is defined on the model, Quell will load the schema from the database before
-	 * performing the select.
-	 *
+
+Load may be called in a variety of ways depending on the object state. The following are all methods that may be used to load a record from a table primary keyed on an 'id' column. Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead. If the response is false, a record could not be found matching the keys requested.
+
+If no schema is defined on the model, Quell will load the schema from the database before performing the select.
 
 #### Arguments
 1. `[value]` *(mixed)*:
@@ -291,18 +281,14 @@ record.load({id: 16}); // Load using multiple column values, or a column hash.
 <a href="#recordsaveoptions-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L344 "View in source") [&#x24C9;][1]
 
 Intelligently saves the record contents to the database.
-	 *
-	 * `Record.save()` attempts to ascertain if the record already exists in the database
-	 * by performing a query for the primary keys. This query is skipped if it is already known
-	 * if the record exists due to a fetch or `Record.exists` being set to `true` or `false`.
-	 *
-	 * If the record exists, an update is performed, otherwise a fresh insert is done.
-	 * If the options object contains a truthy `replace` option, the save will always be a REPLACE.
-	 *
-	 * See `Record.update` and `Record.insert` for details of those behaviors.
-	 *
-	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
-	 *
+
+`Record.save()` attempts to ascertain if the record already exists in the database by performing a query for the primary keys. This query is skipped if it is already known if the record exists due to a fetch or `Record.exists` being set to `true` or `false`.
+
+If the record exists, an update is performed, otherwise a fresh insert is done. If the options object contains a truthy `replace` option, the save will always be a REPLACE.
+
+See `Record.update` and `Record.insert` for details of those behaviors.
+
+Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
 
 #### Arguments
 1. `[options]` *(object)*:
@@ -319,17 +305,14 @@ Intelligently saves the record contents to the database.
 <a href="#recordinsertoptions-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L394 "View in source") [&#x24C9;][1]
 
 Inserts the record into the database as a new row.
-	 *
-	 * If the table has an auto-incrementing id, that field on the record will be updated to the new id,
-	 * overwriting any existing value.
-	 *
-	 * If the options object contains a truthy `replace` option, the save will always be a REPLACE using
-	 * the existing primary keys *(including an auto-incrementing key)*.
-	 *
-	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
-	 *
-	 * If no schema is defined on the model, Quell will load the schema from the database before
-	 * performing the insert.
+
+If the table has an auto-incrementing id, that field on the record will be updated to the new id, overwriting any existing value.
+
+If the options object contains a truthy `replace` option, the save will always be a REPLACE using the existing primary keys *(including an auto-incrementing key)*.
+
+Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+
+If no schema is defined on the model, Quell will load the schema from the database before performing the insert.
 
 #### Arguments
 1. `[options]` *(object)*:
@@ -346,18 +329,12 @@ Inserts the record into the database as a new row.
 <a href="#recordupdateoptions-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L461 "View in source") [&#x24C9;][1]
 
 Updates the database with the current contents of the record.
-	 *
-	 * By default the update operation uses the primary keys of the record as the `WHERE` clause of the
-	 * `UPDATE` query, and will throw an error if all of the primary keys do not contain values.  This
-	 * behavior can be overridden by providing a `using` hash object in the update options which defines
-	 * what column values to use for the update. This is the only way to perform an update if the table
-	 * schema does not define any primary keys.
-	 *
-	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
-	 *
-	 * If no schema is defined on the model, Quell will load the schema from the database before
-	 * performing the update.
-	 *
+
+By default the update operation uses the primary keys of the record as the `WHERE` clause of the `UPDATE` query, and will throw an error if all of the primary keys do not contain values.  This behavior can be overridden by providing a `using` hash object in the update options which defines what column values to use for the update. This is the only way to perform an update if the table schema does not define any primary keys.
+
+Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+
+If no schema is defined on the model, Quell will load the schema from the database before performing the update.
 
 #### Arguments
 1. `[options]` *(object)*:
@@ -374,19 +351,12 @@ Updates the database with the current contents of the record.
 <a href="#recorddeleteoptions-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/quell/blob/master/quell.js#L549 "View in source") [&#x24C9;][1]
 
 Deletes the record from the database.
-	 *
-	 * By default the delete operation uses the primary keys of the record as the `WHERE` clause of the
-	 * `DELETE` query, and will throw an error if all of the primary keys do not contain values.  If the
-	 * table schema does not define any primary keys, Quell will use all data on the record to conduct the
-	 * query.  This behavior can be overridden by providing a `using` hash object in the delete options
-	 * which defines what column values to use for the delete. An error will be thrown if no values exist
-	 * to perform the delete with, so as to avoid deleting everything.
-	 *
-	 * Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
-	 *
-	 * If no schema is defined on the model, Quell will load the schema from the database before
-	 * performing the delete.
-	 *
+
+By default the delete operation uses the primary keys of the record as the `WHERE` clause of the `DELETE` query, and will throw an error if all of the primary keys do not contain values.  If the table schema does not define any primary keys, Quell will use all data on the record to conduct the query.  This behavior can be overridden by providing a `using` hash object in the delete options which defines what column values to use for the delete. An error will be thrown if no values exist to perform the delete with, so as to avoid deleting everything.
+
+Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.
+
+If no schema is defined on the model, Quell will load the schema from the database before performing the delete.
 
 #### Arguments
 1. `[options]` *(object)*:
