@@ -1046,7 +1046,7 @@ modelBase.find = function (where) {
 		q.where(where);
 	}
 
-	var exec = q.run;
+	var exec = q.exec;
 	q.exec = function (conn, callback) {
 		switch (arguments.length) {
 		case 2:

@@ -34,7 +34,7 @@
     "lodash.foreach": "^2.4.1"
   },
   "dependencies": {
-    "queryize": "^0.1.2",
+    "queryize": "^0.1.3",
     "moment": "^2.5.1",
     "proxmis": "^0.1.1",
     "es6-promise": "^0.1.1",
