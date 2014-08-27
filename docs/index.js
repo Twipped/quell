@@ -4,7 +4,7 @@ var Handlebars = require('handlebars');
 
 var template = Handlebars.compile(fs.readFileSync(__dirname + '/template.hbs.html').toString('utf8'));
 
-var parsed = dox.parseComments(fs.readFileSync(__dirname + '/../quell.js').toString('utf8'));
+var parsed = dox.parseComments(fs.readFileSync(__dirname + '/../lib/quell.js').toString('utf8'));
 
 var parents = {};
 var parentless = {
