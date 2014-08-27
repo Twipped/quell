@@ -1,4 +1,5 @@
 var assign = require('lodash.assign');
+var clone = require('lodash.clone');
 var types = require('./lib/types');
 var queryize = require('queryize');
 var Promise = require('es6-promise').Promise;
@@ -6,20 +7,60 @@ var proxmis = require('proxmis');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
-var modelBase;
-
 /**
- * Creates a model object using provided the tablename and/or prototype.
- * All properties of the options object will applied to the model's prototype as initial values.
+ * Creates a Model constructor, using provided the tablename and/or prototype, for creating records representing rows in the table.
+ * All properties of the options object will be mixed into to the model's prototype.
  *
  * @name  quell
- * @typedef Quell
+ * @typedef quell
  * @constructor
  * @param  {string} [tablename]
  * @param  {object} [options]
  * @return {Model}
+ * @example
+ * // Create a plain model for the users table that loads its schema
+ * // from the database on first use.
+ *
+ * var User = quell('users');
+ * @example
+ * // Alternative syntax for defining the table name, with a prototype method.
+ *
+ * var User = quell({
+ *   tablename: 'users',
+ *
+ *   checkPassword: function (password) {
+ *     // ...
+ *   }
+ * });
+ * @example
+ * // Create a model for the user table with a predefined expected schema and
+ * // couple member functions. Quell will not attempt to fetch the table schema
+ * // if a valid definition exists on the prototype.
+ *
+ * var User = quell('users', {
+ *   schema: {
+ *     columns: {
+ *       id:       quell.INT({unsigned: true}),
+ *       email:    quell.VARCHAR(255)
+ *       fullname: quell.TINYTEXT(),
+ *       enabled:  quell.BOOLEAN()
+ *     },
+ *     autoincrement: 'id',
+ *     primaries: ['id']
+ *   },
+ *
+ *   enable: function () {
+ *     this.set('enabled', true);
+ *     return this;
+ *   },
+ *
+ *   disable: function () {
+ *     this.set('enabled', false);
+ *     return this;
+ *   }
+ * });
  */
-var quell = module.exports = function (tablename, options) {
+var quell = function (tablename, options) {
 
 	if (typeof tablename === 'object') {
 		options = tablename;
@@ -54,13 +95,15 @@ var quell = module.exports = function (tablename, options) {
 
 assign(quell, types);
 
+module.exports = quell;
+
 /**
  * Model constructor used to create a new record.
  * Takes the default data contents of the model.
  *
  * @example
  *
- * var User = new Quell('users')
+ * var User = quell('users')
  * var userRecord = new User();
  *
  * @name Model
@@ -70,7 +113,7 @@ assign(quell, types);
  * @param  {object} [options]
  * @return {Record}
  */
-modelBase = quell._model = function (data, options) {
+function modelBase (data, options) {
 	data = data || {};
 	options = options || {};
 
@@ -87,6 +130,8 @@ modelBase = quell._model = function (data, options) {
 	EventEmitter.call(this);
 	this.initialize.apply(this, arguments);
 };
+
+quell._model = modelBase;
 
 util.inherits(modelBase, EventEmitter);
 
@@ -115,11 +160,26 @@ var Record = {
 	exists: null,
 
 	/**
-	 * Function called at model initialization.  Receives all arguments passed to `new Model()`.
+	 * Function called at model initialization. Abstract method intended to be overridden during model creation, not intended to be called directly.
+	 *
+	 * Receives all arguments passed to `new Model()`.
 	 *
 	 * @memberOf Record
+	 * @abstract
+	 * @example
+	 * var User = quell({
+	 *   initialize: function (data, options) {
+	 *     console.log('User record instance created', data);
+	 *   }
+	 * });
+	 *
+	 * var user = new User({id: 200});
+	 * // Console:
+	 * // "User record instance created", {"id": 200}
 	 */
-	initialize: function () {},
+	initialize: function () {
+		// override me
+	},
 
 
 	/**
@@ -252,20 +312,38 @@ var Record = {
 	 * performing the select.
 	 *
 	 * @example
-	 * var record = new Model({id: 16});
-	 * record.load(); // Load using existing data already in the
+	 * // Load using existing data already in the record object.
+	 * var record = new User({id: 16});
+	 * record.load().then(function (exists) {
+	 *   // loaded.
+	 * });
 	 *
-	 * record.load(16); // Load using primary key (note, does not work for tables with multiple primaries)
+	 * @example
+	 * // Load using primary key (note, does not work for tables with multiple primaries)
+	 * var record = new User();
+	 * record.load(16).then(function (exists) {
+	 *   // loaded
+	 * });
 	 *
-	 * record.load(16, 'id'); // Load using a specific column value (column does not need to be a primary key)
+	 * @example
+	 * // Load using a specific column value (column does not need to be a primary key)
+	 * var record = new User();
+	 * record.load(16, 'id', function (exists) {
+	 *   // loaded
+	 * });
 	 *
-	 * record.load({id: 16}); // Load using multiple column values, or a column hash.
+	 * @example
+	 * // Load using multiple column values, or a column hash.
+	 * var record = new User();
+	 * record.load({id: 16}, function (exists) {
+	 *   // loaded
+	 * });
 	 *
 	 * @memberOf Record
 	 * @param  {mixed}    [value]
 	 * @param  {string}   [field]
 	 * @param  {object}   [options]
-	 * @param  {Function} [callback]
+	 * @param  {Function} [callback] Callback to be executed when the record is loaded.
 	 * @return {Promise}
 	 */
 	load: function (value, field, options, callback) {
@@ -312,10 +390,9 @@ var Record = {
 		}
 
 		if (typeof callback === 'function') {
-			var self = this;
 			return defer.then(
-				function () { callback(null, self); },
-				function (err) { callback(err); }
+				function (exists) { callback(null, exists); },
+				function (err) { callback(err || true); }
 			);
 		} else {
 			return defer;
@@ -1122,6 +1199,12 @@ modelBase.loadSchema = function (options, callback) {
 
 /** Utility Functions *******************************************************************************************/
 
+/**
+ * Checks if the value passed in is a primitive value.
+ * @private
+ * @param  {mixed}  value
+ * @return {Boolean}
+ */
 function isScalar (value) {
 	switch (typeof value) {
 	case 'string':
@@ -1133,15 +1216,14 @@ function isScalar (value) {
 	}
 }
 
-function clone (obj) {
-	var cloned = Object.create(obj),
-		property;
-	for (property in obj) {
-		cloned[property] = obj[property];
-	}
-	return cloned;
-}
-
+/**
+ * Checks if two values are equal using the column type
+ * @private
+ * @param  {mixed}  a
+ * @param  {mixed}  b
+ * @param  {function} [ctype]
+ * @return {Boolean}
+ */
 function isEqual (a, b, ctype) {
 	if (ctype) {
 		return ctype.compare(a, b);

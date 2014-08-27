@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>QuellJS - API Reference</title>
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+		<link rel="stylesheet" href="fonts.css">
+		<style>
+
+			.jumbotron {
+				margin-top: 30px;
+				background-color: #333;
+				color: white;
+			}
+
+			.jumbotron .btn-code {
+				font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+				text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+			}
+
+			.jumbotron .prettyprint {
+				padding: 10px;
+			}
+
+			pre {
+				box-shadow: 0 1px 2px rgba(100,100,100,0.2);
+				background-color: #f8f8f8;
+				border-color: #ddd;
+			}
+
+			pre code {
+				word-wrap: normal;
+				white-space: pre;
+			}
+
+			.sidenav .nav > li > a {
+				padding: 2px 15px;
+			}
+
+			.sidenav span.name {
+				vertical-align: middle;
+				display: inline-block;
+				line-height: 1;
+			}
+
+			.sidenav .ico-arrow-up {
+				color: #ccc;
+				font-size: 12px;
+			}
+
+			.sidenav .alias .name {
+				color: #ccc;
+				font-size: 12px;
+				margin-left: 10px;
+			}
+
+			.category {
+				margin-top: 5px;
+			}
+
+			.nav > li.category > a {
+				color: #666;
+				text-shadow: 0 1px 0 rgba(255,255,255,.5);
+				background: none;
+			}
+
+			.category > ul a {
+				background: #fbfbfb;
+				
+			}
+
+			.pieces .private, .nav .private {
+				display: none;
+				opacity: 0.5;
+			}
+
+			.pieces .page-header, .pieces h2 {
+				margin-top: 0;
+			}
+
+			.pieces h3 {
+				font-size: 15px;
+			}
+
+			.signature .list-group strong {
+				margin-right: 20px;
+			}
+
+			.signature .list-group em, .signature u {
+				margin-left: 20px;
+			}
+
+			.signature .panel-footer em {
+				color: #999;
+			}
+
+			.signature pre.panel-body + pre.panel-body {
+				border-top: 1px solid #ddd;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+
+			.codeview .panel-heading {
+				font-size: 12px;
+				padding: 5px;
+				cursor: pointer;
+			}
+
+			.codeview .panel-heading .ico-embed {
+				font-size:16px;
+				line-height: 1;
+				vertical-align: middle;
+				position:relative;
+				top: -1px;
+			}
+
+			pre.panel-body, pre.panel-body.prettyprint  {
+				padding: 8px;
+				border: none;
+				font-size: 11px;
+				line-height: 13px;
+				margin-bottom: 0;
+				background-color: #fbfbfb;
+				
+			}
+
+
+			pre.panel-body:before, pre.panel-body:after {
+				content: '';
+			}
+
+			.kwd {font-weight: bold;}
+
+			.nav-list {
+				padding-left: 15px;
+				padding-right: 15px;
+				margin-bottom: 0;
+			}
+
+			.nav-list > li > a,
+			.nav-list .nav-header {
+				margin-left: -15px;
+				margin-right: -15px;
+				text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+			}
+
+			.nav-list > li > a {
+				padding: 3px 15px;
+			}
+
+			.nav-header {
+				display: block;
+				padding: 3px 15px;
+				font-size: 11px;
+				font-weight: bold;
+				line-height: 1.428571429;
+				color: #999;
+				text-shadow: 0 1px 0 rgba(255,255,255,.5);
+				text-transform: uppercase;
+			}
+
+			.nav > .nav-header > a:hover {
+				background: none;
+			}
+
+			.gh-link {
+				margin: 8px 0 0 15px;
+			}
+
+			.navbar .ico-github {
+				font-size: 32px;
+				text-decoration: none;
+			}
+
+			footer {
+				text-align: center;
+				font-size: 10px;
+			}
+
+			@media (max-width: 768px) {
+				.navbar-fixed-top {
+					display: none;
+				}
+
+				.jumbotron {
+					margin-top: 0;
+				}
+
+			}
+
+
+
+		</style>
+	</head>
+	
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header"><a class="navbar-brand" href="#">Quell.js</a></div>
+				<ul class="nav navbar-nav">
+					<li><a href="#reference">API Reference</a></li>
+				</ul>
+				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
+			</div>
+		</div>
+
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Quell.js</h1>
+				<p>A no-frills active record implementation for node-mysql.</p>
+				<p>
+					<a href="http://npmjs.org/quell" class="btn btn-default btn-code btn-success">npm install quell</a>
+					<a href="http://github.com/chipersoft/quell" class="btn btn-primary">View on GitHub</a>
+					<a href="http://github.com/chipersoft/quell/issues" class="btn btn-danger">Report an Issue</a>
+				</p>
+				<p>
+					<a href="http://badge.fury.io/js/quell"><img src="https://img.shields.io/npm/v/quell.svg?style=flat" alt="NPM Version" height="18"></a>
+					<img src="https://img.shields.io/npm/l/quell.svg?style=flat" alt="License: MIT" height="18">
+					<a href="http://npmjs.org/quell"><img src="https://img.shields.io/npm/dm/quell.svg?style=flat" alt="Downloads/Week" height="18"></a>
+					<a href="https://travis-ci.org/ChiperSoft/quell"><img src="https://img.shields.io/travis/ChiperSoft/quell.svg?style=flat" alt="Build Status" height="18"></a>
+					<a href="https://coveralls.io/r/chipersoft/quell"><img src="https://img.shields.io/coveralls/ChiperSoft/quell.svg?style=flat" alt="Coverage" height="18"></a>
+					<a href="https://www.gittip.com/chipersoft"><img src="http://img.shields.io/gittip/chipersoft.svg?style=flat" alt="Gittip" height="18"></a>
+				</p>
+
+				<pre class="prettyprint"><code class="language-javascript">var quell = require('quell');
+var Book = quell('books');
+var Author = quell('authors');
+
+var tperry = new Author({
+	firstname: 'Terry',
+	lastname: 'Pratchett'
+});
+
+var nightWatch = new Book({
+	title: 'Night Watch'
+});
+
+tperry.save(function () {
+	nightWatch.set('authorid', tperry.get('id'));
+	nightWatch.save();
+});
+</code></pre>
+			</div>
+			</div>
+
+		</div>
+
+		<div id="reference" style="position:relative;top:-60px;"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3 sidenav">
+					<ul class="nav nav-list">
+					
+						
+						<li class="private "><a href="#functionisScalar"><span class="name">isScalar</span></a></li>
+						
+						<li class="private "><a href="#functionisEqual"><span class="name">isEqual</span></a></li>
+						
+						
+					
+					
+						
+							<li class=" "><a href="#constructorquell"><span class="name">quell</span></a></li>
+						
+						<li><ul class="nav ">
+						
+							<li class="private "><a href="#methodquell_buildSelectQuery"><span class="name">quell._buildSelectQuery</span></a></li>
+						
+							<li class="private "><a href="#methodquell_buildInsertQuery"><span class="name">quell._buildInsertQuery</span></a></li>
+						
+							<li class="private "><a href="#methodquell_buildUpdateQuery"><span class="name">quell._buildUpdateQuery</span></a></li>
+						
+							<li class="private "><a href="#methodquell_buildDeleteQuery"><span class="name">quell._buildDeleteQuery</span></a></li>
+						
+							<li class="private "><a href="#methodquell_promiseQueryRun"><span class="name">quell._promiseQueryRun</span></a></li>
+						
+							<li class="private "><a href="#methodquell_promiseTableSchema"><span class="name">quell._promiseTableSchema</span></a></li>
+						
+						
+						</ul></li>
+					
+						
+							<li class=" "><a href="#constructorModel"><span class="name">Model</span></a></li>
+						
+						<li><ul class="nav ">
+						
+							<li class=" "><a href="#methodModelfind"><span class="name">Model.find</span></a></li>
+						
+							<li class=" "><a href="#methodModelloadSchema"><span class="name">Model.loadSchema</span></a></li>
+						
+						
+						</ul></li>
+					
+						
+							<li class=""><a>Record</a></li>
+						
+						<li><ul class="nav ">
+						
+							<li class=" "><a href="#methodRecordinitialize"><span class="name">Record.initialize</span></a></li>
+						
+							<li class=" "><a href="#methodRecordget"><span class="name">Record.get</span></a></li>
+						
+							<li class=" "><a href="#methodRecordset"><span class="name">Record.set</span></a></li>
+						
+							<li class=" "><a href="#methodRecordunset"><span class="name">Record.unset</span></a></li>
+						
+							<li class=" "><a href="#methodRecordhas"><span class="name">Record.has</span></a></li>
+						
+							<li class=" "><a href="#methodRecordload"><span class="name">Record.load</span></a></li>
+						
+							<li class=" "><a href="#methodRecordsave"><span class="name">Record.save</span></a></li>
+						
+							<li class=" "><a href="#methodRecordinsert"><span class="name">Record.insert</span></a></li>
+						
+							<li class=" "><a href="#methodRecordupdate"><span class="name">Record.update</span></a></li>
+						
+							<li class=" "><a href="#methodRecorddelete"><span class="name">Record.delete</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_loadWithExisting"><span class="name">Record._loadWithExisting</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_loadWithPrimaryKey"><span class="name">Record._loadWithPrimaryKey</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_loadWithSingleColumn"><span class="name">Record._loadWithSingleColumn</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_loadWithMultiColumn"><span class="name">Record._loadWithMultiColumn</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_loadUsing"><span class="name">Record._loadUsing</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_promiseIfExists"><span class="name">Record._promiseIfExists</span></a></li>
+						
+							<li class="private "><a href="#methodRecord_promiseValidateSchema"><span class="name">Record._promiseValidateSchema</span></a></li>
+						
+						
+						</ul></li>
+					
+					</ul>
+				</div>
+
+
+				<div class="col-sm-9 pieces">
+				
+					<div id="constructorquell" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>quell <small></small></h2></div>
+					
+						<p>Creates a Model constructor, using provided the tablename and/or prototype, for creating records representing rows in the table.<br />All properties of the options object will be mixed into to the model&#39;s prototype.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell([tablename], [options])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Create a plain model for the users table that loads its schema
+// from the database on first use.
+
+var User = quell('users');</code></pre>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Alternative syntax for defining the table name, with a prototype method.
+
+var User = quell({
+  tablename: 'users',
+
+  checkPassword: function (password) {
+    // ...
+  }
+});</code></pre>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Create a model for the user table with a predefined expected schema and
+// couple member functions. Quell will not attempt to fetch the table schema
+// if a valid definition exists on the prototype.
+
+var User = quell('users', {
+  schema: {
+    columns: {
+      id:       quell.INT({unsigned: true}),
+      email:    quell.VARCHAR(255)
+      fullname: quell.TINYTEXT(),
+      enabled:  quell.BOOLEAN()
+    },
+    autoincrement: 'id',
+    primaries: ['id']
+  },
+
+  enable: function () {
+    this.set('enabled', true);
+    return this;
+  },
+
+  disable: function () {
+    this.set('enabled', false);
+    return this;
+  }
+});</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Model <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#constructorquell + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">var quell = function (tablename, options) {
+
+  if (typeof tablename === 'object') {
+    options = tablename;
+  } else {
+    options = options || {};
+    options.tablename = tablename;
+  }
+
+  if (!options.tablename || typeof options.tablename !== 'string') {throw new TypeError('Tablename must be a string.');}
+
+  var model = function () {
+    if (model.connection) {
+      this.connection = model.connection;
+    }
+    modelBase.apply(this, arguments);
+  };
+
+  // Copy over the Model members
+  assign(model, modelBase);
+
+  // Create the new Model prototype
+  model.prototype = Object.create(modelBase.prototype);
+
+  // Apply any overrides
+  assign(model.prototype, options);
+
+  model.prototype.tablename = model.tablename = options.tablename;
+  model.connection = model.prototype.connection = options.connection || quell.connection || false;
+
+  return model;
+};
+
+assign(quell, types);
+
+module.exports = quell;</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="constructorModel" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Model <small></small></h2></div>
+					
+						<p>Model constructor used to create a new record.<br />Takes the default data contents of the model.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Model([data], [options])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>data</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">var User = quell('users')
+var userRecord = new User();</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Record <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#constructorModel + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function modelBase (data, options) {
+  data = data || {};
+  options = options || {};
+
+  if (options.connection) {
+    this.connection = options.connection;
+  } else if (quell.connection) {
+    this.connection = quell.connection;
+  }
+
+  this.data = {};
+  this.set(data, options);
+  this.changed = {};
+
+  EventEmitter.call(this);
+  this.initialize.apply(this, arguments);
+};
+
+quell._model = modelBase;
+
+util.inherits(modelBase, EventEmitter);</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordinitialize" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.initialize <small></small></h2></div>
+					
+						<p>Function called at model initialization. Abstract method intended to be overridden during model creation, not intended to be called directly.</p><p>Receives all arguments passed to <code>new Model()</code>.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">var User = quell({
+  initialize: function (data, options) {
+    console.log('User record instance created', data);
+  }
+});
+
+var user = new User({id: 200});
+// Console:
+// "User record instance created", {"id": 200}</code></pre>
+							
+						</div>
+						
+						
+					
+					</div>
+				
+					<div id="methodRecordget" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.get <small></small></h2></div>
+					
+						<p>Gets the current value of a column from the Record.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.get(field, [formatted])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string
+									
+									<br>The column to retrieve.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>formatted</strong> boolean
+									<em>Optional </em>
+									<br>Indicates if the data should be returned in the format MySQL would store it in. Defaults to true.
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordget + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">get: function (field, formatted) {
+  // default to formatted unless the user passed false
+  if ((formatted || formatted === undefined) && this.schema && this.schema.columns && this.schema.columns[field]) {
+    return this.schema.columns[field].format(this.data[field]);
+  } else {
+    return this.data[field];
+  }
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordset" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.set <small></small></h2></div>
+					
+						<p>Set a hash of attributes (one or many) on the model.</p><p>If any of the attributes change the model&#39;s state, a &quot;change&quot; event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.set(field, [value], [options])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordset + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">set: function (field, value, options) {
+  var attr, attrs, unset, changes, silent, changing, prev, current;
+  if (!field) {
+    return this;
+  }
+
+  // Handle both `"field", value` and `{field: value}` -style arguments.
+  if (typeof field === 'object') {
+    attrs = field;
+    options = value;
+  } else {
+    (attrs = {})[field] = value;
+  }
+
+  options = options || {};
+
+  // Extract data and options.
+  unset           = options.unset;
+  silent          = options.silent;
+  changes         = [];
+  changing        = this._changing;
+  this._changing  = true;
+
+  if (!changing) {
+    this._previousData = clone(this.data);
+    this.changed = {};
+  }
+  current = this.data;
+  prev = this._previousData;
+
+  // For each `set` data, update or delete the current value.
+  for (attr in attrs) {
+    value = attrs[attr];
+    if (!isEqual(current[attr], value, this.schema && this.schema[attr])) {changes.push(attr);}
+    if (!isEqual(prev[attr], value, this.schema && this.schema[attr])) {
+      this.changed[attr] = value;
+    } else {
+      delete this.changed[attr];
+    }
+    if (unset) {
+      delete current[attr];
+    } else {
+      current[attr] = value;
+    }
+  }
+
+  // Trigger all relevant data changes.
+  if (!silent) {
+    if (changes.length) {this._pending = true;}
+    for (var i = 0, l = changes.length; i < l; i++) {
+      this.emit('change:' + changes[i], this, current[changes[i]], options);
+    }
+  }
+
+  // You might be wondering why there's a `while` loop here. Changes can
+  // be recursively nested within `"change"` events.
+  if (changing) {return this;}
+  if (!silent) {
+    while (this._pending) {
+      this._pending = false;
+      this.emit('change', this, options);
+    }
+  }
+  this._pending = false;
+  this._changing = false;
+  return this;
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordunset" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.unset <small></small></h2></div>
+					
+						<p>Remove an attribute by deleting it from the internal attributes hash.</p><p>Fires a &quot;change&quot; event unless silent is passed as an option.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.unset(field, [options])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordunset + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">unset: function (field, options) {
+  return this.set(field, void 0, assign({}, options, {unset: true}));
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordhas" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.has <small></small></h2></div>
+					
+						<p>Returns <code>true</code> if the attribute is set to a non-null or non-undefined value.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.has(field)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordhas + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">has: function (field) {
+  return this.get(field, false) !== undefined;
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordload" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.load <small></small></h2></div>
+					
+						<p>Fetches a record from the database.</p><p>Load may be called in a variety of ways depending on the object state. The following are all<br />methods that may be used to load a record from a table primary keyed on an &#39;id&#39; column.<br />Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.<br />If the response is false, a record could not be found matching the keys requested.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the select.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.load([value], [field], [options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>field</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> Function
+									<em>Optional </em>
+									<br>Callback to be executed when the record is loaded.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using existing data already in the record object.
+var record = new User({id: 16});
+record.load().then(function (exists) {
+  // loaded.
+});</code></pre>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using primary key (note, does not work for tables with multiple primaries)
+var record = new User();
+record.load(16).then(function (exists) {
+  // loaded
+});</code></pre>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using a specific column value (column does not need to be a primary key)
+var record = new User();
+record.load(16, 'id', function (exists) {
+  // loaded
+});</code></pre>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using multiple column values, or a column hash.
+var record = new User();
+record.load({id: 16}, function (exists) {
+  // loaded
+});</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordload + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">load: function (value, field, options, callback) {
+  switch (arguments.length) {
+  case 4:
+    break;
+  case 3:
+    if (typeof options === 'function') {
+      callback = options;
+      options = {callback: callback};
+    } else {
+      options = options || {};
+      options.callback = options.callback || callback;
+    }
+    break;
+  case 2:
+    if (typeof field === 'function') {
+      callback = field;
+      field = undefined;
+    }
+    if (typeof field === 'object') {
+      options = field || {};
+      field = undefined;
+    }
+    break;
+  case 1:
+    if (typeof value === 'function') {
+      callback = value;
+      value = undefined;
+    }
+  }
+
+  var defer;
+  if (value === undefined) {
+    defer = this._loadWithExisting(options);
+  } else if (typeof value === 'object') {
+    defer = this._loadWithMultiColumn(value, options);
+  } else if (isScalar(value)) {
+    if (field === undefined) {
+      defer = this._loadWithPrimaryKey(value, options);
+    } else {
+      defer = this._loadWithSingleColumn(value, field, options);
+    }
+  }
+
+  if (typeof callback === 'function') {
+    return defer.then(
+      function (exists) { callback(null, exists); },
+      function (err) { callback(err || true); }
+    );
+  } else {
+    return defer;
+  }
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordsave" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.save <small></small></h2></div>
+					
+						<p>Intelligently saves the record contents to the database.</p><p><code>Record.save()</code> attempts to ascertain if the record already exists in the database<br />by performing a query for the primary keys. This query is skipped if it is already known<br />if the record exists due to a fetch or <code>Record.exists</code> being set to <code>true</code> or <code>false</code>.</p><p>If the record exists, an update is performed, otherwise a fresh insert is done.<br />If the options object contains a truthy <code>replace</code> option, the save will always be a REPLACE.</p><p>See <code>Record.update</code> and <code>Record.insert</code> for details of those behaviors.</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.save([options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> Function
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordsave + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">save: function (options, callback) {
+  var self = this;
+
+  if (typeof options === 'function') {
+    callback = options;
+    options = {callback: callback};
+  } else {
+    options = options || {};
+    options.callback = options.callback || callback;
+  }
+
+  if (options.replace) {
+    var ai = this.schema && this.schema.autoincrement;
+    if (ai) {
+      this.unset(ai);
+    }
+
+    return this.insert(options);
+
+  }
+
+  return Promise.cast(self.exists === null ? self._promiseIfExists(options) : self.exists)
+    .then(function (exists) {
+      if (exists) {
+        return self.update(options, callback);
+      } else {
+        return self.insert(options, callback);
+      }
+    });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordinsert" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.insert <small></small></h2></div>
+					
+						<p>Inserts the record into the database as a new row.</p><p>If the table has an auto-incrementing id, that field on the record will be updated to the new id,<br />overwriting any existing value.</p><p>If the options object contains a truthy <code>replace</code> option, the save will always be a REPLACE using<br />the existing primary keys (including an auto-incrementing key).</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the insert.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.insert([options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> Function
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordinsert + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">insert: function (options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {callback: callback};
+  } else {
+    options = options || {};
+    options.callback = options.callback || callback;
+  }
+
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    var write = {},
+      fields = Object.keys(self.data),
+      field, type,
+      i = 0,
+      c = fields.length;
+
+    for (;i < c;i++) {
+      field = fields[i];
+      type = self.schema.columns[field];
+
+      if (type && (options.replace || self.schema.autoincrement !== field)) {
+        write[field] = type.prepare(self.data[field]);
+      }
+    }
+
+    return quell._buildInsertQuery(self.tablename, write, options.replace);
+  }).then(function (query) {
+    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
+  }).then(function (result) {
+    if (self.schema.autoincrement && result && result.insertId !== undefined) {
+      self.data[self.schema.autoincrement] = result.insertId;
+    }
+
+    if (options.callback) {
+      options.callback(null, self);
+    }
+
+    return self;
+  }).catch(function (err) {
+    if (options.callback) {
+      callback(err);
+    }
+
+    return Promise.reject(err);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecordupdate" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.update <small></small></h2></div>
+					
+						<p>Updates the database with the current contents of the record.</p><p>By default the update operation uses the primary keys of the record as the <code>WHERE</code> clause of the<br /><code>UPDATE</code> query, and will throw an error if all of the primary keys do not contain values.  This<br />behavior can be overridden by providing a <code>using</code> hash object in the update options which defines<br />what column values to use for the update. This is the only way to perform an update if the table<br />schema does not define any primary keys.</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the update.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.update([options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> Function
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecordupdate + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">update: function (options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {callback: callback};
+  } else {
+    options = options || {};
+    options.callback = options.callback || callback;
+  }
+
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    var lookup = {},
+      lookupCount = 0,
+      write = {},
+      fields = Object.keys(self.data),
+      field, type,
+      i,c;
+
+    if (typeof options.using === 'object') {
+      lookup = options.using;
+      lookupCount = Object.keys(lookup).length;
+    } else {
+
+      for (i = 0, c = self.schema.primaries.length;i < c;i++) {
+        field = self.schema.primaries[i];
+        type = self.schema.columns[field];
+
+        if (!self.has(field)) {
+          throw new Error('Could not update quell record, required primary key value was absent: ' + field);
+        } else {
+          lookup[field] = type.prepare(self.data[field]);
+          lookupCount++;
+        }
+      }
+
+    }
+
+    if (!lookupCount) {
+      throw new Error('Could not update quell record, no primary keys was available to update against.');
+    }
+
+    for (i = 0, c = fields.length;i < c;i++) {
+      field = fields[i];
+      type = self.schema.columns[field];
+
+      if (type && (options.replace || self.schema.autoincrement !== field)) {
+        write[field] = type.prepare(self.data[field]);
+      }
+    }
+
+    return quell._buildUpdateQuery(self.tablename, write, lookup);
+  }).then(function (query) {
+    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
+  }).then(function () {
+    if (options.callback) {
+      options.callback(null, self);
+    }
+
+    return self;
+  }).catch(function (err) {
+    if (options.callback) {
+      callback(err);
+    }
+
+    return Promise.reject(err);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecorddelete" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.delete <small></small></h2></div>
+					
+						<p>Deletes the record from the database.</p><p>By default the delete operation uses the primary keys of the record as the <code>WHERE</code> clause of the<br /><code>DELETE</code> query, and will throw an error if all of the primary keys do not contain values.  If the<br />table schema does not define any primary keys, Quell will use all data on the record to conduct the<br />query.  This behavior can be overridden by providing a <code>using</code> hash object in the delete options<br />which defines what column values to use for the delete. An error will be thrown if no values exist<br />to perform the delete with, so as to avoid deleting everything.</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the delete.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.delete([options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> Function
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecorddelete + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">delete: function (options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {callback: callback};
+  } else {
+    options = options || {};
+    options.callback = options.callback || callback;
+  }
+
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    var lookup = {},
+      lookupCount = 0,
+      field, type,
+      fields = self.schema.primaries,
+      i = 0,
+      c = fields.length;
+
+    if (typeof options.using === 'object') {
+      lookup = options.using;
+      lookupCount = Object.keys(lookup).length;
+    } else {
+
+      // If the schema has no primary keys, use any column data we have.
+      if (c) {
+        for (;i < c;i++) {
+          field = fields[i];
+          type = self.schema.columns[field];
+
+          if (!self.has(field)) {
+            throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
+          } else {
+            lookup[field] = type.prepare(self.data[field]);
+            lookupCount++;
+          }
+        }
+      } else {
+        fields = Object.keys(self.schema.columns);
+        c = fields.length;
+
+        for (;i < c;i++) {
+          field = fields[i];
+          type = self.schema.columns[field];
+
+          if (self.has(field)) {
+            lookup[field] = type.prepare(self.data[field]);
+            lookupCount++;
+          }
+        }
+      }
+
+    }
+
+    if (!lookupCount) {
+      throw new Error('Could not delete quell record, no data was available to delete against.');
+    }
+
+
+    return quell._buildDeleteQuery(self.tablename, lookup);
+  }).then(function (query) {
+    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
+  }).then(function () {
+    self.exists = false;
+
+    if (options.callback) {
+      options.callback(null, self);
+    }
+
+    return self;
+  }).catch(function (err) {
+    if (options.callback) {
+      callback(err);
+    }
+
+    return Promise.reject(err);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_loadWithExisting" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._loadWithExisting <small></small></h2></div>
+					
+						<p>Loads a record from the database using the existing primary key data.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._loadWithExisting()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_loadWithExisting + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithExisting: function (options) {
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    if (!self.schema.primaries || !self.schema.primaries.length) {
+      throw new Error('Could not load quell model using existing data; table has no primary keys.');
+    }
+
+    var lookup = {},
+      field, type,
+      i,c;
+
+    for (i = 0, c = self.schema.primaries.length;i < c;i++) {
+      field = self.schema.primaries[i];
+      type = self.schema.columns[field];
+
+      if (!self.has(field)) {
+        throw new Error('Could not load quell record, required primary key value was absent: ' + field);
+      } else {
+        lookup[field] = type.prepare(self.data[field]);
+      }
+    }
+
+    return self._loadUsing(lookup, options);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_loadWithPrimaryKey" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._loadWithPrimaryKey <small></small></h2></div>
+					
+						<p>Loads a record from the database using a single primary key.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._loadWithPrimaryKey(value)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_loadWithPrimaryKey + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithPrimaryKey: function (value, options) {
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    if (!self.schema.primaries.length) {
+      throw new Error('Could not load quell model using existing data; schema has no primary keys.');
+    }
+
+    if (self.schema.primaries.length > 1) {
+      throw new Error('Could not load quell model using single primary key, schema has more than one primary key.');
+    }
+
+    var key = self.schema.primaries[0],
+      type = self.schema.columns[key],
+      lookup = {};
+
+    lookup[key] = type.prepare(value);
+
+    return self._loadUsing(lookup, options);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_loadWithSingleColumn" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._loadWithSingleColumn <small></small></h2></div>
+					
+						<p>Loads a record from the database using a single column value.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._loadWithSingleColumn(value, field)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>field</strong> string
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_loadWithSingleColumn + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithSingleColumn: function (value, field, options) {
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    var type = self.schema.columns[field],
+      lookup = {};
+
+    if (!type) {
+      throw new Error('Could not load quell model, ' + field + ' does not exist in the table schema.');
+    }
+
+    lookup[field] = type.prepare(value);
+
+    return self._loadUsing(lookup, options);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_loadWithMultiColumn" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._loadWithMultiColumn <small></small></h2></div>
+					
+						<p>Loads a record from the database using one or more column values from an object hash.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._loadWithMultiColumn(search)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>search</strong> object
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_loadWithMultiColumn + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithMultiColumn: function (search, options) {
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    if (typeof search !== 'object' || !Object.keys(search).length) {
+      throw new Error('Could not load quell model; provided data was empty or not an object.');
+    }
+
+    var lookup = {},
+      fields = Object.keys(search),
+      field, type,
+      i,c;
+
+    for (i = 0, c = fields.length;i < c;i++) {
+      field = fields[i];
+      type = self.schema.columns[field];
+
+      if (!type) {
+        throw new Error('Could not load quell model, ' + field + ' does not exist in the table schema.');
+      } else {
+        lookup[field] = type.prepare(search[field]);
+      }
+    }
+
+    return self._loadUsing(lookup, options);
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_loadUsing" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._loadUsing <small></small></h2></div>
+					
+						<p>Loads a record from the database using pre-validated data.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._loadUsing(lookup)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>lookup</strong> [type]
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_loadUsing + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadUsing: function (lookup, options) {
+  var self = this;
+  var query = quell._buildSelectQuery(self.tablename, lookup);
+
+  return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection).then(function (results) {
+    // If results are returned, then we found the row and can map the data onto the model
+    // If no results were returned, then the row wasn't found and we resolve with false.
+    if (results.length) {
+      self.exists = true;
+      self.set(results[0]);
+      self.changed = {};
+      return self;
+    } else {
+      self.exists = false;
+      return false;
+    }
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_promiseIfExists" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._promiseIfExists <small></small></h2></div>
+					
+						<p>Checks to see if the record already exists in the database using the primary keys.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._promiseIfExists()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_promiseIfExists + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_promiseIfExists: function (options) {
+  var self = this;
+  return this._promiseValidateSchema().then(function () {
+    var lookup = {},
+      key,
+      i = 0,
+      c = self.schema.primaries.length;
+
+    // if there are no primary keys, then it is impossible to determine if this row existed
+    // in a previous state. Therefore, we return true if we already knew it existed before
+    // or false if the previous state is unknown.  This means that all new models without
+    // primary keys will default to inserts.
+    if (!c) {
+      return (!!self.exists);
+    }
+
+    // Iterate over all primary keys. If we do not have a value for a key, assume the
+    // record does not exist. If all keys have values, perform a lookup of those fields
+    // and values to verify that the row exists.
+    for (;i < c;i++) {
+      key = self.schema.primaries[i];
+      if (!self.has(key)) {
+        return (self.exists = false);
+      } else if (self.schema.columns[key]) {
+        lookup[key] = self.schema.columns[key].prepare(self.data[key]);
+      }
+    }
+
+    var query = quell._buildSelectQuery(self.tablename, lookup, self.schema.primaries);
+
+    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection).then(function (results) {
+      self.exists = !!results.length;
+      return self.exists;
+    });
+
+  });
+},</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodRecord_promiseValidateSchema" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>Record._promiseValidateSchema <small></small></h2></div>
+					
+						<p>Validates the schema data for the model, loading the schema from the database if needed.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record._promiseValidateSchema()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodRecord_promiseValidateSchema + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">_promiseValidateSchema: function () {
+  var self = this;
+
+  if (!this.connection) {
+    throw new Error('quell model does not have a MySQL connection or pool defined.');
+  }
+
+  // if we have a schema already marked as good, just continue the callback chain
+  if (this.schema && this.schema.loaded) {
+    return Promise.resolve();
+  }
+
+  var valid =
+    this.schema &&
+    this.schema.primaries &&
+    Array.isArray(this.schema.primaries) &&
+    this.schema.columns &&
+    Object.keys(this.schema.columns).length
+  ;
+
+  if (!valid) {
+    return quell._promiseTableSchema(this.tablename, this.connection).then(function (schema) {
+      self.schema = schema;
+    });
+  } else {
+    return Promise.resolve();
+  }
+}
+};
+
+assign(modelBase.prototype, Record);</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquell_buildSelectQuery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>quell._buildSelectQuery <small></small></h2></div>
+					
+						<p>Constructs the query for a SELECT request.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell._buildSelectQuery(tablename, lookup, [select])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>lookup</strong> object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>select</strong> array
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquell_buildSelectQuery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">quell._buildSelectQuery = function (tablename, lookup, select) {
+  var q = queryize()
+    .select(select || undefined)
+    .from(tablename)
+    .where(lookup);
+
+  return q.compile();
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquell_buildInsertQuery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>quell._buildInsertQuery <small></small></h2></div>
+					
+						<p>Constructs the query for an INSERT request.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell._buildInsertQuery(tablename, write, [replace])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>write</strong> object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>replace</strong> boolean
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquell_buildInsertQuery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">quell._buildInsertQuery = function (tablename, write, replace) {
+  var q = queryize()[replace ? 'replace' : 'insert'](write)
+    .into(tablename);
+
+  return q.compile();
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquell_buildUpdateQuery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>quell._buildUpdateQuery <small></small></h2></div>
+					
+						<p>Constructs the query for an UPDATE request.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell._buildUpdateQuery(tablename, write, lookup)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>write</strong> object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>lookup</strong> object
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquell_buildUpdateQuery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">quell._buildUpdateQuery = function (tablename, write, lookup) {
+  var q = queryize()
+    .update(tablename)
+    .set(write)
+    .where(lookup);
+
+  return q.compile();
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquell_buildDeleteQuery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>quell._buildDeleteQuery <small></small></h2></div>
+					
+						<p>Constructs the query for a DELETE request.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell._buildDeleteQuery(tablename, lookup)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>lookup</strong> object
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquell_buildDeleteQuery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">quell._buildDeleteQuery = function (tablename, lookup) {
+  var q = queryize()
+    .deleteFrom(tablename)
+    .where(lookup);
+
+  return q.compile();
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquell_promiseQueryRun" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>quell._promiseQueryRun <small></small></h2></div>
+					
+						<p>Runs an arbitrary query.  Attempts to use prepared statements when available.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell._promiseQueryRun(query, data, mysql)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>query</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>data</strong> array
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>mysql</strong> object
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquell_promiseQueryRun + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">quell._promiseQueryRun = function (query, data, mysql) {
+  var callback = proxmis();
+  if (typeof mysql.execute === 'function') {
+    mysql.execute(query, data, callback);
+  } else {
+    mysql.query(query, data, callback);
+  }
+  return callback;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquell_promiseTableSchema" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>quell._promiseTableSchema <small></small></h2></div>
+					
+						<p>Loads the schema for a table from the database and parses for use.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell._promiseTableSchema(tablename, mysql)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>mysql</strong> object
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquell_promiseTableSchema + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">quell._promiseTableSchema = function (tablename, mysql) {
+  var defer = proxmis();
+
+  mysql.query('DESCRIBE ' + tablename, defer);
+
+  return defer.then(function (results) {
+    var schema = {
+      columns: {},
+      primaries: [],
+      autoincrement: false,
+      loaded: true
+    };
+
+    var i = 0, c = results.length;
+    for (;i < c;i++) {
+      parseRow(results[i]);
+    }
+
+    function parseRow (row) {
+      var matches;
+      var column = {
+        NULL: row.Null === 'YES'
+      };
+
+      if (row.Type === 'date' || row.Type === 'datetime' || row.Type === 'timestamp' || row.Type === 'time' || row.Type === 'year') {
+        column = types[row.Type.toUpperCase()](column);
+      }
+
+      else if ((matches = row.Type.match(/^(decimal|float|double)\((\d+),(\d+)\)/))) {
+        column.size = parseInt(matches[2], 10);
+        column.precision = parseInt(matches[3], 10);
+        column.unsigned = row.Type.indexOf('unsigned') >= 0;
+        column = types[matches[1].toUpperCase()](column);
+      }
+
+      else if ((matches = row.Type.match(/^((?:big|medium|small|tiny)?int(?:eger)?)\((\d+)\)/))) {
+        column.size = parseInt(matches[2], 10);
+        column.unsigned = row.Type.indexOf('unsigned') >= 0;
+        column = types[matches[1].toUpperCase()](column);
+      }
+
+      else if ((matches = row.Type.match(/^enum\((.*)\)/))) {
+        column.options = matches[1].split(',').map(function (o) { return o.slice(1, -1);});
+        column = types.ENUM(column);
+      }
+
+      else if ((matches = row.Type.match(/^((?:var)?char)\((\d+)\)/))) {
+        column.size = parseInt(matches[2], 10);
+        column = types[matches[1].toUpperCase()](column);
+      }
+
+      //didn't find a known type. Split the type field by opening parens to get the type name without other info.
+      else {
+        column.type = row.Type.split('(')[0].toUpperCase();
+        if (types[column.type]) {
+          column = types[column.type](column);
+        } else {
+          column = types.UNKNOWN(column);
+        }
+      }
+
+      schema.columns[row.Field] = column;
+
+      if (row.Key === 'PRI') {
+        schema.primaries.push(row.Field);
+      }
+
+      if (row.Extra === 'auto_increment') {
+        schema.autoincrement = row.Field;
+      }
+    }
+
+    return schema;
+  });
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodModelfind" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Model.find <small></small></h2></div>
+					
+						<p>Creates a Queryize chain for loading multiple records.</p><p>Overrides the <code>exec</code> function to pre-wrap all results with Quell models.</p><p>See QueryizeJS documentation for more details.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Model.find([where])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>where</strong> object
+									<em>Optional </em>
+									<br>An object hash of all columns to search against. Shortcut to calling .find().where()
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodModelfind + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">modelBase.find = function (where) {
+  var self = this;
+  var q = queryize().select().from(this.tablename);
+  if (where) {
+    q.where(where);
+  }
+
+  var exec = q.exec;
+  q.exec = function (conn, callback) {
+    switch (arguments.length) {
+    case 2:
+      break;
+    case 1:
+      if (typeof conn === 'function') {
+        callback = conn;
+        conn = self.connection || quell.connection || undefined;
+      }
+      break;
+    case 0:
+      conn = self.connection || quell.connection;
+      break;
+    }
+
+    if (!conn) {
+      throw new Error('You must provide a node-mysql connection or pool for this query to use.');
+    }
+
+    var defer = proxmis();
+    exec.call(q, conn, defer);
+
+    return defer.then(function (results) {
+      results = results.map(function (row) {
+        return new self(row);
+      });
+
+      if (callback) {
+        callback(null, results);
+      }
+      return results;
+    }, function (err) {
+      if (callback) {
+        callback(err);
+      }
+      return Promise.reject(err);
+    });
+  };
+
+  return q;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodModelloadSchema" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Model.loadSchema <small></small></h2></div>
+					
+						<p>Pre-loads the schema details for the model.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Model.loadSchema([options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> object
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> Function
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodModelloadSchema + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">modelBase.loadSchema = function (options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {callback: callback};
+  } else {
+    options = options || {};
+    options.callback = options.callback || callback;
+  }
+
+  var self = this;
+  return quell._promiseTableSchema(this.tablename, (options && options.connection) || self.connection || quell.connection).then(function (schema) {
+    self.schema = schema;
+    if (options.callback) {
+      callback(null, self);
+    }
+    return self;
+  }, function (err) {
+    if (callback) {
+      callback(err);
+    }
+    return Promise.reject(err);
+  });
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="functionisScalar" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>isScalar <small></small></h2></div>
+					
+						<p>Checks if the value passed in is a primitive value.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">isScalar(value)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionisScalar + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function isScalar (value) {
+  switch (typeof value) {
+  case 'string':
+  case 'number':
+  case 'boolean':
+    return true;
+  default:
+    return false;
+  }
+}</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="functionisEqual" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>isEqual <small></small></h2></div>
+					
+						<p>Checks if two values are equal using the column type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">isEqual(a, b, [ctype])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>a</strong> mixed
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>b</strong> mixed
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>ctype</strong> function
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionisEqual + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function isEqual (a, b, ctype) {
+  if (ctype) {
+    return ctype.compare(a, b);
+  }
+
+  if (a === b) {return true;}
+
+  return false;
+}</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+				</div>
+			</div>
+
+			<footer>
+				Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
+			</footer>
+		</div>
+
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-4767790-10', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+	</body>
+</html>

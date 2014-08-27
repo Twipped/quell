@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>QuellJS - API Reference</title>
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+		<link rel="stylesheet" href="fonts.css">
+		<style>
+
+			.jumbotron {
+				margin-top: 30px;
+				background-color: #333;
+				color: white;
+			}
+
+			.jumbotron .btn-code {
+				font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+				text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+			}
+
+			.jumbotron .prettyprint {
+				padding: 10px;
+			}
+
+			pre {
+				box-shadow: 0 1px 2px rgba(100,100,100,0.2);
+				background-color: #f8f8f8;
+				border-color: #ddd;
+			}
+
+			pre code {
+				word-wrap: normal;
+				white-space: pre;
+			}
+
+			.sidenav .nav > li > a {
+				padding: 2px 15px;
+			}
+
+			.sidenav span.name {
+				vertical-align: middle;
+				display: inline-block;
+				line-height: 1;
+			}
+
+			.sidenav .ico-arrow-up {
+				color: #ccc;
+				font-size: 12px;
+			}
+
+			.sidenav .alias .name {
+				color: #ccc;
+				font-size: 12px;
+				margin-left: 10px;
+			}
+
+			.category {
+				margin-top: 5px;
+			}
+
+			.nav > li.category > a {
+				color: #666;
+				text-shadow: 0 1px 0 rgba(255,255,255,.5);
+				background: none;
+			}
+
+			.category > ul a {
+				background: #fbfbfb;
+				
+			}
+
+			.pieces .private, .nav .private {
+				display: none;
+				opacity: 0.5;
+			}
+
+			.pieces .page-header, .pieces h2 {
+				margin-top: 0;
+			}
+
+			.pieces h3 {
+				font-size: 15px;
+			}
+
+			.signature .list-group strong {
+				margin-right: 20px;
+			}
+
+			.signature .list-group em, .signature u {
+				margin-left: 20px;
+			}
+
+			.signature .panel-footer em {
+				color: #999;
+			}
+
+			.signature pre.panel-body + pre.panel-body {
+				border-top: 1px solid #ddd;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+
+			.codeview .panel-heading {
+				font-size: 12px;
+				padding: 5px;
+				cursor: pointer;
+			}
+
+			.codeview .panel-heading .ico-embed {
+				font-size:16px;
+				line-height: 1;
+				vertical-align: middle;
+				position:relative;
+				top: -1px;
+			}
+
+			pre.panel-body, pre.panel-body.prettyprint  {
+				padding: 8px;
+				border: none;
+				font-size: 11px;
+				line-height: 13px;
+				margin-bottom: 0;
+				background-color: #fbfbfb;
+				
+			}
+
+
+			pre.panel-body:before, pre.panel-body:after {
+				content: '';
+			}
+
+			.kwd {font-weight: bold;}
+
+			.nav-list {
+				padding-left: 15px;
+				padding-right: 15px;
+				margin-bottom: 0;
+			}
+
+			.nav-list > li > a,
+			.nav-list .nav-header {
+				margin-left: -15px;
+				margin-right: -15px;
+				text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+			}
+
+			.nav-list > li > a {
+				padding: 3px 15px;
+			}
+
+			.nav-header {
+				display: block;
+				padding: 3px 15px;
+				font-size: 11px;
+				font-weight: bold;
+				line-height: 1.428571429;
+				color: #999;
+				text-shadow: 0 1px 0 rgba(255,255,255,.5);
+				text-transform: uppercase;
+			}
+
+			.nav > .nav-header > a:hover {
+				background: none;
+			}
+
+			.gh-link {
+				margin: 8px 0 0 15px;
+			}
+
+			.navbar .ico-github {
+				font-size: 32px;
+				text-decoration: none;
+			}
+
+			footer {
+				text-align: center;
+				font-size: 10px;
+			}
+
+			@media (max-width: 768px) {
+				.navbar-fixed-top {
+					display: none;
+				}
+
+				.jumbotron {
+					margin-top: 0;
+				}
+
+			}
+
+
+
+		</style>
+	</head>
+	
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header"><a class="navbar-brand" href="#">Quell.js</a></div>
+				<ul class="nav navbar-nav">
+					<li><a href="#reference">API Reference</a></li>
+				</ul>
+				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
+			</div>
+		</div>
+
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Quell.js</h1>
+				<p>A no-frills active record implementation for node-mysql.</p>
+				<p>
+					<a href="http://npmjs.org/quell" class="btn btn-default btn-code btn-success">npm install quell</a>
+					<a href="http://github.com/chipersoft/quell" class="btn btn-primary">View on GitHub</a>
+					<a href="http://github.com/chipersoft/quell/issues" class="btn btn-danger">Report an Issue</a>
+				</p>
+				<p>
+					<a href="http://badge.fury.io/js/quell"><img src="https://img.shields.io/npm/v/quell.svg?style=flat" alt="NPM Version" height="18"></a>
+					<img src="https://img.shields.io/npm/l/quell.svg?style=flat" alt="License: MIT" height="18">
+					<a href="http://npmjs.org/quell"><img src="https://img.shields.io/npm/dm/quell.svg?style=flat" alt="Downloads/Week" height="18"></a>
+					<a href="https://travis-ci.org/ChiperSoft/quell"><img src="https://img.shields.io/travis/ChiperSoft/quell.svg?style=flat" alt="Build Status" height="18"></a>
+					<a href="https://coveralls.io/r/chipersoft/quell"><img src="https://img.shields.io/coveralls/ChiperSoft/quell.svg?style=flat" alt="Coverage" height="18"></a>
+					<a href="https://www.gittip.com/chipersoft"><img src="http://img.shields.io/gittip/chipersoft.svg?style=flat" alt="Gittip" height="18"></a>
+				</p>
+
+				<pre class="prettyprint"><code class="language-javascript">var quell = require('quell');
+var Book = quell('books');
+var Author = quell('authors');
+
+var tperry = new Author({
+	firstname: 'Terry',
+	lastname: 'Pratchett'
+});
+
+var nightWatch = new Book({
+	title: 'Night Watch'
+});
+
+tperry.save(function () {
+	nightWatch.set('authorid', tperry.get('id'));
+	nightWatch.save();
+});
+</code></pre>
+			</div>
+			</div>
+
+		</div>
+
+		<div id="reference" style="position:relative;top:-60px;"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3 sidenav">
+					<ul class="nav nav-list">
+					{{#with parentless}}
+						{{#each uncategorized}}{{#unless ignore}}
+						<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+						{{/unless}}{{/each}}
+						{{#each categories}}
+						<li class="category"><a>{{@key}}</a>
+							<ul class="nav subnav">
+							{{#each this}}{{#unless ignore}}
+								<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+							{{/unless}}{{/each}}
+							</ul>
+						</li>
+						{{/each}}
+					{{/with}}
+					{{#each parents}}
+						{{#if item}}
+							{{#with item}}<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>{{/with}}
+						{{else}}
+							<li class=""><a>{{name}}</a></li>
+						{{/if}}
+						<li><ul class="nav ">
+						{{#each uncategorized}}{{#unless ignore}}
+							<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+						{{/unless}}{{/each}}
+						{{#each categories}}
+								<li class="category"><a>{{@key}}</a>
+									<ul class="nav subnav">
+							{{#each this}}{{#unless ignore}}
+										<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+							{{/unless}}{{/each}}
+									</ul>
+								</li>
+						{{/each}}
+						</ul></li>
+					{{/each}}
+					</ul>
+				</div>
+
+
+				<div class="col-sm-9 pieces">
+				{{#each pieces}}{{#unless ignore}}
+					<div id="{{id}}" style="position:relative;top:-60px;"></div>
+					<div class="piece {{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}">
+						<div class="page-header"><h2>{{name}} <small>{{aliases}}</small></h2></div>
+					{{#unless isAlias}}
+						{{{description.full}}}
+						{{#unless isAbstract}}
+						<h3>Usage:</h3>
+						{{#each signatures}}
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">{{signature}}</div></div>
+							<ol class="list-group">
+							{{#each params}}
+								<li class="list-group-item">
+									<strong>{{name}}</strong> {{types}}
+									{{#if optional}}<em>Optional {{#if default}} (Default: {{default}}){{/if}}</em>{{/if}}
+									<br>{{description}}
+								</li>
+							{{/each}}
+							</ol>
+							{{#each examples}}
+							<pre class="panel-body prettyprint"><code class="language-javascript">{{{this}}}</code></pre>
+							{{/each}}
+							{{#if returns}}
+							<div class="panel-footer"><strong>Returns: </strong> {{returns.types}} <em class="pull-right">{{returns.description}}</em></div>
+							{{/if}}
+						</div>
+						{{/each}}
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#{{id}} + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">{{{code}}}</code></pre>
+							</div>
+						</div>
+						{{else}}
+						<h3>Usage:</h3>
+						{{#each signatures}}
+						<div class="signature panel panel-default">
+							{{#each examples}}
+							<pre class="panel-body prettyprint"><code class="language-javascript">{{{this}}}</code></pre>
+							{{/each}}
+						</div>
+						{{/each}}
+						{{/unless}}
+					{{else}}
+						<a href="#{{id}}">See {{original}}</a>
+					{{/unless}}
+					</div>
+				{{/unless}}{{/each}}
+				</div>
+			</div>
+
+			<footer>
+				Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
+			</footer>
+		</div>
+
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-4767790-10', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+	</body>
+</html>
