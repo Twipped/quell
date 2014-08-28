@@ -299,6 +299,10 @@ tperry.save(function () {
 						
 						<li><ul class="nav ">
 						
+							<li class=" "><a href="#propertyRecorddata"><span class="name">Record.data</span></a></li>
+						
+							<li class=" "><a href="#propertyRecordexists"><span class="name">Record.exists</span></a></li>
+						
 							<li class=" "><a href="#methodRecordinitialize"><span class="name">Record.initialize</span></a></li>
 						
 							<li class=" "><a href="#methodRecordget"><span class="name">Record.get</span></a></li>
@@ -332,6 +336,66 @@ tperry.save(function () {
 							<li class="private "><a href="#methodRecord_promiseIfExists"><span class="name">Record._promiseIfExists</span></a></li>
 						
 							<li class="private "><a href="#methodRecord_promiseValidateSchema"><span class="name">Record._promiseValidateSchema</span></a></li>
+						
+						
+						</ul></li>
+					
+						
+							<li class=" "><a href="#constructorSchema"><span class="name">Schema</span></a></li>
+						
+						<li><ul class="nav ">
+						
+							<li class=" "><a href="#propertySchemaTEXT"><span class="name">Schema.TEXT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaBLOB"><span class="name">Schema.BLOB</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaMEDIUMBLOB"><span class="name">Schema.MEDIUMBLOB</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaMEDIUMTEXT"><span class="name">Schema.MEDIUMTEXT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaLONGBLOB"><span class="name">Schema.LONGBLOB</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaLONGTEXT"><span class="name">Schema.LONGTEXT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaTINYBLOB"><span class="name">Schema.TINYBLOB</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaTINYTEXT"><span class="name">Schema.TINYTEXT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaVARCHAR"><span class="name">Schema.VARCHAR</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaCHAR"><span class="name">Schema.CHAR</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaINT"><span class="name">Schema.INT</span></a></li>
+						
+							<li class=" alias"><a href="#propertySchemaINT"><i class="ico-arrow-up"></i><span class="name">Schema.INTEGER</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaTINYINT"><span class="name">Schema.TINYINT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaSMALLINT"><span class="name">Schema.SMALLINT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaMEDIUMINT"><span class="name">Schema.MEDIUMINT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaBIGINT"><span class="name">Schema.BIGINT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaFLOAT"><span class="name">Schema.FLOAT</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaDOUBLE"><span class="name">Schema.DOUBLE</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaDECIMAL"><span class="name">Schema.DECIMAL</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaDATETIME"><span class="name">Schema.DATETIME</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaTIMESTAMP"><span class="name">Schema.TIMESTAMP</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaDATE"><span class="name">Schema.DATE</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaTIME"><span class="name">Schema.TIME</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaYEAR"><span class="name">Schema.YEAR</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaENUM"><span class="name">Schema.ENUM</span></a></li>
+						
+							<li class=" "><a href="#propertySchemaUNKNOWN"><span class="name">Schema.UNKNOWN</span></a></li>
 						
 						
 						</ul></li>
@@ -526,6 +590,68 @@ var userRecord = new User();</code></pre>
 quell._model = modelBase;
 
 util.inherits(modelBase, EventEmitter);</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertyRecorddata" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.data <small></small></h2></div>
+					
+						<p>The raw model data.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.data</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertyRecorddata + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">data: null,</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertyRecordexists" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Record.exists <small></small></h2></div>
+					
+						<p>Indicates if the record already exists in the database.  Will be null if existence is unknown.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">Record.exists</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertyRecordexists + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">exists: null,</code></pre>
 							</div>
 						</div>
 						
@@ -2422,6 +2548,1320 @@ assign(modelBase.prototype, Record);</code></pre>
 
   return false;
 }</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="constructorSchema" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema <small></small></h2></div>
+					
+						<p>By default, quell will automatically load the table schema for any models that are created the first time a read/write operation is performed, but this operation may be skipped by predefining the table schema as part of the model. <em>Note: quell does not alter or create table structure, defining the schema in code is not a substitute for creating a table structure in the database.</em></p><p>To make it easier to define table structure, all of the column data types are accessible directly from the quell object and can be used exactly as you would in a CREATE TABLE command (eg, <code>VARCHAR(10)</code>. If used as a value instead of a function, quell will use the default values for that type.  To define extra column attributes such as integer sign and null acceptance, you must pass a column settings object as the main argument on the data type object.  See the main <a href="#constructorquell">quell</a> definition for an example.</p><p><strong>Custom Types:</strong></p><p>Every quell data type must define three functions: <code>format</code>, <code>prepare</code> and <code>compare</code> function.  If any of these options are excluded from the settings object, the defaults for the base type are used.</p><p><code>prepare</code> is called right before the data is used in a query and sanitizes the input for the expected data type.  In the case of integers this means stripping any non-numeric characters, for dates the value is parsed with Moment and then formatted as a MySQL date. String and Enum values are force cast to string.  All values are tested for <code>null</code>.</p><p>The <code>format</code> function is used when fetching data from the model via the <code>.get()</code> method. It attempts the structure whatever data is on the model in the way that MySQL would format it in the database (eg, trimming values for their column lengths).  This is useful for validating model data before saving.</p><p><code>compare</code> is called when quell is determining what columns have changed from their original values. It takes two arguments and returns a boolean.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TYPE(settings)</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#constructorSchema + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">var TYPE = function (options) {
+  var o = Object.create(this);
+  if (typeof options === 'object' && !Array.isArray(options)) {
+    extend(o, this, options || {});
+  } else if (typeof o.initialize === 'function') {
+    o.initialize.apply(o, arguments);
+  }
+  return o;
+};
+
+var compare = function (a,b) {
+  return this.format(a) === this.format(b);
+};
+
+var TEXT = {
+  type: 'TEXT',
+  NULL: true,
+  size: 0,
+  format: function (o) {
+    if (o === null) {
+      if (this.NULL) {
+        return null;
+      } else {
+        return '';
+      }
+    }
+    if (this.size && this.size < o.length) {
+      return ('' + o).slice(0, this.size);
+    }
+    return ('' + o);
+  },
+  prepare: function (o) {
+    if (o === null) {
+      if (this.NULL) {
+        return null;
+      } else {
+        return '';
+      }
+    }
+    return '' + o;
+  },
+  compare: compare,
+  initialize: function () {
+    if (arguments.length > 0) {
+      this.size = arguments[0];
+    }
+  }
+};
+
+var ENUM = {
+  type: 'ENUM',
+  NULL: true,
+  options: [],
+  format: function (o) {
+    var NULL = this.NULL ? null : '';
+
+    if (o === null) {
+      return NULL;
+    }
+
+    o = '' + o;
+    var options = this.options.map(function (s) { return s.toUpperCase(); });
+    var i = options.indexOf(o.toUpperCase());
+
+    if (i > -1) {
+      return this.options[i];
+    } else {
+      return NULL;
+    }
+  },
+  prepare: function (o) {
+    if (o === null) {
+      return this.NULL ? null : '';
+    }
+    return '' + o;
+  },
+  compare: compare,
+  initialize: function () {
+    this.options = Array.prototype.slice.call(arguments);
+  }
+};
+
+var INT = {
+  type: 'INT',
+  NULL: true,
+  size: 11,
+  precision: 0,
+  unsigned: false,
+  format: function (o) {
+    var result;
+    var NULL = this.NULL ? null : '0';
+
+    if (o === null) {
+      return NULL;
+    }
+
+    o = parseFloat(o);
+
+    if (isNaN(o)) {
+      return NULL;
+    }
+
+    if (this.precision) {
+      // round at the needed precision and then split on the decimal.
+      var k = Math.pow(10, this.precision);
+      result = ('' + Math.round(o * k) / k).split('.');
+
+      // if no decimal existed, make sure we create a place for it.
+      if (result.length === 1) {result.push('');}
+    } else {
+      // parse as float and round off, then store in an array to simplify below.
+      result = [Math.round(parseFloat(o))];
+    }
+
+    // if the whole number is longer than available space, slice off the extra characters
+    if (this.size && this.size - this.precision < result[0].length) {
+      if (this.size - this.precision === 0) {
+        result[0] = '';
+      } else {
+        result[0] = result[0].slice(0 - (this.size - this.precision));
+      }
+    }
+
+    // pad out the decimal places with 0, if needed
+    if (this.precision && result[1].length < this.precision) {
+      result[1] += new Array(this.precision - result[1].length + 1).join('0');
+    }
+
+    return this.precision ? result.join('.') : '' + result[0];
+  },
+  prepare: function (o) {
+    if (o === null) {
+      return this.NULL ? null : 0;
+    }
+
+    o = Number(o);
+
+    if (isNaN(o)) {
+      return this.NULL ? null : 0;
+    }
+
+    return o;
+  },
+  compare: compare,
+  initialize: function () {
+    if (arguments.length > 0) {
+      this.size = arguments[0];
+    }
+    if (arguments.length > 1) {
+      this.precision = arguments[1];
+    }
+  }
+};
+
+var DATETIME = {
+  type: 'DATETIME',
+  NULL: true,
+  mask: 'YYYY-MM-DD HH:mm:ss',
+  format: function (o) {
+    var NULL = this.NULL ? null : '0000-00-00 00:00:00';
+
+    if (o === null) {
+      return NULL;
+    }
+
+    if (o === 'now') {
+      return moment().format(this.mask);
+    }
+
+    o = moment(o).format(this.mask);
+    if (o === 'Invalid date') {
+      return NULL;
+    } else {
+      return o;
+    }
+  },
+  compare: compare
+};
+DATETIME.prepare = DATETIME.format;
+
+function makeType (base, extras) {
+  var properties = extend({}, base, extras || {});
+  var type = TYPE.bind(properties);
+  return extend(type, properties);
+}
+
+
+module.exports = {</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaTEXT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.TEXT <small></small></h2></div>
+					
+						<p>TEXT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TEXT</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaTEXT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">TEXT      : makeType(TEXT, {type: 'TEXT',       size: 65535}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaBLOB" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.BLOB <small></small></h2></div>
+					
+						<p>BLOB Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.BLOB</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaBLOB + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">BLOB      : makeType(TEXT, {type: 'BLOB',       size: 65535}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaMEDIUMBLOB" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.MEDIUMBLOB <small></small></h2></div>
+					
+						<p>MEDIUMBLOB Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.MEDIUMBLOB</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaMEDIUMBLOB + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">MEDIUMBLOB: makeType(TEXT, {type: 'MEDIUMBLOB', size: 16777215}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaMEDIUMTEXT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.MEDIUMTEXT <small></small></h2></div>
+					
+						<p>MEDIUMTEXT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.MEDIUMTEXT</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaMEDIUMTEXT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">MEDIUMTEXT: makeType(TEXT, {type: 'MEDIUMTEXT', size: 16777215}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaLONGBLOB" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.LONGBLOB <small></small></h2></div>
+					
+						<p>LONGBLOB Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.LONGBLOB</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaLONGBLOB + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">LONGBLOB  : makeType(TEXT, {type: 'LONGBLOB',   size: 4294967295}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaLONGTEXT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.LONGTEXT <small></small></h2></div>
+					
+						<p>LONGTEXT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.LONGTEXT</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaLONGTEXT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">LONGTEXT  : makeType(TEXT, {type: 'LONGTEXT',   size: 4294967295}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaTINYBLOB" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.TINYBLOB <small></small></h2></div>
+					
+						<p>TINYBLOB Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TINYBLOB</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaTINYBLOB + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">TINYBLOB  : makeType(TEXT, {type: 'TINYBLOB',   size: 255}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaTINYTEXT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.TINYTEXT <small></small></h2></div>
+					
+						<p>TINYTEXT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TINYTEXT</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaTINYTEXT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">TINYTEXT  : makeType(TEXT, {type: 'TINYTEXT',   size: 255}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaVARCHAR" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.VARCHAR <small></small></h2></div>
+					
+						<p>VARCHAR Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.VARCHAR([size])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>size</strong> number
+									<em>Optional  (Default: 255)</em>
+									<br>Size of the varchar.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.VARCHAR(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.VARCHAR({
+  size: 10,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaVARCHAR + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">VARCHAR   : makeType(TEXT, {type: 'VARCHAR',    size: 255}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaCHAR" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.CHAR <small></small></h2></div>
+					
+						<p>CHAR Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.CHAR([size])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>size</strong> number
+									<em>Optional  (Default: 255)</em>
+									<br>Size of the char.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.CHAR(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.CHAR({
+  size: 10,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaCHAR + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">CHAR      : makeType(TEXT, {type: 'CHAR',       size: 255}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaINT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.INT <small>INTEGER</small></h2></div>
+					
+						<p>INT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.INT([length])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 11)</em>
+									<br>Size of the integer.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.INT(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.INT({
+  length: 10,
+  unsigned: true,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaINT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">INT       : makeType(INT),
+INTEGER   : makeType(INT),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaTINYINT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.TINYINT <small></small></h2></div>
+					
+						<p>TINYINT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TINYINT([length])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 1)</em>
+									<br>Size of the integer.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TINYINT(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.TINYINT({
+  length: 2,
+  unsigned: true,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaTINYINT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">TINYINT   : makeType(INT,  {type: 'TINYINT',    size: 1}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaSMALLINT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.SMALLINT <small></small></h2></div>
+					
+						<p>SMALLINT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.SMALLINT([length])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 4)</em>
+									<br>Size of the integer.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.SMALLINT(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.SMALLINT({
+  length: 3,
+  unsigned: true,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaSMALLINT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">SMALLINT  : makeType(INT,  {type: 'SMALLINT',   size: 4}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaMEDIUMINT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.MEDIUMINT <small></small></h2></div>
+					
+						<p>MEDIUMINT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.MEDIUMINT([length])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 8)</em>
+									<br>Size of the integer.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.MEDIUMINT(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.MEDIUMINT({
+  length: 10,
+  unsigned: true,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaMEDIUMINT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">MEDIUMINT : makeType(INT,  {type: 'MEDIUMINT',  size: 8}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaBIGINT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.BIGINT <small></small></h2></div>
+					
+						<p>BIGINT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.BIGINT([length])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 20)</em>
+									<br>Size of the integer.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.BIGINT(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.BIGINT({
+  length: 10,
+  unsigned: true,
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaBIGINT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">BIGINT    : makeType(INT,  {type: 'BIGINT',     size: 20}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaFLOAT" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.FLOAT <small></small></h2></div>
+					
+						<p>FLOAT Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.FLOAT([length], [precision])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 10)</em>
+									<br>Display length of the float value, in characters.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>precision</strong> number
+									<em>Optional </em>
+									<br>Number of decimal places
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.FLOAT(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.FLOAT({
+  length: 6,
+  precision: 4
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaFLOAT + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">FLOAT     : makeType(INT,  {type: 'FLOAT',      size: 10, precision: 2}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaDOUBLE" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.DOUBLE <small></small></h2></div>
+					
+						<p>DOUBLE Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DOUBLE([length], [precision])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									<em>Optional  (Default: 10)</em>
+									<br>Display length of the double value.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>precision</strong> number
+									<em>Optional </em>
+									<br>Number of decimal places
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DOUBLE(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.DOUBLE({
+  length: 6,
+  precision: 4
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaDOUBLE + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">DOUBLE    : makeType(INT,  {type: 'DOUBLE',     size: 16, precision: 4}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaDECIMAL" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.DECIMAL <small></small></h2></div>
+					
+						<p>DECIMAL Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DECIMAL([length], [precision])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>length</strong> number
+									
+									<br>Display length of the decimal value.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>precision</strong> number
+									
+									<br>Number of decimal places
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DECIMAL(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.DECIMAL({
+  length: 6,
+  precision: 4
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaDECIMAL + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">DECIMAL   : makeType(INT,  {type: 'DECIMAL',    size: 0, precision: 20}),
+// DECIMALS must have a size and precision defined in the schema, so we're being ambiguous with the values</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaDATETIME" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.DATETIME <small></small></h2></div>
+					
+						<p>DATETIME Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DATETIME</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaDATETIME + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">DATETIME  : makeType(DATETIME),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaTIMESTAMP" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.TIMESTAMP <small></small></h2></div>
+					
+						<p>TIMESTAMP Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DATETIME</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaTIMESTAMP + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">TIMESTAMP : makeType(DATETIME,  {type: 'TIMESTAMP', NULL: false}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaDATE" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.DATE <small></small></h2></div>
+					
+						<p>DATE Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.DATE</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaDATE + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">DATE      : makeType(DATETIME,  {type: 'DATE',  mask: 'YYYY-MM-DD'}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaTIME" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.TIME <small></small></h2></div>
+					
+						<p>TIME Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.TIME</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaTIME + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">TIME      : makeType(DATETIME,  {type: 'DATE',  mask: 'HH:mm:ss'}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaYEAR" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.YEAR <small></small></h2></div>
+					
+						<p>YEAR Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.YEAR</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaYEAR + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">YEAR      : makeType(DATETIME,  {type: 'YEAR',  mask: 'YYYY'}),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaENUM" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.ENUM <small></small></h2></div>
+					
+						<p>ENUM Column Type</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.ENUM(option1, option2, option3, ...)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> string
+									
+									<br>The possible values for the enum
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.ENUM(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> object
+									
+									<br>Detailed column options
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">quell.ENUM({
+  options: ['Normal', 'Moderator', 'Admin'],
+  NULL: false
+})</code></pre>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaENUM + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">ENUM      : makeType(ENUM),</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="propertySchemaUNKNOWN" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>Schema.UNKNOWN <small></small></h2></div>
+					
+						<p>Used to define any column type not natively supported by Quell.</p><p>See the Schema entry for details of the column format.</p>
+						
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">quell.UNKNOWN(settings)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>settings</strong> Object
+									
+									<br>Type prototype
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertySchemaUNKNOWN + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">UNKNOWN   : makeType(TEXT)
+};</code></pre>
 							</div>
 						</div>
 						

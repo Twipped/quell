@@ -6,6 +6,8 @@ var template = Handlebars.compile(fs.readFileSync(__dirname + '/template.hbs.htm
 
 var parsed = dox.parseComments(fs.readFileSync(__dirname + '/../lib/quell.js').toString('utf8'));
 
+parsed = parsed.concat( dox.parseComments(fs.readFileSync(__dirname + '/../lib/types.js').toString('utf8')) );
+
 var parents = {};
 var parentless = {
 	categories: {},
