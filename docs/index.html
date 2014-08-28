@@ -231,17 +231,17 @@ var Book = quell('books');
 var Author = quell('authors');
 
 var tperry = new Author({
-	firstname: 'Terry',
-	lastname: 'Pratchett'
+  firstname: 'Terry',
+  lastname: 'Pratchett'
 });
 
 var nightWatch = new Book({
-	title: 'Night Watch'
+  title: 'Night Watch'
 });
 
 tperry.save(function () {
-	nightWatch.set('authorid', tperry.get('id'));
-	nightWatch.save();
+  nightWatch.set('authorid', tperry.get('id'));
+  nightWatch.save();
 });
 </code></pre>
 			</div>
