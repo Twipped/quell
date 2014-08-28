@@ -226,6 +226,7 @@
 				</p>
 
 				<pre class="prettyprint"><code class="language-javascript">var quell = require('quell');
+quell.connection = require('mysql').createConnection('mysql://dev@localhost/testdb');
 var Book = quell('books');
 var Author = quell('authors');
 
