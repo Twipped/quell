@@ -1,6 +1,6 @@
 var quell = require('../quell');
 var assign = require('lodash.assign');
-var each = require('lodash.forEach');
+var each = require('lodash.foreach');
 var Promise = require('es6-promise').Promise;
 
 var singleKeyDescribe, multiKeyDescribe;
