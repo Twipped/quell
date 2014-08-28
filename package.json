@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/ChiperSoft/quell/issues"
   },
-  "homepage": "https://github.com/ChiperSoft/quell",
+  "homepage": "http://quelljs.com",
   "devDependencies": {
     "nodeunit": "~0.8.2",
     "nodeunit-dataprovider": "0.0.1",
