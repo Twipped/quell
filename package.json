@@ -41,6 +41,6 @@
     "lodash.clone": "^2.4.1",
     "moment": "^2.5.1",
     "proxmis": "^0.2.0",
-    "queryize": "^0.4.0"
+    "queryize": "^1.0.1"
   }
 }
