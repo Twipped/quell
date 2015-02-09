@@ -1,6 +1,6 @@
 {
   "name": "quell",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A no-frills active record implementation for node-mysql.",
   "main": "quell.js",
   "scripts": {
