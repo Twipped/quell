@@ -1,4 +1,4 @@
-var quell = require('../quell');
+var quell = require('../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {

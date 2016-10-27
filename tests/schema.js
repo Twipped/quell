@@ -1,5 +1,5 @@
-var quell = require('../quell');
 var assign = require('lodash.assign');
+var quell = require('../');
 var each = require('lodash.foreach');
 var Promise = require('es6-promise').Promise;
 

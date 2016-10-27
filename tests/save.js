@@ -1,5 +1,5 @@
 var assign = require('lodash.assign');
-var quell = require('../quell');
+var quell = require('../');
 var Promise = require('es6-promise').Promise;
 
 function logError (err) {
