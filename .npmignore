@@ -1,0 +1,7 @@
+/node_modules
+/coverage
+/docs/quell.json
+/docs/CNAME
+/docs/template.hbs.html
+/docs/index.js
+/tests

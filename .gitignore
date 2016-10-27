@@ -1,3 +1,4 @@
 /node_modules
 /coverage
 docs/quell.json
+/npm-debug.log
