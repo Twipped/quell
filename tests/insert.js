@@ -27,14 +27,15 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
+					email: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
 			}
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({name: 'john doe', email: undefined });
 
 		quell._buildInsertQuery = function (tablename, write, replace) {
 			test.strictEqual(tablename, 'users');

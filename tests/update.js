@@ -27,14 +27,15 @@ exports.update = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
+					email: quell.VARCHAR()
 				},
 				primaries: ['id'],
 				autoincrement: 'id',
 			}
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
+		var model = new Model({id: 5, name: 'john doe', email: undefined});
 
 		quell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
