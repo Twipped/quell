@@ -1,3 +1,4 @@
+
 var quell = require('../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {

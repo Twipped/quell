@@ -1,9 +1,9 @@
-var assign = require('lodash.assign');
+
 var quell = require('../');
 var Promise = require('es6-promise').Promise;
 
 function logError (err) {
-	var error = { error: assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
+	var error = { error: Object.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map((v) => { return '' + v + ''; }) }, err) };
 	console.log(error);
 }
 
@@ -165,7 +165,7 @@ exports['save, options object, replace true, exists undefined'] = function (test
 
 exports._promiseIfExists = {
 	setUp: function (done) {
-		this.backup = assign({}, quell);
+		this.backup = Object.assign({}, quell);
 		done();
 	},
 
@@ -382,7 +382,7 @@ exports._promiseIfExists = {
 	},
 
 	tearDown: function (done) {
-		assign(quell, this.backup);
+		Object.assign(quell, this.backup);
 		done();
 	}
 };

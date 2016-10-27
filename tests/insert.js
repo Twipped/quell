@@ -1,4 +1,4 @@
-var assign = require('lodash.assign');
+
 var quell = require('../');
 var Promise = require('es6-promise').Promise;
 
@@ -15,7 +15,7 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 
 exports.insert = {
 	setUp: function (done) {
-		this.backup = assign({}, quell);
+		this.backup = Object.assign({}, quell);
 		done();
 	},
 
@@ -352,7 +352,7 @@ exports.insert = {
 
 
 	tearDown: function (done) {
-		assign(quell, this.backup);
+		Object.assign(quell, this.backup);
 		done();
 	}
 };

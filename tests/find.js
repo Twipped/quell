@@ -1,8 +1,9 @@
+
 var quell = require('../');
 var Promise = require('es6-promise').Promise;
 
 function logError (err) {
-	var error = { error: assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map(function (v) { return '' + v + ''; }) }, err)};
+	var error = { error: Object.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map((v) => { return '' + v + ''; }) }, err) };
 	console.log(error);
 }
 

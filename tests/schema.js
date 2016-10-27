@@ -1,4 +1,4 @@
-var assign = require('lodash.assign');
+
 var quell = require('../');
 var each = require('lodash.foreach');
 var Promise = require('es6-promise').Promise;
@@ -25,7 +25,7 @@ function flattenObject (input) {
 
 	protos.unshift({});
 
-	return assign.apply(null, protos);
+	return Object.assign.apply(null, protos);
 }
 
 exports['_promiseTableSchema 1'] = function (test) {
