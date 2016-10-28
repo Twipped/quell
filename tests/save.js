@@ -3,14 +3,19 @@ var quell = require('../');
 var Promise = require('es6-promise').Promise;
 
 function logError (err) {
-	var error = { error: Object.assign({ message: err.message, stack: (err.stack || '').split('\n').slice(1).map((v) => { return '' + v + ''; }) }, err) };
+	var error = {
+		error: Object.assign({
+			message: err.message,
+			stack: (err.stack || '').split('\n').slice(1).map((v) => '' + v + ''),
+		}, err),
+	};
 	console.log(error);
 }
 
-exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
+exports['save, no arguments, exist unset, pIE returns true'] = function (test) {
 	test.expect(2);
 	var Model = quell('users');
-	var model = new Model({id: 1, name: 'john doe'});
+	var model = new Model({ id: 1, name: 'john doe' });
 
 	model._promiseIfExists = function () {
 		return Promise.resolve(true);
@@ -25,10 +30,10 @@ exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
 		return Promise.resolve(model);
 	};
 
-	model.save().then(function (actual) {
+	model.save().then((actual) => {
 		test.equal(actual, model);
 		test.done();
-	}, function (err) {
+	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
 		test.done();
@@ -39,7 +44,7 @@ exports['save, no arguments, exist unset, pIE returns reuw'] = function (test) {
 exports['save, no arguments, exists true'] = function (test) {
 	test.expect(2);
 	var Model = quell('users');
-	var model = new Model({id: 1, name: 'john doe'});
+	var model = new Model({ id: 1, name: 'john doe' });
 	model.exists = true;
 
 	model._promiseIfExists = function () {
@@ -56,10 +61,10 @@ exports['save, no arguments, exists true'] = function (test) {
 		return Promise.resolve(model);
 	};
 
-	model.save().then(function (actual) {
+	model.save().then((actual) => {
 		test.equal(actual, model);
 		test.done();
-	}, function (err) {
+	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
 		test.done();
@@ -70,7 +75,7 @@ exports['save, no arguments, exists true'] = function (test) {
 exports['save, no arguments, exists false'] = function (test) {
 	test.expect(2);
 	var Model = quell('users');
-	var model = new Model({id: 1, name: 'john doe'});
+	var model = new Model({ id: 1, name: 'john doe' });
 	model.exists = false;
 
 	model._promiseIfExists = function () {
@@ -87,10 +92,10 @@ exports['save, no arguments, exists false'] = function (test) {
 		return Promise.resolve(model);
 	};
 
-	model.save().then(function (actual) {
+	model.save().then((actual) => {
 		test.equal(actual, model);
 		test.done();
-	}, function (err) {
+	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
 		test.done();
@@ -101,10 +106,8 @@ exports['save, no arguments, exists false'] = function (test) {
 exports['save, callback, exists false'] = function (test) {
 	test.expect(5);
 	var Model = quell('users');
-	var model = new Model({id: 1, name: 'john doe'});
+	var model = new Model({ id: 1, name: 'john doe' });
 	model.exists = false;
-
-	var cb;
 
 	model._promiseIfExists = function () {
 		test.ok(false, 'Should not have called promiseIfExists');
@@ -117,13 +120,13 @@ exports['save, callback, exists false'] = function (test) {
 
 	model.insert = function (options, callback) {
 		test.ok(true, 'Called correct save method');
-		test.deepEqual(options, {callback: callback});
+		test.deepEqual(options, { callback });
 		test.strictEqual(typeof callback, 'function');
 		callback(null, model);
 		return Promise.resolve(model);
 	};
 
-	model.save(cb = function (err, actual) {
+	model.save((err, actual) => {
 		test.strictEqual(err, null);
 		test.equal(actual, model);
 		test.done();
@@ -134,7 +137,7 @@ exports['save, callback, exists false'] = function (test) {
 exports['save, options object, replace true, exists undefined'] = function (test) {
 	test.expect(3);
 	var Model = quell('users');
-	var model = new Model({id: 1, name: 'john doe'});
+	var model = new Model({ id: 1, name: 'john doe' });
 	// model.exists = true;
 
 	model._promiseIfExists = function () {
@@ -147,15 +150,15 @@ exports['save, options object, replace true, exists undefined'] = function (test
 	};
 
 	model.insert = function (options) {
-		test.deepEqual(options, {replace: true, callback: undefined});
+		test.deepEqual(options, { replace: true, callback: undefined });
 		test.ok(true, 'Called correct save method');
 		return Promise.resolve(model);
 	};
 
-	model.save({replace: true}).then(function (actual) {
+	model.save({ replace: true }).then((actual) => {
 		test.equal(actual, model);
 		test.done();
-	}, function (err) {
+	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
 		test.done();
@@ -164,7 +167,7 @@ exports['save, options object, replace true, exists undefined'] = function (test
 };
 
 exports._promiseIfExists = {
-	setUp: function (done) {
+	setUp (done) {
 		this.backup = Object.assign({}, quell);
 		done();
 	},
@@ -172,45 +175,45 @@ exports._promiseIfExists = {
 	'ok - found': function (test) {
 		test.expect(11);
 
-		var mockConnection = {query: true};
+		var mockConnection = { query: true };
 
 		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id']
-			}
+				primaries: [ 'id' ],
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
+		var model = new Model({ id: 5, name: 'john doe' });
 
 		quell._buildSelectQuery = function (tablename, lookup, select) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5});
-			test.deepEqual(select, ['id']);
+			test.deepEqual(lookup, { id: 5 });
+			test.deepEqual(select, [ 'id' ]);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, mockConnection);
 			test.ok(true, 'query ran');
 			return Promise.resolve([
-				{id: 5}
+				{ id: 5 },
 			]);
 		};
 
-		model._promiseIfExists().then(function (result) {
+		model._promiseIfExists().then((result) => {
 			test.equal(result, true);
 			test.equal(model.exists, true);
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function (err) {
+		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
 			test.done();
@@ -220,43 +223,43 @@ exports._promiseIfExists = {
 	'ok - not found': function (test) {
 		test.expect(11);
 
-		var mockConnection = {query: true};
+		var mockConnection = { query: true };
 
 		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id']
-			}
+				primaries: [ 'id' ],
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
+		var model = new Model({ id: 5, name: 'john doe' });
 
 		quell._buildSelectQuery = function (tablename, lookup, select) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5});
-			test.deepEqual(select, ['id']);
+			test.deepEqual(lookup, { id: 5 });
+			test.deepEqual(select, [ 'id' ]);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, mockConnection);
 			test.ok(true, 'query ran');
 			return Promise.resolve([]);
 		};
 
-		model._promiseIfExists().then(function (result) {
+		model._promiseIfExists().then((result) => {
 			test.equal(result, false);
 			test.equal(model.exists, false);
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function (err) {
+		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
 			test.done();
@@ -265,24 +268,24 @@ exports._promiseIfExists = {
 
 	'missing primaries': function (test) {
 
-		var mockConnection = {query: true};
+		var mockConnection = { query: true };
 
 		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id']
-			}
+				primaries: [ 'id' ],
+			},
 		});
 
 		var model = new Model();
 
 		quell._buildSelectQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -290,13 +293,13 @@ exports._promiseIfExists = {
 			return Promise.resolve([]);
 		};
 
-		model._promiseIfExists().then(function (result) {
+		model._promiseIfExists().then((result) => {
 			test.strictEqual(result, false);
 			test.strictEqual(model.exists, false);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function () {
+		}, () => {
 			test.ok(false, 'promise rejected');
 			test.done();
 		});
@@ -304,24 +307,24 @@ exports._promiseIfExists = {
 
 	'no primaries, unknown state': function (test) {
 
-		var mockConnection = {query: true};
+		var mockConnection = { query: true };
 
 		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: []
-			}
+				primaries: [],
+			},
 		});
 
 		var model = new Model();
 
 		quell._buildSelectQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -329,13 +332,13 @@ exports._promiseIfExists = {
 			return Promise.resolve([]);
 		};
 
-		model._promiseIfExists().then(function (result) {
+		model._promiseIfExists().then((result) => {
 			test.strictEqual(result, false);
 			test.strictEqual(model.exists, null);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function () {
+		}, () => {
 			test.ok(false, 'promise rejected');
 			test.done();
 		});
@@ -343,17 +346,17 @@ exports._promiseIfExists = {
 
 	'no primaries, known exists': function (test) {
 
-		var mockConnection = {query: true};
+		var mockConnection = { query: true };
 
 		var Model = quell('users', {
 			connection: mockConnection,
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: []
-			}
+				primaries: [],
+			},
 		});
 
 		var model = new Model();
@@ -361,7 +364,7 @@ exports._promiseIfExists = {
 
 		quell._buildSelectQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -369,21 +372,21 @@ exports._promiseIfExists = {
 			return Promise.resolve([]);
 		};
 
-		model._promiseIfExists().then(function (result) {
+		model._promiseIfExists().then((result) => {
 			test.strictEqual(result, true);
 			test.strictEqual(model.exists, true);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function () {
+		}, () => {
 			test.ok(false, 'promise rejected');
 			test.done();
 		});
 	},
 
-	tearDown: function (done) {
+	tearDown (done) {
 		Object.assign(quell, this.backup);
 		done();
-	}
+	},
 };
 

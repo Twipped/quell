@@ -4,17 +4,17 @@ var Promise = require('es6-promise').Promise;
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
-		query: function (query, data, callback) {
-			if (expectedQuery !== undefined) {test.strictEqual(query, expectedQuery);}
-			if (expectedData !== undefined) {test.deepEqual(data, expectedData);}
+		query (query, data, callback) {
+			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery); }
+			if (expectedData !== undefined) { test.deepEqual(data, expectedData); }
 			test.ok(true, 'Mysql query was called');
 			callback(null, returnValue);
-		}
+		},
 	};
 };
 
 exports.delete = {
-	setUp: function (done) {
+	setUp (done) {
 		this.backup = Object.assign({}, quell);
 		done();
 	},
@@ -27,28 +27,28 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
+		var model = new Model({ id: 5, name: 'john doe' });
 
 		quell._buildDeleteQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5});
+			test.deepEqual(lookup, { id: 5 });
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -58,11 +58,11 @@ exports.delete = {
 
 
 
-		model.delete().then(function (result) {
+		model.delete().then((result) => {
 			test.equal(result, model);
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function (err) {
+		}, (err) => {
 			console.error(err);
 			test.ok(false, 'promise rejected');
 			test.done();
@@ -78,28 +78,28 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
+		var model = new Model({ id: 5, name: 'john doe' });
 
 		quell._buildDeleteQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5});
+			test.deepEqual(lookup, { id: 5 });
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -107,7 +107,7 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.ok(true, 'callback invoked');
@@ -124,19 +124,19 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
-		var mockError = {error: 'THIS IS AN ERROR'};
+		var model = new Model({ id: 5, name: 'john doe' });
+		var mockError = { error: 'THIS IS AN ERROR' };
 
 		quell._buildDeleteQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -149,7 +149,7 @@ exports.delete = {
 			return Promise.reject(mockError);
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
@@ -166,26 +166,26 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
-		var mockError = {error: 'THIS IS AN ERROR'};
+		var model = new Model({ id: 5, name: 'john doe' });
+		var mockError = { error: 'THIS IS AN ERROR' };
 
 		quell._buildDeleteQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5});
+			test.deepEqual(lookup, { id: 5 });
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
 			return Promise.reject(mockError);
@@ -195,7 +195,7 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
@@ -205,24 +205,24 @@ exports.delete = {
 	},
 
 	'missing primary key': function (test) {
-		test.expect(3);
+		test.expect(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id']
-			}
+				primaries: [ 'id' ],
+			},
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({ name: 'john doe' });
 
 		quell._buildDeleteQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -235,33 +235,34 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err.message, 'Could not delete quell record, required primary key value was absent: id');
 			test.ok(true, 'callback invoked');
+			test.ok(!result);
 			test.done();
 		});
 
 	},
 
 	'missing primary key, multikey': function (test) {
-		test.expect(3);
+		test.expect(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id', 'name']
-			}
+				primaries: [ 'id', 'name' ],
+			},
 		});
 
-		var model = new Model({id: 5});
+		var model = new Model({ id: 5 });
 
 		quell._buildDeleteQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -274,9 +275,10 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err.message, 'Could not delete quell record, required primary key value was absent: name');
 			test.ok(true, 'callback invoked');
+			test.ok(!result);
 			test.done();
 		});
 
@@ -290,25 +292,25 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe', city: 'San Diego'});
+		var model = new Model({ id: 5, name: 'john doe', city: 'San Diego' });
 
 		quell._buildDeleteQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5});
+			test.deepEqual(lookup, { id: 5 });
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
 			return Promise.resolve();
@@ -319,7 +321,7 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -337,24 +339,24 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id', 'name']
-			}
+				primaries: [ 'id', 'name' ],
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe', city: 'San Diego'});
+		var model = new Model({ id: 5, name: 'john doe', city: 'San Diego' });
 
 		quell._buildDeleteQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5, name: 'john doe'});
+			test.deepEqual(lookup, { id: 5, name: 'john doe' });
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
 			return Promise.resolve();
@@ -365,7 +367,7 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -383,24 +385,24 @@ exports.delete = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: []
-			}
+				primaries: [],
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe', city: 'San Diego'});
+		var model = new Model({ id: 5, name: 'john doe', city: 'San Diego' });
 
 		quell._buildDeleteQuery = function (tablename, lookup) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(lookup, {id: 5, name: 'john doe'});
+			test.deepEqual(lookup, { id: 5, name: 'john doe' });
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
 			return Promise.resolve();
@@ -411,7 +413,7 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -422,24 +424,24 @@ exports.delete = {
 	},
 
 	'no primaries, no data': function (test) {
-		test.expect(3);
+		test.expect(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: []
-			}
+				primaries: [],
+			},
 		});
 
 		var model = new Model({});
 
 		quell._buildDeleteQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
@@ -452,16 +454,17 @@ exports.delete = {
 			return Promise.resolve();
 		};
 
-		model.delete(function (err, result) {
+		model.delete((err, result) => {
 			test.equal(err.message, 'Could not delete quell record, no data was available to delete against.');
 			test.ok(true, 'callback invoked');
+			test.ok(!result);
 			test.done();
 		});
 
 	},
 
-	tearDown: function (done) {
+	tearDown (done) {
 		Object.assign(quell, this.backup);
 		done();
-	}
+	},
 };

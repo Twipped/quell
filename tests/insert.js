@@ -4,17 +4,17 @@ var Promise = require('es6-promise').Promise;
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
-		query: function (query, data, callback) {
-			if (expectedQuery !== undefined) {test.strictEqual(query, expectedQuery);}
-			if (expectedData !== undefined) {test.deepEqual(data, expectedData);}
+		query (query, data, callback) {
+			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery); }
+			if (expectedData !== undefined) { test.deepEqual(data, expectedData); }
 			test.ok(true, 'Mysql query was called');
 			callback(null, returnValue);
-		}
+		},
 	};
 };
 
 exports.insert = {
-	setUp: function (done) {
+	setUp (done) {
 		this.backup = Object.assign({}, quell);
 		done();
 	},
@@ -28,29 +28,29 @@ exports.insert = {
 				columns: {
 					id: quell.INT(),
 					name: quell.VARCHAR(),
-					email: quell.VARCHAR()
+					email: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({name: 'john doe', email: undefined });
+		var model = new Model({ name: 'john doe', email: undefined });
 
 		quell._buildInsertQuery = function (tablename, write, replace) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {name: 'john doe'}, 'written data');
+			test.deepEqual(write, { name: 'john doe' }, 'written data');
 			test.equal(replace, undefined);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -60,12 +60,12 @@ exports.insert = {
 
 
 
-		model.insert().then(function (result) {
+		model.insert().then((result) => {
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
 			test.ok(true, 'promise resolved');
 			test.done();
-		}, function (err) {
+		}, (err) => {
 			console.error(err);
 			test.ok(false, 'promise rejected');
 			test.done();
@@ -81,29 +81,29 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({ name: 'john doe' });
 
 		quell._buildInsertQuery = function (tablename, write, replace) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {name: 'john doe'}, 'written data');
+			test.deepEqual(write, { name: 'john doe' }, 'written data');
 			test.equal(replace, undefined);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -111,7 +111,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert(function (err, result) {
+		model.insert((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -129,24 +129,24 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({name: 'john doe'});
-		var mockError = {error: 'THIS IS AN ERROR'};
+		var model = new Model({ name: 'john doe' });
+		var mockError = { error: 'THIS IS AN ERROR' };
 
-		quell._buildInsertQuery = function (tablename, write, replace) {
+		quell._buildInsertQuery = function () {
 			test.ok(false, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
 			test.ok(false, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -154,7 +154,7 @@ exports.insert = {
 			return Promise.reject(mockError);
 		};
 
-		model.insert(function (err, result) {
+		model.insert((err, result) => {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
@@ -171,24 +171,24 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({name: 'john doe'});
-		var mockError = {error: 'THIS IS AN ERROR'};
+		var model = new Model({ name: 'john doe' });
+		var mockError = { error: 'THIS IS AN ERROR' };
 
-		quell._buildInsertQuery = function (tablename, write, replace) {
+		quell._buildInsertQuery = function () {
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
 			return Promise.reject(mockError);
@@ -198,7 +198,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert(function (err, result) {
+		model.insert((err, result) => {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
@@ -215,28 +215,28 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id']
-			}
+				primaries: [ 'id' ],
+			},
 		});
 
-		var model = new Model({name: 'john doe'});
+		var model = new Model({ name: 'john doe' });
 
 		quell._buildInsertQuery = function (tablename, write, replace) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {name: 'john doe'}, 'written data');
+			test.deepEqual(write, { name: 'john doe' }, 'written data');
 			test.equal(replace, undefined);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -244,7 +244,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert(function (err, result) {
+		model.insert((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), undefined);
@@ -262,29 +262,29 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe', city: 'San Diego'});
+		var model = new Model({ id: 5, name: 'john doe', city: 'San Diego' });
 
 		quell._buildInsertQuery = function (tablename, write, replace) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {name: 'john doe'}, 'written data');
+			test.deepEqual(write, { name: 'john doe' }, 'written data');
 			test.equal(replace, undefined);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
-			return Promise.resolve({insertId: 5});
+			return Promise.resolve({ insertId: 5 });
 		};
 
 		model._promiseValidateSchema = function () {
@@ -292,7 +292,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert(function (err, result) {
+		model.insert((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -310,26 +310,26 @@ exports.insert = {
 			schema: {
 				columns: {
 					id: quell.INT(),
-					name: quell.VARCHAR()
+					name: quell.VARCHAR(),
 				},
-				primaries: ['id'],
+				primaries: [ 'id' ],
 				autoincrement: 'id',
-			}
+			},
 		});
 
-		var model = new Model({id: 5, name: 'john doe'});
+		var model = new Model({ id: 5, name: 'john doe' });
 
 		quell._buildInsertQuery = function (tablename, write, replace) {
 			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, {id: 5, name: 'john doe'}, 'written data');
+			test.deepEqual(write, { id: 5, name: 'john doe' }, 'written data');
 			test.equal(replace, true);
 			test.ok(true, 'build ran');
-			return {query: "QUERY", data: [22]};
+			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
 			test.equal(query, 'QUERY');
-			test.deepEqual(data, [22]);
+			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
 			test.ok(true, 'query ran');
 			return Promise.resolve();
@@ -340,7 +340,7 @@ exports.insert = {
 			return Promise.resolve();
 		};
 
-		model.insert({replace: true}, function (err, result) {
+		model.insert({ replace: true }, (err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.equal(result.get('id'), 5);
@@ -351,8 +351,8 @@ exports.insert = {
 	},
 
 
-	tearDown: function (done) {
+	tearDown (done) {
 		Object.assign(quell, this.backup);
 		done();
-	}
+	},
 };

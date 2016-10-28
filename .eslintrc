@@ -1,1 +1,7 @@
-{ "extends": "chiper/node4" }
+{
+	"extends": "chiper/node4",
+	"rules": {
+		"no-negated-condition": "off",
+		"max-len": ["warn", 140]
+	}
+}

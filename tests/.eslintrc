@@ -1,0 +1,8 @@
+{
+	"extends": "../.eslintrc",
+	"rules": {
+		"no-shadow": 0,
+		"no-console": 0,
+		"max-len": 0
+	}
+}
