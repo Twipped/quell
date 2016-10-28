@@ -1,6 +1,12 @@
 
 var quell = require('../');
-var each = require('lodash.foreach');
+var each = function each (collection, fn) {
+	if (Array.isArray(collection)) return collection.forEach(fn);
+	if (collection && typeof collection === 'object') {
+		return Object.keys(collection).forEach((key) => fn(collection[key], key));
+	}
+};
+
 var Promise = require('es6-promise').Promise;
 
 var singleKeyDescribe;
