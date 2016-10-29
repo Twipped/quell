@@ -41,7 +41,7 @@
     "nodeunit-dataprovider": "0.0.1"
   },
   "dependencies": {
-    "lodash.clone": "^2.4.1",
+    "lodash.clone": "~4.5.0",
     "moment": "^2.5.1",
     "proxmis": "~1.0.0",
     "queryize": "^1.1.1"
