@@ -254,18 +254,14 @@ tperry.save(function () {
 			<div class="row">
 				<div class="col-sm-3 sidenav">
 					<ul class="nav nav-list">
-					
+						
+						<li class=" "><a href="#methodtoJSON"><span class="name">toJSON</span></a></li>
 						
 						<li class="private "><a href="#functionisScalar"><span class="name">isScalar</span></a></li>
 						
 						<li class="private "><a href="#functionisEqual"><span class="name">isEqual</span></a></li>
 						
-						
-					
-					
-						
 							<li class=" "><a href="#constructorquell"><span class="name">quell</span></a></li>
-						
 						<li><ul class="nav ">
 						
 							<li class="private "><a href="#methodquell_buildSelectQuery"><span class="name">quell._buildSelectQuery</span></a></li>
@@ -280,24 +276,16 @@ tperry.save(function () {
 						
 							<li class="private "><a href="#methodquell_promiseTableSchema"><span class="name">quell._promiseTableSchema</span></a></li>
 						
-						
 						</ul></li>
-					
-						
 							<li class=" "><a href="#constructorModel"><span class="name">Model</span></a></li>
-						
 						<li><ul class="nav ">
 						
 							<li class=" "><a href="#methodModelfind"><span class="name">Model.find</span></a></li>
 						
 							<li class=" "><a href="#methodModelloadSchema"><span class="name">Model.loadSchema</span></a></li>
 						
-						
 						</ul></li>
-					
-						
 							<li class=""><a>Record</a></li>
-						
 						<li><ul class="nav ">
 						
 							<li class=" "><a href="#propertyRecorddata"><span class="name">Record.data</span></a></li>
@@ -338,12 +326,8 @@ tperry.save(function () {
 						
 							<li class="private "><a href="#methodRecord_promiseValidateSchema"><span class="name">Record._promiseValidateSchema</span></a></li>
 						
-						
 						</ul></li>
-					
-						
 							<li class=" "><a href="#constructorSchema"><span class="name">Schema</span></a></li>
-						
 						<li><ul class="nav ">
 						
 							<li class=" "><a href="#propertySchemaTEXT"><span class="name">Schema.TEXT</span></a></li>
@@ -398,9 +382,7 @@ tperry.save(function () {
 						
 							<li class=" "><a href="#propertySchemaUNKNOWN"><span class="name">Schema.UNKNOWN</span></a></li>
 						
-						
 						</ul></li>
-					
 					</ul>
 				</div>
 
@@ -410,34 +392,28 @@ tperry.save(function () {
 					<div id="constructorquell" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>quell <small></small></h2></div>
-					
-						<p>Creates a Model constructor, using provided the tablename and/or prototype, for creating records representing rows in the table.<br />All properties of the options object will be mixed into to the model&#39;s prototype.</p>
-						
+						<p>Creates a Model constructor, using provided the tablename and/or prototype, for<br />
+creating records representing rows in the table.<br />
+All properties of the options object will be mixed into to the model's prototype.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell([tablename], [options])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Create a plain model for the users table that loads its schema
 // from the database on first use.
 
 var User = quell('users');</code></pre>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Alternative syntax for defining the table name, with a prototype method.
 
 var User = quell({
@@ -447,7 +423,6 @@ var User = quell({
     // ...
   }
 });</code></pre>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Create a model for the user table with a predefined expected schema and
 // couple member functions. Quell will not attempt to fetch the table schema
 // if a valid definition exists on the prototype.
@@ -474,12 +449,8 @@ var User = quell('users', {
     return this;
   }
 });</code></pre>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Model <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -496,7 +467,7 @@ var User = quell('users', {
     options.tablename = tablename;
   }
 
-  if (!options.tablename || typeof options.tablename !== 'string') {throw new TypeError('Tablename must be a string.');}
+  if (!options.tablename || typeof options.tablename !== 'string') { throw new TypeError('Tablename must be a string.'); }
 
   var model = function () {
     if (model.connection) {
@@ -506,13 +477,13 @@ var User = quell('users', {
   };
 
   // Copy over the Model members
-  assign(model, modelBase);
+  Object.assign(model, modelBase);
 
   // Create the new Model prototype
   model.prototype = Object.create(modelBase.prototype);
 
   // Apply any overrides
-  assign(model.prototype, options);
+  Object.assign(model.prototype, options);
 
   model.prototype.tablename = model.tablename = options.tablename;
   model.connection = model.prototype.connection = options.connection || quell.connection || false;
@@ -520,49 +491,37 @@ var User = quell('users', {
   return model;
 };
 
-assign(quell, types);
+Object.assign(quell, types);
 
-module.exports = quell;</code></pre>
+module.exports = exports = quell;</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="constructorModel" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Model <small></small></h2></div>
-					
-						<p>Model constructor used to create a new record.<br />Takes the default data contents of the model.</p>
-						
+						<p>Model constructor used to create a new record.<br />
+Takes the default data contents of the model.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Model([data], [options])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>data</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">var User = quell('users')
 var userRecord = new User();</code></pre>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Record <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -593,27 +552,18 @@ quell._model = modelBase;
 util.inherits(modelBase, EventEmitter);</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertyRecorddata" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.data <small></small></h2></div>
-					
 						<p>The raw model data.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.data</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -624,27 +574,18 @@ util.inherits(modelBase, EventEmitter);</code></pre>
 								<pre class="panel-body prettyprint"><code class="language-javascript">data: null,</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertyRecordexists" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.exists <small></small></h2></div>
-					
 						<p>Indicates if the record already exists in the database.  Will be null if existence is unknown.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.exists</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -655,20 +596,16 @@ util.inherits(modelBase, EventEmitter);</code></pre>
 								<pre class="panel-body prettyprint"><code class="language-javascript">exists: null,</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordinitialize" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.initialize <small></small></h2></div>
-					
-						<p>Function called at model initialization. Abstract method intended to be overridden during model creation, not intended to be called directly.</p><p>Receives all arguments passed to <code>new Model()</code>.</p>
-						
+						<p>Function called at model initialization. Abstract method intended to be overridden during<br />
+model creation, not intended to be called directly.</p>
+<p>Receives all arguments passed to <code>new Model()</code>.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">var User = quell({
   initialize: function (data, options) {
     console.log('User record instance created', data);
@@ -678,44 +615,55 @@ util.inherits(modelBase, EventEmitter);</code></pre>
 var user = new User({id: 200});
 // Console:
 // "User record instance created", {"id": 200}</code></pre>
-							
 						</div>
-						
-						
-					
+					</div>
+				
+					<div id="methodtoJSON" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>toJSON <small></small></h2></div>
+						<p>Returns a copy of the model's data</p>
+						<h3>Usage:</h3>
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">toJSON()</div></div>
+							<ol class="list-group">
+							</ol>
+							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right"></em></div>
+						</div>
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodtoJSON + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">toJSON () {
+  return clone(this.data);
+},</code></pre>
+							</div>
+						</div>
 					</div>
 				
 					<div id="methodRecordget" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.get <small></small></h2></div>
-					
 						<p>Gets the current value of a column from the Record.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.get(field, [formatted])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>field</strong> string
 									
-									<br>The column to retrieve.
+									<br>&lt;p&gt;The column to retrieve.&lt;/p&gt;
 								</li>
-							
 								<li class="list-group-item">
 									<strong>formatted</strong> boolean
 									<em>Optional </em>
-									<br>Indicates if the data should be returned in the format MySQL would store it in. Defaults to true.
+									<br>&lt;p&gt;Indicates if the data should be returned in the format MySQL would store it in. Defaults to true.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
-							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right"></em></div>
-							
+							<div class="panel-footer"><strong>Returns: </strong> mixed <em class="pull-right"></em></div>
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -723,55 +671,47 @@ var user = new User({id: 200});
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">get: function (field, formatted) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">get (field, formatted) {
   // default to formatted unless the user passed false
   if ((formatted || formatted === undefined) && this.schema && this.schema.columns && this.schema.columns[field]) {
     return this.schema.columns[field].format(this.data[field]);
-  } else {
-    return this.data[field];
   }
+
+  return this.data[field];
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordset" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.set <small></small></h2></div>
-					
-						<p>Set a hash of attributes (one or many) on the model.</p><p>If any of the attributes change the model&#39;s state, a &quot;change&quot; event will be triggered on the model. Change events for specific attributes are also triggered, and you can bind to those as well, for example: change:title, and change:content. You may also pass individual keys and values.</p>
-						
+						<p>Set a hash of attributes (one or many) on the model.</p>
+<p>If any of the attributes change the model's state, a &quot;change&quot; event will be triggered<br />
+on the model. Change events for specific attributes are also triggered, and you can bind<br />
+to those as well, for example: change:title, and change:content. You may also pass<br />
+individual keys and values.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.set(field, [value], [options])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>field</strong> string, object
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -779,13 +719,13 @@ var user = new User({id: 200});
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">set: function (field, value, options) {
-  var attr, attrs, unset, changes, silent, changing, prev, current;
+								<pre class="panel-body prettyprint"><code class="language-javascript">set (field, value, options) {
   if (!field) {
     return this;
   }
 
   // Handle both `"field", value` and `{field: value}` -style arguments.
+  var attrs;
   if (typeof field === 'object') {
     attrs = field;
     options = value;
@@ -796,38 +736,40 @@ var user = new User({id: 200});
   options = options || {};
 
   // Extract data and options.
-  unset           = options.unset;
-  silent          = options.silent;
-  changes         = [];
-  changing        = this._changing;
+  var unset           = options.unset;
+  var silent          = options.silent;
+  var changes         = [];
+  var changing        = this._changing;
   this._changing  = true;
 
   if (!changing) {
     this._previousData = clone(this.data);
     this.changed = {};
   }
-  current = this.data;
-  prev = this._previousData;
+  var current = this.data;
+  var prev = this._previousData;
 
   // For each `set` data, update or delete the current value.
-  for (attr in attrs) {
-    value = attrs[attr];
-    if (!isEqual(current[attr], value, this.schema && this.schema[attr])) {changes.push(attr);}
-    if (!isEqual(prev[attr], value, this.schema && this.schema[attr])) {
-      this.changed[attr] = value;
+  Object.keys(attrs).forEach((attr) => {
+    var attrValue = attrs[attr];
+    if (!isEqual(current[attr], attrValue, this.schema && this.schema[attr])) {
+      changes.push(attr);
+    }
+    if (!isEqual(prev[attr], attrValue, this.schema && this.schema[attr])) {
+      this.changed[attr] = attrValue;
     } else {
       delete this.changed[attr];
     }
     if (unset) {
       delete current[attr];
     } else {
-      current[attr] = value;
+      current[attr] = attrValue;
     }
-  }
+  });
 
   // Trigger all relevant data changes.
   if (!silent) {
-    if (changes.length) {this._pending = true;}
+    if (changes.length) { this._pending = true; }
     for (var i = 0, l = changes.length; i < l; i++) {
       this.emit('change:' + changes[i], this, current[changes[i]], options);
     }
@@ -835,7 +777,7 @@ var user = new User({id: 200});
 
   // You might be wondering why there's a `while` loop here. Changes can
   // be recursively nested within `"change"` events.
-  if (changing) {return this;}
+  if (changing) { return this; }
   if (!silent) {
     while (this._pending) {
       this._pending = false;
@@ -848,39 +790,29 @@ var user = new User({id: 200});
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordunset" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.unset <small></small></h2></div>
-					
-						<p>Remove an attribute by deleting it from the internal attributes hash.</p><p>Fires a &quot;change&quot; event unless silent is passed as an option.</p>
-						
+						<p>Remove an attribute by deleting it from the internal attributes hash.</p>
+<p>Fires a &quot;change&quot; event unless silent is passed as an option.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.unset(field, [options])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>field</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -888,40 +820,29 @@ var user = new User({id: 200});
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">unset: function (field, options) {
-  return this.set(field, void 0, assign({}, options, {unset: true}));
+								<pre class="panel-body prettyprint"><code class="language-javascript">unset (field, options) {
+  return this.set(field, undefined, Object.assign({}, options, { unset: true }));
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordhas" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.has <small></small></h2></div>
-					
 						<p>Returns <code>true</code> if the attribute is set to a non-null or non-undefined value.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.has(field)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>field</strong> string
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -929,82 +850,70 @@ var user = new User({id: 200});
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">has: function (field) {
-  return this.get(field, false) !== undefined;
+								<pre class="panel-body prettyprint"><code class="language-javascript">has (field) {
+  return Boolean(typeof this.data[field] !== 'undefined');
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordload" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.load <small></small></h2></div>
-					
-						<p>Fetches a record from the database.</p><p>Load may be called in a variety of ways depending on the object state. The following are all<br />methods that may be used to load a record from a table primary keyed on an &#39;id&#39; column.<br />Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.<br />If the response is false, a record could not be found matching the keys requested.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the select.</p>
-						
+						<p>Fetches a record from the database.</p>
+<p>Load may be called in a variety of ways depending on the object state. The following are all<br />
+methods that may be used to load a record from a table primary keyed on an 'id' column.<br />
+Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.<br />
+If the response is false, a record could not be found matching the keys requested.</p>
+<p>If no schema is defined on the model, Quell will load the schema from the database before<br />
+performing the select.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.load([value], [field], [options], [callback])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>field</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
-									<br>Callback to be executed when the record is loaded.
+									<br>&lt;p&gt;Callback to be executed when the record is loaded.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using existing data already in the record object.
 var record = new User({id: 16});
 record.load().then(function (exists) {
   // loaded.
 });</code></pre>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using primary key (note, does not work for tables with multiple primaries)
 var record = new User();
 record.load(16).then(function (exists) {
   // loaded
 });</code></pre>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using a specific column value (column does not need to be a primary key)
 var record = new User();
 record.load(16, 'id', function (exists) {
   // loaded
 });</code></pre>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">// Load using multiple column values, or a column hash.
 var record = new User();
 record.load({id: 16}, function (exists) {
   // loaded
 });</code></pre>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1012,14 +921,12 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">load: function (value, field, options, callback) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">load (value, field, options, callback) {
   switch (arguments.length) {
-  case 4:
-    break;
   case 3:
     if (typeof options === 'function') {
       callback = options;
-      options = {callback: callback};
+      options = { callback };
     } else {
       options = options || {};
       options.callback = options.callback || callback;
@@ -1040,6 +947,9 @@ record.load({id: 16}, function (exists) {
       callback = value;
       value = undefined;
     }
+    break;
+  default:
+    break;
   }
 
   var defer;
@@ -1057,50 +967,45 @@ record.load({id: 16}, function (exists) {
 
   if (typeof callback === 'function') {
     return defer.then(
-      function (exists) { callback(null, exists); },
-      function (err) { callback(err || true); }
+      (exists) => { callback(null, exists); },
+      (err) => { callback(err || true); }
     );
-  } else {
-    return defer;
   }
+
+  return defer;
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordsave" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.save <small></small></h2></div>
-					
-						<p>Intelligently saves the record contents to the database.</p><p><code>Record.save()</code> attempts to ascertain if the record already exists in the database<br />by performing a query for the primary keys. This query is skipped if it is already known<br />if the record exists due to a fetch or <code>Record.exists</code> being set to <code>true</code> or <code>false</code>.</p><p>If the record exists, an update is performed, otherwise a fresh insert is done.<br />If the options object contains a truthy <code>replace</code> option, the save will always be a REPLACE.</p><p>See <code>Record.update</code> and <code>Record.insert</code> for details of those behaviors.</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p>
-						
+						<p>Intelligently saves the record contents to the database.</p>
+<p><code>Record.save()</code> attempts to ascertain if the record already exists in the database<br />
+by performing a query for the primary keys. This query is skipped if it is already known<br />
+if the record exists due to a fetch or <code>Record.exists</code> being set to <code>true</code> or <code>false</code>.</p>
+<p>If the record exists, an update is performed, otherwise a fresh insert is done.<br />
+If the options object contains a truthy <code>replace</code> option, the save will always be a REPLACE.</p>
+<p>See <code>Record.update</code> and <code>Record.insert</code> for details of those behaviors.</p>
+<p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.save([options], [callback])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1108,12 +1013,12 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">save: function (options, callback) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">save (options, callback) {
   var self = this;
 
   if (typeof options === 'function') {
     callback = options;
-    options = {callback: callback};
+    options = { callback };
   } else {
     options = options || {};
     options.callback = options.callback || callback;
@@ -1129,52 +1034,47 @@ record.load({id: 16}, function (exists) {
 
   }
 
-  return Promise.cast(self.exists === null ? self._promiseIfExists(options) : self.exists)
-    .then(function (exists) {
+  return Promise.resolve(self.exists === null ? self._promiseIfExists(options) : self.exists)
+    .then((exists) => {
       if (exists) {
         return self.update(options, callback);
-      } else {
-        return self.insert(options, callback);
       }
+
+      return self.insert(options, callback);
     });
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordinsert" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.insert <small></small></h2></div>
-					
-						<p>Inserts the record into the database as a new row.</p><p>If the table has an auto-incrementing id, that field on the record will be updated to the new id,<br />overwriting any existing value.</p><p>If the options object contains a truthy <code>replace</code> option, the save will always be a REPLACE using<br />the existing primary keys (including an auto-incrementing key).</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the insert.</p>
-						
+						<p>Inserts the record into the database as a new row.</p>
+<p>If the table has an auto-incrementing id, that field on the record will be updated to the new id,<br />
+overwriting any existing value.</p>
+<p>If the options object contains a truthy <code>replace</code> option, the save will always be a REPLACE using<br />
+the existing primary keys (including an auto-incrementing key).</p>
+<p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p>
+<p>If no schema is defined on the model, Quell will load the schema from the database before<br />
+performing the insert.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.insert([options], [callback])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1182,36 +1082,37 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">insert: function (options, callback) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">insert (options, callback) {
   if (typeof options === 'function') {
     callback = options;
-    options = {callback: callback};
+    options = { callback };
   } else {
     options = options || {};
     options.callback = options.callback || callback;
   }
 
   var self = this;
-  return this._promiseValidateSchema().then(function () {
-    var write = {},
-      fields = Object.keys(self.data),
-      field, type,
-      i = 0,
-      c = fields.length;
+  return this._promiseValidateSchema().then(() => {
+    var write = {};
+    var  fields = Object.keys(self.data);
 
-    for (;i < c;i++) {
-      field = fields[i];
-      type = self.schema.columns[field];
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const type = self.schema.columns[field];
 
-      if (type && (options.replace || self.schema.autoincrement !== field)) {
+      if (type && typeof self.data[field] !== 'undefined' && (options.replace || self.schema.autoincrement !== field)) {
         write[field] = type.prepare(self.data[field]);
       }
     }
 
     return quell._buildInsertQuery(self.tablename, write, options.replace);
-  }).then(function (query) {
-    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
-  }).then(function (result) {
+  })
+  .then((query) => quell._promiseQueryRun(
+    query.query,
+    query.data,
+    (options && options.connection) || self.connection || quell.connection
+  ))
+  .then((result) => {
     if (self.schema.autoincrement && result && result.insertId !== undefined) {
       self.data[self.schema.autoincrement] = result.insertId;
     }
@@ -1221,7 +1122,7 @@ record.load({id: 16}, function (exists) {
     }
 
     return self;
-  }).catch(function (err) {
+  }).catch((err) => {
     if (options.callback) {
       callback(err);
     }
@@ -1231,41 +1132,37 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecordupdate" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.update <small></small></h2></div>
-					
-						<p>Updates the database with the current contents of the record.</p><p>By default the update operation uses the primary keys of the record as the <code>WHERE</code> clause of the<br /><code>UPDATE</code> query, and will throw an error if all of the primary keys do not contain values.  This<br />behavior can be overridden by providing a <code>using</code> hash object in the update options which defines<br />what column values to use for the update. This is the only way to perform an update if the table<br />schema does not define any primary keys.</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the update.</p>
-						
+						<p>Updates the database with the current contents of the record.</p>
+<p>By default the update operation uses the primary keys of the record as the <code>WHERE</code> clause of the<br />
+<code>UPDATE</code> query, and will throw an error if all of the primary keys do not contain values.  This<br />
+behavior can be overridden by providing a <code>using</code> hash object in the update options which defines<br />
+what column values to use for the update. This is the only way to perform an update if the table<br />
+schema does not define any primary keys.</p>
+<p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p>
+<p>If no schema is defined on the model, Quell will load the schema from the database before<br />
+performing the update.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.update([options], [callback])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1273,32 +1170,30 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">update: function (options, callback) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">update (options, callback) {
   if (typeof options === 'function') {
     callback = options;
-    options = {callback: callback};
+    options = { callback };
   } else {
     options = options || {};
     options.callback = options.callback || callback;
   }
 
   var self = this;
-  return this._promiseValidateSchema().then(function () {
-    var lookup = {},
-      lookupCount = 0,
-      write = {},
-      fields = Object.keys(self.data),
-      field, type,
-      i,c;
+  return this._promiseValidateSchema().then(() => {
+    var lookup = {};
+    var lookupCount = 0;
+    var write = {};
+    var fields = Object.keys(self.data);
 
     if (typeof options.using === 'object') {
       lookup = options.using;
       lookupCount = Object.keys(lookup).length;
     } else {
 
-      for (i = 0, c = self.schema.primaries.length;i < c;i++) {
-        field = self.schema.primaries[i];
-        type = self.schema.columns[field];
+      for (let i = 0; i < self.schema.primaries.length; i++) {
+        const field = self.schema.primaries[i];
+        const type = self.schema.columns[field];
 
         if (!self.has(field)) {
           throw new Error('Could not update quell record, required primary key value was absent: ' + field);
@@ -1314,25 +1209,29 @@ record.load({id: 16}, function (exists) {
       throw new Error('Could not update quell record, no primary keys was available to update against.');
     }
 
-    for (i = 0, c = fields.length;i < c;i++) {
-      field = fields[i];
-      type = self.schema.columns[field];
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const type = self.schema.columns[field];
 
-      if (type && (options.replace || self.schema.autoincrement !== field)) {
+      if (type && typeof self.data[field] !== 'undefined' && (options.replace || self.schema.autoincrement !== field)) {
         write[field] = type.prepare(self.data[field]);
       }
     }
 
     return quell._buildUpdateQuery(self.tablename, write, lookup);
-  }).then(function (query) {
-    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
-  }).then(function () {
+  })
+  .then((query) => quell._promiseQueryRun(
+    query.query,
+    query.data,
+    (options && options.connection) || self.connection || quell.connection
+  ))
+  .then(() => {
     if (options.callback) {
       options.callback(null, self);
     }
 
     return self;
-  }).catch(function (err) {
+  }).catch((err) => {
     if (options.callback) {
       callback(err);
     }
@@ -1342,41 +1241,38 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecorddelete" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Record.delete <small></small></h2></div>
-					
-						<p>Deletes the record from the database.</p><p>By default the delete operation uses the primary keys of the record as the <code>WHERE</code> clause of the<br /><code>DELETE</code> query, and will throw an error if all of the primary keys do not contain values.  If the<br />table schema does not define any primary keys, Quell will use all data on the record to conduct the<br />query.  This behavior can be overridden by providing a <code>using</code> hash object in the delete options<br />which defines what column values to use for the delete. An error will be thrown if no values exist<br />to perform the delete with, so as to avoid deleting everything.</p><p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p><p>If no schema is defined on the model, Quell will load the schema from the database before<br />performing the delete.</p>
-						
+						<p>Deletes the record from the database.</p>
+<p>By default the delete operation uses the primary keys of the record as the <code>WHERE</code> clause of the<br />
+<code>DELETE</code> query, and will throw an error if all of the primary keys do not contain values.  If the<br />
+table schema does not define any primary keys, Quell will use all data on the record to conduct the<br />
+query.  This behavior can be overridden by providing a <code>using</code> hash object in the delete options<br />
+which defines what column values to use for the delete. An error will be thrown if no values exist<br />
+to perform the delete with, so as to avoid deleting everything.</p>
+<p>Returns an ES6 Promise, but a traditional callback may be supplied as the last argument instead.</p>
+<p>If no schema is defined on the model, Quell will load the schema from the database before<br />
+performing the delete.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record.delete([options], [callback])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1384,57 +1280,49 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">delete: function (options, callback) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">delete (options, callback) {
   if (typeof options === 'function') {
     callback = options;
-    options = {callback: callback};
+    options = { callback };
   } else {
     options = options || {};
     options.callback = options.callback || callback;
   }
 
   var self = this;
-  return this._promiseValidateSchema().then(function () {
-    var lookup = {},
-      lookupCount = 0,
-      field, type,
-      fields = self.schema.primaries,
-      i = 0,
-      c = fields.length;
+  return this._promiseValidateSchema().then(() => {
+    var lookup = {};
+    var lookupCount = 0;
+    var fields = self.schema.primaries;
 
     if (typeof options.using === 'object') {
       lookup = options.using;
       lookupCount = Object.keys(lookup).length;
-    } else {
-
       // If the schema has no primary keys, use any column data we have.
-      if (c) {
-        for (;i < c;i++) {
-          field = fields[i];
-          type = self.schema.columns[field];
+    } else if (fields.length) {
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
+        const type = self.schema.columns[field];
 
-          if (!self.has(field)) {
-            throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
-          } else {
-            lookup[field] = type.prepare(self.data[field]);
-            lookupCount++;
-          }
-        }
-      } else {
-        fields = Object.keys(self.schema.columns);
-        c = fields.length;
-
-        for (;i < c;i++) {
-          field = fields[i];
-          type = self.schema.columns[field];
-
-          if (self.has(field)) {
-            lookup[field] = type.prepare(self.data[field]);
-            lookupCount++;
-          }
+        if (!self.has(field)) {
+          throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
+        } else {
+          lookup[field] = type.prepare(self.data[field]);
+          lookupCount++;
         }
       }
+    } else {
+      fields = Object.keys(self.schema.columns);
 
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
+        const type = self.schema.columns[field];
+
+        if (self.has(field)) {
+          lookup[field] = type.prepare(self.data[field]);
+          lookupCount++;
+        }
+      }
     }
 
     if (!lookupCount) {
@@ -1443,9 +1331,13 @@ record.load({id: 16}, function (exists) {
 
 
     return quell._buildDeleteQuery(self.tablename, lookup);
-  }).then(function (query) {
-    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection);
-  }).then(function () {
+  })
+  .then((query) => quell._promiseQueryRun(
+    query.query,
+    query.data,
+    (options && options.connection) || self.connection || quell.connection
+  ))
+  .then(() => {
     self.exists = false;
 
     if (options.callback) {
@@ -1453,7 +1345,7 @@ record.load({id: 16}, function (exists) {
     }
 
     return self;
-  }).catch(function (err) {
+  }).catch((err) => {
     if (options.callback) {
       callback(err);
     }
@@ -1463,29 +1355,19 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_loadWithExisting" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._loadWithExisting <small></small></h2></div>
-					
 						<p>Loads a record from the database using the existing primary key data.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._loadWithExisting()</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1493,20 +1375,18 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithExisting: function (options) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithExisting (options) {
   var self = this;
-  return this._promiseValidateSchema().then(function () {
+  return this._promiseValidateSchema().then(() => {
     if (!self.schema.primaries || !self.schema.primaries.length) {
       throw new Error('Could not load quell model using existing data; table has no primary keys.');
     }
 
-    var lookup = {},
-      field, type,
-      i,c;
+    var lookup = {};
 
-    for (i = 0, c = self.schema.primaries.length;i < c;i++) {
-      field = self.schema.primaries[i];
-      type = self.schema.columns[field];
+    for (let i = 0; i < self.schema.primaries.length; i++) {
+      const field = self.schema.primaries[i];
+      const type = self.schema.columns[field];
 
       if (!self.has(field)) {
         throw new Error('Could not load quell record, required primary key value was absent: ' + field);
@@ -1520,35 +1400,24 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_loadWithPrimaryKey" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._loadWithPrimaryKey <small></small></h2></div>
-					
 						<p>Loads a record from the database using a single primary key.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._loadWithPrimaryKey(value)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1556,9 +1425,9 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithPrimaryKey: function (value, options) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithPrimaryKey (value, options) {
   var self = this;
-  return this._promiseValidateSchema().then(function () {
+  return this._promiseValidateSchema().then(() => {
     if (!self.schema.primaries.length) {
       throw new Error('Could not load quell model using existing data; schema has no primary keys.');
     }
@@ -1567,9 +1436,9 @@ record.load({id: 16}, function (exists) {
       throw new Error('Could not load quell model using single primary key, schema has more than one primary key.');
     }
 
-    var key = self.schema.primaries[0],
-      type = self.schema.columns[key],
-      lookup = {};
+    var key = self.schema.primaries[0];
+    var type = self.schema.columns[key];
+    var lookup = {};
 
     lookup[key] = type.prepare(value);
 
@@ -1578,41 +1447,29 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_loadWithSingleColumn" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._loadWithSingleColumn <small></small></h2></div>
-					
 						<p>Loads a record from the database using a single column value.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._loadWithSingleColumn(value, field)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>field</strong> string
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1620,11 +1477,11 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithSingleColumn: function (value, field, options) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithSingleColumn (value, field, options) {
   var self = this;
-  return this._promiseValidateSchema().then(function () {
-    var type = self.schema.columns[field],
-      lookup = {};
+  return this._promiseValidateSchema().then(() => {
+    var type = self.schema.columns[field];
+    var lookup = {};
 
     if (!type) {
       throw new Error('Could not load quell model, ' + field + ' does not exist in the table schema.');
@@ -1637,35 +1494,24 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_loadWithMultiColumn" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._loadWithMultiColumn <small></small></h2></div>
-					
 						<p>Loads a record from the database using one or more column values from an object hash.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._loadWithMultiColumn(search)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>search</strong> object
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1673,21 +1519,18 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithMultiColumn: function (search, options) {
-  var self = this;
-  return this._promiseValidateSchema().then(function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadWithMultiColumn (search, options) {
+  return this._promiseValidateSchema().then(() => {
     if (typeof search !== 'object' || !Object.keys(search).length) {
       throw new Error('Could not load quell model; provided data was empty or not an object.');
     }
 
-    var lookup = {},
-      fields = Object.keys(search),
-      field, type,
-      i,c;
+    var lookup = {};
+    var fields = Object.keys(search);
 
-    for (i = 0, c = fields.length;i < c;i++) {
-      field = fields[i];
-      type = self.schema.columns[field];
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const type = this.schema.columns[field];
 
       if (!type) {
         throw new Error('Could not load quell model, ' + field + ' does not exist in the table schema.');
@@ -1696,40 +1539,29 @@ record.load({id: 16}, function (exists) {
       }
     }
 
-    return self._loadUsing(lookup, options);
+    return this._loadUsing(lookup, options);
   });
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_loadUsing" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._loadUsing <small></small></h2></div>
-					
 						<p>Loads a record from the database using pre-validated data.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._loadUsing(lookup)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
-									<strong>lookup</strong> [type]
+									<strong>lookup</strong> object
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
-							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right"></em></div>
-							
+							<div class="panel-footer"><strong>Returns: </strong> boolean, self <em class="pull-right"></em></div>
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1737,11 +1569,15 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_loadUsing: function (lookup, options) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_loadUsing (lookup, options) {
   var self = this;
   var query = quell._buildSelectQuery(self.tablename, lookup);
 
-  return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection).then(function (results) {
+  return quell._promiseQueryRun(
+    query.query,
+    query.data,
+    (options && options.connection) || self.connection || quell.connection
+  ).then((results) => {
     // If results are returned, then we found the row and can map the data onto the model
     // If no results were returned, then the row wasn't found and we resolve with false.
     if (results.length) {
@@ -1749,37 +1585,27 @@ record.load({id: 16}, function (exists) {
       self.set(results[0]);
       self.changed = {};
       return self;
-    } else {
-      self.exists = false;
-      return false;
     }
+
+    self.exists = false;
+    return false;
   });
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_promiseIfExists" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._promiseIfExists <small></small></h2></div>
-					
 						<p>Checks to see if the record already exists in the database using the primary keys.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._promiseIfExists()</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1787,27 +1613,24 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_promiseIfExists: function (options) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_promiseIfExists (options) {
   var self = this;
-  return this._promiseValidateSchema().then(function () {
-    var lookup = {},
-      key,
-      i = 0,
-      c = self.schema.primaries.length;
+  return this._promiseValidateSchema().then(() => {
+    var lookup = {};
 
     // if there are no primary keys, then it is impossible to determine if this row existed
     // in a previous state. Therefore, we return true if we already knew it existed before
     // or false if the previous state is unknown.  This means that all new models without
     // primary keys will default to inserts.
-    if (!c) {
+    if (!self.schema.primaries.length) {
       return (!!self.exists);
     }
 
     // Iterate over all primary keys. If we do not have a value for a key, assume the
     // record does not exist. If all keys have values, perform a lookup of those fields
     // and values to verify that the row exists.
-    for (;i < c;i++) {
-      key = self.schema.primaries[i];
+    for (let i = 0; i < self.schema.primaries.length; i++) {
+      const key = self.schema.primaries[i];
       if (!self.has(key)) {
         return (self.exists = false);
       } else if (self.schema.columns[key]) {
@@ -1817,7 +1640,11 @@ record.load({id: 16}, function (exists) {
 
     var query = quell._buildSelectQuery(self.tablename, lookup, self.schema.primaries);
 
-    return quell._promiseQueryRun(query.query, query.data, (options && options.connection) || self.connection || quell.connection).then(function (results) {
+    return quell._promiseQueryRun(
+      query.query,
+      query.data,
+      (options && options.connection) || self.connection || quell.connection
+    ).then((results) => {
       self.exists = !!results.length;
       return self.exists;
     });
@@ -1826,29 +1653,19 @@ record.load({id: 16}, function (exists) {
 },</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodRecord_promiseValidateSchema" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>Record._promiseValidateSchema <small></small></h2></div>
-					
 						<p>Validates the schema data for the model, loading the schema from the database if needed.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Record._promiseValidateSchema()</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1856,7 +1673,7 @@ record.load({id: 16}, function (exists) {
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">_promiseValidateSchema: function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">_promiseValidateSchema () {
   var self = this;
 
   if (!this.connection) {
@@ -1877,59 +1694,46 @@ record.load({id: 16}, function (exists) {
   ;
 
   if (!valid) {
-    return quell._promiseTableSchema(this.tablename, this.connection).then(function (schema) {
+    return quell._promiseTableSchema(this.tablename, this.connection).then((schema) => {
       self.schema = schema;
     });
-  } else {
-    return Promise.resolve();
   }
-}
+
+  return Promise.resolve();
+},
 };
 
-assign(modelBase.prototype, Record);</code></pre>
+Object.assign(modelBase.prototype, Record);</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodquell_buildSelectQuery" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>quell._buildSelectQuery <small></small></h2></div>
-					
 						<p>Constructs the query for a SELECT request.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell._buildSelectQuery(tablename, lookup, [select])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>lookup</strong> object
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>select</strong> array
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -1947,47 +1751,34 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodquell_buildInsertQuery" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>quell._buildInsertQuery <small></small></h2></div>
-					
 						<p>Constructs the query for an INSERT request.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell._buildInsertQuery(tablename, write, [replace])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>write</strong> object
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>replace</strong> boolean
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2003,47 +1794,34 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodquell_buildUpdateQuery" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>quell._buildUpdateQuery <small></small></h2></div>
-					
 						<p>Constructs the query for an UPDATE request.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell._buildUpdateQuery(tablename, write, lookup)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>write</strong> object
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>lookup</strong> object
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2061,41 +1839,29 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodquell_buildDeleteQuery" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>quell._buildDeleteQuery <small></small></h2></div>
-					
 						<p>Constructs the query for a DELETE request.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell._buildDeleteQuery(tablename, lookup)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>lookup</strong> object
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> object <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2112,47 +1878,34 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodquell_promiseQueryRun" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>quell._promiseQueryRun <small></small></h2></div>
-					
 						<p>Runs an arbitrary query.  Attempts to use prepared statements when available.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell._promiseQueryRun(query, data, mysql)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>query</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>data</strong> array
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>mysql</strong> object
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2171,41 +1924,29 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodquell_promiseTableSchema" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>quell._promiseTableSchema <small></small></h2></div>
-					
 						<p>Loads the schema for a table from the database and parses for use.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell._promiseTableSchema(tablename, mysql)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>mysql</strong> object
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2218,54 +1959,49 @@ assign(modelBase.prototype, Record);</code></pre>
 
   mysql.query('DESCRIBE ' + tablename, defer);
 
-  return defer.then(function (results) {
+  return defer.then((results) => {
     var schema = {
       columns: {},
       primaries: [],
       autoincrement: false,
-      loaded: true
+      loaded: true,
     };
 
-    var i = 0, c = results.length;
-    for (;i < c;i++) {
+    for (let i = 0; i < results.length; i++) {
       parseRow(results[i]);
     }
 
     function parseRow (row) {
       var matches;
       var column = {
-        NULL: row.Null === 'YES'
+        NULL: row.Null === 'YES',
       };
 
       if (row.Type === 'date' || row.Type === 'datetime' || row.Type === 'timestamp' || row.Type === 'time' || row.Type === 'year') {
         column = types[row.Type.toUpperCase()](column);
-      }
 
-      else if ((matches = row.Type.match(/^(decimal|float|double)\((\d+),(\d+)\)/))) {
+      } else if ((matches = row.Type.match(/^(decimal|float|double)\((\d+),(\d+)\)/))) {
         column.size = parseInt(matches[2], 10);
         column.precision = parseInt(matches[3], 10);
         column.unsigned = row.Type.indexOf('unsigned') >= 0;
         column = types[matches[1].toUpperCase()](column);
-      }
 
-      else if ((matches = row.Type.match(/^((?:big|medium|small|tiny)?int(?:eger)?)\((\d+)\)/))) {
+      } else if ((matches = row.Type.match(/^((?:big|medium|small|tiny)?int(?:eger)?)\((\d+)\)/))) {
         column.size = parseInt(matches[2], 10);
         column.unsigned = row.Type.indexOf('unsigned') >= 0;
         column = types[matches[1].toUpperCase()](column);
-      }
 
-      else if ((matches = row.Type.match(/^enum\((.*)\)/))) {
-        column.options = matches[1].split(',').map(function (o) { return o.slice(1, -1);});
+      } else if ((matches = row.Type.match(/^enum\((.*)\)/))) {
+        column.options = matches[1].split(',').map((opt) => opt.slice(1, -1));
         column = types.ENUM(column);
-      }
 
-      else if ((matches = row.Type.match(/^((?:var)?char)\((\d+)\)/))) {
+      } else if ((matches = row.Type.match(/^((?:var)?char)\((\d+)\)/))) {
         column.size = parseInt(matches[2], 10);
         column = types[matches[1].toUpperCase()](column);
-      }
 
-      //didn't find a known type. Split the type field by opening parens to get the type name without other info.
-      else {
+      } else {
+        // didn't find a known type. Split the type field by opening
+        // parens to get the type name without other info.
         column.type = row.Type.split('(')[0].toUpperCase();
         if (types[column.type]) {
           column = types[column.type](column);
@@ -2290,35 +2026,26 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodModelfind" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Model.find <small></small></h2></div>
-					
-						<p>Creates a Queryize chain for loading multiple records.</p><p>Overrides the <code>exec</code> function to pre-wrap all results with Quell models.</p><p>See QueryizeJS documentation for more details.</p>
-						
+						<p>Creates a Queryize chain for loading multiple records.</p>
+<p>Overrides the <code>exec</code> function to pre-wrap all results with Quell models.</p>
+<p>See QueryizeJS documentation for more details.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Model.find([where])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>where</strong> object
 									<em>Optional </em>
-									<br>An object hash of all columns to search against. Shortcut to calling .find().where()
+									<br>&lt;p&gt;An object hash of all columns to search against. Shortcut to calling .find().where()&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
-							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right"></em></div>
-							
+							<div class="panel-footer"><strong>Returns: </strong> Queryize <em class="pull-right"></em></div>
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2336,7 +2063,8 @@ assign(modelBase.prototype, Record);</code></pre>
   var exec = q.exec;
   q.exec = function (conn, callback) {
     switch (arguments.length) {
-    case 2:
+    case 0:
+      conn = self.connection || quell.connection;
       break;
     case 1:
       if (typeof conn === 'function') {
@@ -2344,9 +2072,8 @@ assign(modelBase.prototype, Record);</code></pre>
         conn = self.connection || quell.connection || undefined;
       }
       break;
-    case 0:
-      conn = self.connection || quell.connection;
-      break;
+    case 2:
+    default:
     }
 
     if (!conn) {
@@ -2356,16 +2083,15 @@ assign(modelBase.prototype, Record);</code></pre>
     var defer = proxmis();
     exec.call(q, conn, defer);
 
-    return defer.then(function (results) {
-      results = results.map(function (row) {
-        return new self(row);
-      });
+    return defer.then((results) => {
+      results = results.map((row) => new self(row)); // eslint-disable-line new-cap
 
       if (callback) {
         callback(null, results);
       }
+
       return results;
-    }, function (err) {
+    }, (err) => {
       if (callback) {
         callback(err);
       }
@@ -2377,41 +2103,29 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="methodModelloadSchema" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Model.loadSchema <small></small></h2></div>
-					
 						<p>Pre-loads the schema details for the model.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">Model.loadSchema([options], [callback])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>options</strong> object
 									<em>Optional </em>
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2422,20 +2136,23 @@ assign(modelBase.prototype, Record);</code></pre>
 								<pre class="panel-body prettyprint"><code class="language-javascript">modelBase.loadSchema = function (options, callback) {
   if (typeof options === 'function') {
     callback = options;
-    options = {callback: callback};
+    options = { callback };
   } else {
     options = options || {};
     options.callback = options.callback || callback;
   }
 
   var self = this;
-  return quell._promiseTableSchema(this.tablename, (options && options.connection) || self.connection || quell.connection).then(function (schema) {
+  return quell._promiseTableSchema(
+    this.tablename,
+    (options && options.connection) || self.connection || quell.connection
+  ).then((schema) => {
     self.schema = schema;
     if (options.callback) {
       callback(null, self);
     }
     return self;
-  }, function (err) {
+  }, (err) => {
     if (callback) {
       callback(err);
     }
@@ -2444,35 +2161,24 @@ assign(modelBase.prototype, Record);</code></pre>
 };</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="functionisScalar" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>isScalar <small></small></h2></div>
-					
 						<p>Checks if the value passed in is a primitive value.</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">isScalar(value)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2492,47 +2198,34 @@ assign(modelBase.prototype, Record);</code></pre>
 }</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="functionisEqual" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>isEqual <small></small></h2></div>
-					
 						<p>Checks if two values are equal using the column type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">isEqual(a, b, [ctype])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>a</strong> mixed
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>b</strong> mixed
 									
 									<br>
 								</li>
-							
 								<li class="list-group-item">
 									<strong>ctype</strong> function
 									<em>Optional </em>
 									<br>
 								</li>
-							
 							</ol>
-							
-							
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2545,33 +2238,48 @@ assign(modelBase.prototype, Record);</code></pre>
     return ctype.compare(a, b);
   }
 
-  if (a === b) {return true;}
+  if (a === b) { return true; }
 
   return false;
 }</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="constructorSchema" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema <small></small></h2></div>
-					
-						<p>By default, quell will automatically load the table schema for any models that are created the first time a read/write operation is performed, but this operation may be skipped by predefining the table schema as part of the model. <em>Note: quell does not alter or create table structure, defining the schema in code is not a substitute for creating a table structure in the database.</em></p><p>To make it easier to define table structure, all of the column data types are accessible directly from the quell object and can be used exactly as you would in a CREATE TABLE command (eg, <code>VARCHAR(10)</code>. If used as a value instead of a function, quell will use the default values for that type.  To define extra column attributes such as integer sign and null acceptance, you must pass a column settings object as the main argument on the data type object.  See the main <a href="#constructorquell">quell</a> definition for an example.</p><p><strong>Custom Types:</strong></p><p>Every quell data type must define three functions: <code>format</code>, <code>prepare</code> and <code>compare</code> function.  If any of these options are excluded from the settings object, the defaults for the base type are used.</p><p><code>prepare</code> is called right before the data is used in a query and sanitizes the input for the expected data type.  In the case of integers this means stripping any non-numeric characters, for dates the value is parsed with Moment and then formatted as a MySQL date. String and Enum values are force cast to string.  All values are tested for <code>null</code>.</p><p>The <code>format</code> function is used when fetching data from the model via the <code>.get()</code> method. It attempts the structure whatever data is on the model in the way that MySQL would format it in the database (eg, trimming values for their column lengths).  This is useful for validating model data before saving.</p><p><code>compare</code> is called when quell is determining what columns have changed from their original values. It takes two arguments and returns a boolean.</p>
-						
+						<p>By default, quell will automatically load the table schema for any models that are created<br />
+the first time a read/write operation is performed, but this operation may be skipped by<br />
+predefining the table schema as part of the model. <em>Note: quell does not alter or create<br />
+table structure, defining the schema in code is not a substitute for creating a table<br />
+structure in the database.</em></p>
+<p>To make it easier to define table structure, all of the column data types are accessible<br />
+directly from the quell object and can be used exactly as you would in a CREATE TABLE<br />
+command (eg, <code>VARCHAR(10)</code>. If used as a value instead of a function, quell will use the<br />
+default values for that type.  To define extra column attributes such as integer sign and<br />
+null acceptance, you must pass a column settings object as the main argument on the data<br />
+type object.  See the main <a href="#constructorquell">quell</a> definition for an example.</p>
+<p><strong>Custom Types:</strong></p>
+<p>Every quell data type must define three functions: <code>format</code>, <code>prepare</code> and <code>compare</code><br />
+function.  If any of these options are excluded from the settings object, the defaults<br />
+for the base type are used.</p>
+<p><code>prepare</code> is called right before the data is used in a query and sanitizes the input for<br />
+the expected data type.  In the case of integers this means stripping any non-numeric<br />
+characters, for dates the value is parsed with Moment and then formatted as a MySQL date.<br />
+String and Enum values are force cast to string.  All values are tested for <code>null</code>.</p>
+<p>The <code>format</code> function is used when fetching data from the model via the <code>.get()</code> method.<br />
+It attempts the structure whatever data is on the model in the way that MySQL would format<br />
+it in the database (eg, trimming values for their column lengths).  This is useful for<br />
+validating model data before saving.</p>
+<p><code>compare</code> is called when quell is determining what columns have changed from their<br />
+original values. It takes two arguments and returns a boolean.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TYPE(settings)</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2582,14 +2290,14 @@ assign(modelBase.prototype, Record);</code></pre>
 								<pre class="panel-body prettyprint"><code class="language-javascript">var TYPE = function (options) {
   var o = Object.create(this);
   if (typeof options === 'object' && !Array.isArray(options)) {
-    extend(o, this, options || {});
+    Object.assign(o, this, options || {});
   } else if (typeof o.initialize === 'function') {
     o.initialize.apply(o, arguments);
   }
   return o;
 };
 
-var compare = function (a,b) {
+var compare = function (a, b) {
   return this.format(a) === this.format(b);
 };
 
@@ -2597,42 +2305,40 @@ var TEXT = {
   type: 'TEXT',
   NULL: true,
   size: 0,
-  format: function (o) {
+  format (o) {
     if (o === null) {
       if (this.NULL) {
         return null;
-      } else {
-        return '';
       }
+      return '';
     }
     if (this.size && this.size < o.length) {
       return ('' + o).slice(0, this.size);
     }
     return ('' + o);
   },
-  prepare: function (o) {
+  prepare (o) {
     if (o === null) {
       if (this.NULL) {
         return null;
-      } else {
-        return '';
       }
+      return '';
     }
     return '' + o;
   },
-  compare: compare,
-  initialize: function () {
+  compare,
+  initialize () {
     if (arguments.length > 0) {
       this.size = arguments[0];
     }
-  }
+  },
 };
 
 var ENUM = {
   type: 'ENUM',
   NULL: true,
   options: [],
-  format: function (o) {
+  format (o) {
     var NULL = this.NULL ? null : '';
 
     if (o === null) {
@@ -2640,25 +2346,26 @@ var ENUM = {
     }
 
     o = '' + o;
-    var options = this.options.map(function (s) { return s.toUpperCase(); });
+    var options = this.options.map((s) => s.toUpperCase());
     var i = options.indexOf(o.toUpperCase());
 
     if (i > -1) {
       return this.options[i];
-    } else {
-      return NULL;
     }
+
+    return NULL;
   },
-  prepare: function (o) {
+
+  prepare (o) {
     if (o === null) {
       return this.NULL ? null : '';
     }
     return '' + o;
   },
-  compare: compare,
-  initialize: function () {
+  compare,
+  initialize () {
     this.options = Array.prototype.slice.call(arguments);
-  }
+  },
 };
 
 var INT = {
@@ -2667,7 +2374,7 @@ var INT = {
   size: 11,
   precision: 0,
   unsigned: false,
-  format: function (o) {
+  format (o) {
     var result;
     var NULL = this.NULL ? null : '0';
 
@@ -2684,13 +2391,13 @@ var INT = {
     if (this.precision) {
       // round at the needed precision and then split on the decimal.
       var k = Math.pow(10, this.precision);
-      result = ('' + Math.round(o * k) / k).split('.');
+      result = String(Math.round(o * k) / k).split('.');
 
       // if no decimal existed, make sure we create a place for it.
-      if (result.length === 1) {result.push('');}
+      if (result.length === 1) { result.push(''); }
     } else {
       // parse as float and round off, then store in an array to simplify below.
-      result = [Math.round(parseFloat(o))];
+      result = [ Math.round(parseFloat(o)) ];
     }
 
     // if the whole number is longer than available space, slice off the extra characters
@@ -2709,7 +2416,7 @@ var INT = {
 
     return this.precision ? result.join('.') : '' + result[0];
   },
-  prepare: function (o) {
+  prepare (o) {
     if (o === null) {
       return this.NULL ? null : 0;
     }
@@ -2722,22 +2429,22 @@ var INT = {
 
     return o;
   },
-  compare: compare,
-  initialize: function () {
+  compare,
+  initialize () {
     if (arguments.length > 0) {
       this.size = arguments[0];
     }
     if (arguments.length > 1) {
       this.precision = arguments[1];
     }
-  }
+  },
 };
 
 var DATETIME = {
   type: 'DATETIME',
   NULL: true,
   mask: 'YYYY-MM-DD HH:mm:ss',
-  format: function (o) {
+  format (o) {
     var NULL = this.NULL ? null : '0000-00-00 00:00:00';
 
     if (o === null) {
@@ -2748,48 +2455,39 @@ var DATETIME = {
       return moment().format(this.mask);
     }
 
+    if (!(o instanceof Date)) {
+      o = new Date(o);
+    }
+
     o = moment(o).format(this.mask);
     if (o === 'Invalid date') {
       return NULL;
-    } else {
-      return o;
     }
+    return o;
   },
-  compare: compare
+  compare,
 };
 DATETIME.prepare = DATETIME.format;
 
 function makeType (base, extras) {
-  var properties = extend({}, base, extras || {});
+  var properties = Object.assign({}, base, extras || {});
   var type = TYPE.bind(properties);
-  return extend(type, properties);
-}
-
-
-module.exports = {</code></pre>
+  return Object.assign(type, properties);
+}</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaTEXT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.TEXT <small></small></h2></div>
-					
 						<p>TEXT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TEXT</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2797,30 +2495,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">TEXT      : makeType(TEXT, {type: 'TEXT',       size: 65535}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.TEXT = makeType(TEXT, { type: 'TEXT',       size: 65535 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaBLOB" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.BLOB <small></small></h2></div>
-					
 						<p>BLOB Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.BLOB</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2828,30 +2517,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">BLOB      : makeType(TEXT, {type: 'BLOB',       size: 65535}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.BLOB = makeType(TEXT, { type: 'BLOB',       size: 65535 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaMEDIUMBLOB" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.MEDIUMBLOB <small></small></h2></div>
-					
 						<p>MEDIUMBLOB Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.MEDIUMBLOB</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2859,30 +2539,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">MEDIUMBLOB: makeType(TEXT, {type: 'MEDIUMBLOB', size: 16777215}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.MEDIUMBLOB = makeType(TEXT, { type: 'MEDIUMBLOB', size: 16777215 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaMEDIUMTEXT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.MEDIUMTEXT <small></small></h2></div>
-					
 						<p>MEDIUMTEXT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.MEDIUMTEXT</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2890,30 +2561,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">MEDIUMTEXT: makeType(TEXT, {type: 'MEDIUMTEXT', size: 16777215}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.MEDIUMTEXT = makeType(TEXT, { type: 'MEDIUMTEXT', size: 16777215 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaLONGBLOB" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.LONGBLOB <small></small></h2></div>
-					
 						<p>LONGBLOB Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.LONGBLOB</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2921,30 +2583,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">LONGBLOB  : makeType(TEXT, {type: 'LONGBLOB',   size: 4294967295}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.LONGBLOB = makeType(TEXT, { type: 'LONGBLOB',   size: 4294967295 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaLONGTEXT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.LONGTEXT <small></small></h2></div>
-					
 						<p>LONGTEXT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.LONGTEXT</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2952,30 +2605,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">LONGTEXT  : makeType(TEXT, {type: 'LONGTEXT',   size: 4294967295}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.LONGTEXT = makeType(TEXT, { type: 'LONGTEXT',   size: 4294967295 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaTINYBLOB" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.TINYBLOB <small></small></h2></div>
-					
 						<p>TINYBLOB Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TINYBLOB</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -2983,30 +2627,21 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">TINYBLOB  : makeType(TEXT, {type: 'TINYBLOB',   size: 255}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.TINYBLOB = makeType(TEXT, { type: 'TINYBLOB',   size: 255 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaTINYTEXT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.TINYTEXT <small></small></h2></div>
-					
 						<p>TINYTEXT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TINYTEXT</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3014,56 +2649,40 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">TINYTEXT  : makeType(TEXT, {type: 'TINYTEXT',   size: 255}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.TINYTEXT = makeType(TEXT, { type: 'TINYTEXT',   size: 255 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaVARCHAR" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.VARCHAR <small></small></h2></div>
-					
 						<p>VARCHAR Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.VARCHAR([size])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>size</strong> number
 									<em>Optional  (Default: 255)</em>
-									<br>Size of the varchar.
+									<br>&lt;p&gt;Size of the varchar.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.VARCHAR(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.VARCHAR({
   size: 10,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3071,56 +2690,40 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">VARCHAR   : makeType(TEXT, {type: 'VARCHAR',    size: 255}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.VARCHAR = makeType(TEXT, { type: 'VARCHAR',    size: 255 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaCHAR" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.CHAR <small></small></h2></div>
-					
 						<p>CHAR Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.CHAR([size])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>size</strong> number
 									<em>Optional  (Default: 255)</em>
-									<br>Size of the char.
+									<br>&lt;p&gt;Size of the char.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.CHAR(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.CHAR({
   size: 10,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3128,57 +2731,41 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">CHAR      : makeType(TEXT, {type: 'CHAR',       size: 255}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.CHAR = makeType(TEXT, { type: 'CHAR',       size: 255 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaINT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.INT <small>INTEGER</small></h2></div>
-					
 						<p>INT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.INT([length])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 11)</em>
-									<br>Size of the integer.
+									<br>&lt;p&gt;Size of the integer.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.INT(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.INT({
   length: 10,
   unsigned: true,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3186,58 +2773,42 @@ module.exports = {</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">INT       : makeType(INT),
-INTEGER   : makeType(INT),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.INT = makeType(INT);
+exports.INTEGER = makeType(INT);</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaTINYINT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.TINYINT <small></small></h2></div>
-					
 						<p>TINYINT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TINYINT([length])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 1)</em>
-									<br>Size of the integer.
+									<br>&lt;p&gt;Size of the integer.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TINYINT(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.TINYINT({
   length: 2,
   unsigned: true,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3245,57 +2816,41 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">TINYINT   : makeType(INT,  {type: 'TINYINT',    size: 1}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.TINYINT = makeType(INT,  { type: 'TINYINT',    size: 1 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaSMALLINT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.SMALLINT <small></small></h2></div>
-					
 						<p>SMALLINT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.SMALLINT([length])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 4)</em>
-									<br>Size of the integer.
+									<br>&lt;p&gt;Size of the integer.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.SMALLINT(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.SMALLINT({
   length: 3,
   unsigned: true,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3303,57 +2858,41 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">SMALLINT  : makeType(INT,  {type: 'SMALLINT',   size: 4}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.SMALLINT = makeType(INT,  { type: 'SMALLINT',   size: 4 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaMEDIUMINT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.MEDIUMINT <small></small></h2></div>
-					
 						<p>MEDIUMINT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.MEDIUMINT([length])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 8)</em>
-									<br>Size of the integer.
+									<br>&lt;p&gt;Size of the integer.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.MEDIUMINT(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.MEDIUMINT({
   length: 10,
   unsigned: true,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3361,57 +2900,41 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">MEDIUMINT : makeType(INT,  {type: 'MEDIUMINT',  size: 8}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.MEDIUMINT = makeType(INT,  { type: 'MEDIUMINT',  size: 8 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaBIGINT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.BIGINT <small></small></h2></div>
-					
 						<p>BIGINT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.BIGINT([length])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 20)</em>
-									<br>Size of the integer.
+									<br>&lt;p&gt;Size of the integer.&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.BIGINT(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.BIGINT({
   length: 10,
   unsigned: true,
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3419,63 +2942,46 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">BIGINT    : makeType(INT,  {type: 'BIGINT',     size: 20}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.BIGINT = makeType(INT,  { type: 'BIGINT',     size: 20 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaFLOAT" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.FLOAT <small></small></h2></div>
-					
 						<p>FLOAT Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.FLOAT([length], [precision])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 10)</em>
-									<br>Display length of the float value, in characters.
+									<br>&lt;p&gt;Display length of the float value, in characters.&lt;/p&gt;
 								</li>
-							
 								<li class="list-group-item">
 									<strong>precision</strong> number
 									<em>Optional </em>
-									<br>Number of decimal places
+									<br>&lt;p&gt;Number of decimal places&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.FLOAT(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.FLOAT({
   length: 6,
   precision: 4
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3483,63 +2989,46 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">FLOAT     : makeType(INT,  {type: 'FLOAT',      size: 10, precision: 2}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.FLOAT = makeType(INT,  { type: 'FLOAT',      size: 10, precision: 2 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaDOUBLE" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.DOUBLE <small></small></h2></div>
-					
 						<p>DOUBLE Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DOUBLE([length], [precision])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									<em>Optional  (Default: 10)</em>
-									<br>Display length of the double value.
+									<br>&lt;p&gt;Display length of the double value.&lt;/p&gt;
 								</li>
-							
 								<li class="list-group-item">
 									<strong>precision</strong> number
 									<em>Optional </em>
-									<br>Number of decimal places
+									<br>&lt;p&gt;Number of decimal places&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DOUBLE(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.DOUBLE({
   length: 6,
   precision: 4
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3547,63 +3036,46 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">DOUBLE    : makeType(INT,  {type: 'DOUBLE',     size: 16, precision: 4}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.DOUBLE = makeType(INT,  { type: 'DOUBLE',     size: 16, precision: 4 });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaDECIMAL" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.DECIMAL <small></small></h2></div>
-					
 						<p>DECIMAL Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DECIMAL([length], [precision])</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>length</strong> number
 									
-									<br>Display length of the decimal value.
+									<br>&lt;p&gt;Display length of the decimal value.&lt;/p&gt;
 								</li>
-							
 								<li class="list-group-item">
 									<strong>precision</strong> number
 									
-									<br>Number of decimal places
+									<br>&lt;p&gt;Number of decimal places&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DECIMAL(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.DECIMAL({
   length: 6,
   precision: 4
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3611,31 +3083,22 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">DECIMAL   : makeType(INT,  {type: 'DECIMAL',    size: 0, precision: 20}),
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.DECIMAL = makeType(INT,  { type: 'DECIMAL',    size: 0, precision: 20 });
 // DECIMALS must have a size and precision defined in the schema, so we're being ambiguous with the values</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaDATETIME" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.DATETIME <small></small></h2></div>
-					
 						<p>DATETIME Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DATETIME</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3643,30 +3106,21 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">DATETIME  : makeType(DATETIME),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.DATETIME = makeType(DATETIME);</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaTIMESTAMP" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.TIMESTAMP <small></small></h2></div>
-					
 						<p>TIMESTAMP Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DATETIME</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3674,30 +3128,21 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">TIMESTAMP : makeType(DATETIME,  {type: 'TIMESTAMP', NULL: false}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.TIMESTAMP = makeType(DATETIME,  { type: 'TIMESTAMP', NULL: false });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaDATE" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.DATE <small></small></h2></div>
-					
 						<p>DATE Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.DATE</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3705,30 +3150,21 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">DATE      : makeType(DATETIME,  {type: 'DATE',  mask: 'YYYY-MM-DD'}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.DATE = makeType(DATETIME,  { type: 'DATE',  mask: 'YYYY-MM-DD' });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaTIME" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.TIME <small></small></h2></div>
-					
 						<p>TIME Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.TIME</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3736,30 +3172,21 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">TIME      : makeType(DATETIME,  {type: 'DATE',  mask: 'HH:mm:ss'}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.TIME = makeType(DATETIME,  { type: 'DATE',  mask: 'HH:mm:ss' });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaYEAR" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.YEAR <small></small></h2></div>
-					
 						<p>YEAR Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.YEAR</div></div>
 							<ol class="list-group">
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3767,56 +3194,40 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">YEAR      : makeType(DATETIME,  {type: 'YEAR',  mask: 'YYYY'}),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.YEAR = makeType(DATETIME,  { type: 'YEAR',  mask: 'YYYY' });</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaENUM" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.ENUM <small></small></h2></div>
-					
 						<p>ENUM Column Type</p>
-						
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.ENUM(option1, option2, option3, ...)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>options</strong> string
 									
-									<br>The possible values for the enum
+									<br>&lt;p&gt;The possible values for the enum&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.ENUM(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> object
 									
-									<br>Detailed column options
+									<br>&lt;p&gt;Detailed column options&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
 							<pre class="panel-body prettyprint"><code class="language-javascript">quell.ENUM({
   options: ['Normal', 'Moderator', 'Admin'],
   NULL: false
 })</code></pre>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3824,36 +3235,27 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">ENUM      : makeType(ENUM),</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.ENUM = makeType(ENUM);</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 					<div id="propertySchemaUNKNOWN" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>Schema.UNKNOWN <small></small></h2></div>
-					
-						<p>Used to define any column type not natively supported by Quell.</p><p>See the Schema entry for details of the column format.</p>
-						
+						<p>Used to define any column type not natively supported by Quell.</p>
+<p>See the Schema entry for details of the column format.</p>
 						<h3>Usage:</h3>
-						
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">quell.UNKNOWN(settings)</div></div>
 							<ol class="list-group">
-							
 								<li class="list-group-item">
 									<strong>settings</strong> Object
 									
-									<br>Type prototype
+									<br>&lt;p&gt;Type prototype&lt;/p&gt;
 								</li>
-							
 							</ol>
-							
-							
 						</div>
-						
 
 
 						<div class="codeview panel panel-default">
@@ -3861,12 +3263,9 @@ INTEGER   : makeType(INT),</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">UNKNOWN   : makeType(TEXT)
-};</code></pre>
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.UNKNOWN = makeType(TEXT);</code></pre>
 							</div>
 						</div>
-						
-					
 					</div>
 				
 				</div>
