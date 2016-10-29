@@ -1,4 +1,5 @@
 
+var suite = require('tapsuite');
 var quell = require('../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
@@ -12,14 +13,19 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	};
 };
 
-exports.insert = {
-	setUp (done) {
+suite('insert', (s) => {
+	s.before((done) => {
 		this.backup = Object.assign({}, quell);
 		done();
-	},
+	});
 
-	'using promise': function (test) {
-		test.expect(12);
+	s.after((done) => {
+		Object.assign(quell, this.backup);
+		done();
+	});
+
+	s.test('using promise', (test) => {
+		test.plan(12);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -61,19 +67,19 @@ exports.insert = {
 
 		model.insert().then((result) => {
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id'), '5');
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			console.error(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'using callback': function (test) {
-		test.expect(13);
+	s.test('using callback', (test) => {
+		test.plan(13);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -113,15 +119,15 @@ exports.insert = {
 		model.insert((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id'), '5');
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'passes sql error through from _promiseValidateSchema': function (test) {
-		test.expect(4);
+	s.test('passes sql error through from _promiseValidateSchema', (test) => {
+		test.plan(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -157,13 +163,13 @@ exports.insert = {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'passes sql error through from _promiseQueryRun': function (test) {
-		test.expect(8);
+	s.test('passes sql error through from _promiseQueryRun', (test) => {
+		test.plan(8);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -201,13 +207,13 @@ exports.insert = {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'without autoincrement': function (test) {
-		test.expect(13);
+	s.test('without autoincrement', (test) => {
+		test.plan(13);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -246,15 +252,15 @@ exports.insert = {
 		model.insert((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), undefined);
+			test.equal(result.get('id'), null);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'ignores non-schema data and autoincrement fields': function (test) {
-		test.expect(13);
+	s.test('ignores non-schema data and autoincrement fields', (test) => {
+		test.plan(13);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -294,15 +300,15 @@ exports.insert = {
 		model.insert((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id'), '5');
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'as replace': function (test) {
-		test.expect(13);
+	s.test('as replace', (test) => {
+		test.plan(13);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -342,16 +348,10 @@ exports.insert = {
 		model.insert({ replace: true }, (err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id', false), 5);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
-
-
-	tearDown (done) {
-		Object.assign(quell, this.backup);
-		done();
-	},
-};
+	});
+});

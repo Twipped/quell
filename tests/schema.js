@@ -1,4 +1,6 @@
 
+var suite = require('tapsuite');
+var test = require('tap').test;
 var quell = require('../');
 var each = function each (collection, fn) {
 	if (Array.isArray(collection)) return collection.forEach(fn);
@@ -6,9 +8,6 @@ var each = function each (collection, fn) {
 		return Object.keys(collection).forEach((key) => fn(collection[key], key));
 	}
 };
-
-var singleKeyDescribe;
-var multiKeyDescribe;
 
 function logError (err) {
 	var error = {
@@ -38,13 +37,14 @@ function flattenObject (input) {
 	return Object.assign.apply(null, protos);
 }
 
-exports['_promiseTableSchema 1'] = function (test) {
-	test.expect(16);
+test('_promiseTableSchema 1', (test) => {
+	test.plan(17);
 
 	var mockConnection = {
-		query (tablename, callback) {
+		query (tablename, data, callback) {
 			test.equal(tablename, 'DESCRIBE TABLENAME');
-			callback(null, singleKeyDescribe);
+			test.equal(data, null);
+			callback(null, singleKeyDescribe());
 		},
 	};
 
@@ -85,22 +85,23 @@ exports['_promiseTableSchema 1'] = function (test) {
 		test.deepEqual(actual.autoincrement, expected.autoincrement);
 		test.strictEqual(actual.loaded, expected.loaded);
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['_promiseTableSchema 2'] = function (test) {
-	test.expect(14);
+test('_promiseTableSchema 2', (test) => {
+	test.plan(15);
 
 	var mockConnection = {
-		query (tablename, callback) {
+		query (tablename, data, callback) {
 			test.equal(tablename, 'DESCRIBE TABLENAME');
-			callback(null, multiKeyDescribe);
+			test.equal(data, null);
+			callback(null, multiKeyDescribe());
 		},
 	};
 
@@ -134,16 +135,16 @@ exports['_promiseTableSchema 2'] = function (test) {
 		test.deepEqual(actual.autoincrement, expected.autoincrement);
 		test.strictEqual(actual.loaded, expected.loaded);
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['_promiseValidateSchema, missing connection'] = function (test) {
+test('_promiseValidateSchema, missing connection', (test) => {
 
 	var Model = quell('users');
 
@@ -153,11 +154,11 @@ exports['_promiseValidateSchema, missing connection'] = function (test) {
 		model._promiseValidateSchema();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
 
-exports['_promiseValidateSchema, valid'] = function (test) {
+test('_promiseValidateSchema, valid', (test) => {
 
 	var mockConnection = {
 		query () {
@@ -185,15 +186,15 @@ exports['_promiseValidateSchema, valid'] = function (test) {
 
 	model._promiseValidateSchema().then(() => {
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_promiseValidateSchema, valid (generated)'] = function (test) {
+test('_promiseValidateSchema, valid (generated)', (test) => {
 
 	var mockConnection = {
 		query () {
@@ -222,16 +223,16 @@ exports['_promiseValidateSchema, valid (generated)'] = function (test) {
 
 	model._promiseValidateSchema().then(() => {
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_promiseValidateSchema, invalid'] = {
-	setUp (done) {
+suite('_promiseValidateSchema, invalid', (s) => {
+	s.before((done) => {
 		this._promiseTableSchemaBackup = quell._promiseTableSchema;
 		quell._promiseTableSchema = function () {
 			return Promise.resolve({
@@ -250,9 +251,14 @@ exports['_promiseValidateSchema, invalid'] = {
 		};
 
 		done();
-	},
+	});
 
-	'missing primaries': function (test) {
+	s.after((done) => {
+		quell._promiseTableSchema = this._promiseTableSchemaBackup;
+		done();
+	});
+
+	s.test('missing primaries', (test) => {
 
 		var mockConnection = {
 			query () {
@@ -278,15 +284,15 @@ exports['_promiseValidateSchema, invalid'] = {
 
 		model._promiseValidateSchema().then(() => {
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'missing columns': function (test) {
+	s.test('missing columns', (test) => {
 
 		var mockConnection = {
 			query () {
@@ -303,15 +309,15 @@ exports['_promiseValidateSchema, invalid'] = {
 
 		model._promiseValidateSchema().then(() => {
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'missing schema': function (test) {
+	s.test('missing schema', (test) => {
 
 		var mockConnection = {
 			query () {
@@ -327,167 +333,167 @@ exports['_promiseValidateSchema, invalid'] = {
 
 		model._promiseValidateSchema().then(() => {
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	tearDown (done) {
-		quell._promiseTableSchema = this._promiseTableSchemaBackup;
-		done();
-	},
-};
+});
 
 
-singleKeyDescribe = [
-	{
-		'Field': 'member_id',
-		'Type': 'int(11) unsigned',
-		'Null': 'NO',
-		'Key': 'PRI',
-		'Default': null,
-		'Extra': 'auto_increment',
-	},
-	{
-		'Field': 'email',
-		'Type': 'varchar(255)',
-		'Null': 'NO',
-		'Key': 'MUL',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'username',
-		'Type': 'varchar(200)',
-		'Null': 'YES',
-		'Key': '',
-		'Default': '',
-		'Extra': '',
-	},
-	{
-		'Field': 'fullname',
-		'Type': 'tinytext',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'website',
-		'Type': 'text',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'last_updated',
-		'Type': 'timestamp',
-		'Null': 'NO',
-		'Key': '',
-		'Default': 'CURRENT_TIMESTAMP',
-		'Extra': 'on update CURRENT_TIMESTAMP',
-	},
-	{
-		'Field': 'last_login',
-		'Type': 'datetime',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'validated',
-		'Type': 'tinyint(1)',
-		'Null': 'NO',
-		'Key': '',
-		'Default': '0',
-		'Extra': '',
-	},
-	{
-		'Field': 'membership_type',
-		'Type': 'enum(\'Free\',\'None\',\'Credited\',\'Monthly\',\'Yearly\')',
-		'Null': 'YES',
-		'Key': '',
-		'Default': 'Free',
-		'Extra': '',
-	},
-	{
-		'Field': 'balance',
-		'Type': 'decimal(8,4)',
-		'Null': 'YES',
-		'Key': '',
-		'Default': '0.00',
-		'Extra': '',
-	},
-];
+function singleKeyDescribe () {
+	return [
+		{
+			'Field': 'member_id',
+			'Type': 'int(11) unsigned',
+			'Null': 'NO',
+			'Key': 'PRI',
+			'Default': null,
+			'Extra': 'auto_increment',
+		},
+		{
+			'Field': 'email',
+			'Type': 'varchar(255)',
+			'Null': 'NO',
+			'Key': 'MUL',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'username',
+			'Type': 'varchar(200)',
+			'Null': 'YES',
+			'Key': '',
+			'Default': '',
+			'Extra': '',
+		},
+		{
+			'Field': 'fullname',
+			'Type': 'tinytext',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'website',
+			'Type': 'text',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'last_updated',
+			'Type': 'timestamp',
+			'Null': 'NO',
+			'Key': '',
+			'Default': 'CURRENT_TIMESTAMP',
+			'Extra': 'on update CURRENT_TIMESTAMP',
+		},
+		{
+			'Field': 'last_login',
+			'Type': 'datetime',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'validated',
+			'Type': 'tinyint(1)',
+			'Null': 'NO',
+			'Key': '',
+			'Default': '0',
+			'Extra': '',
+		},
+		{
+			'Field': 'membership_type',
+			'Type': 'enum(\'Free\',\'None\',\'Credited\',\'Monthly\',\'Yearly\')',
+			'Null': 'YES',
+			'Key': '',
+			'Default': 'Free',
+			'Extra': '',
+		},
+		{
+			'Field': 'balance',
+			'Type': 'decimal(8,4)',
+			'Null': 'YES',
+			'Key': '',
+			'Default': '0.00',
+			'Extra': '',
+		},
+	];
+}
 
-multiKeyDescribe = [
-	{
-		'Field': 'member_id',
-		'Type': 'int(11) unsigned',
-		'Null': 'NO',
-		'Key': 'PRI',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'type',
-		'Type': 'enum(\'Profile\',\'Billing\',\'Shipping\',\'Other\')',
-		'Null': 'NO',
-		'Key': 'PRI',
-		'Default': 'Profile',
-		'Extra': '',
-	},
-	{
-		'Field': 'address_1',
-		'Type': 'tinytext',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'address_2',
-		'Type': 'tinytext',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'city',
-		'Type': 'varchar(100)',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'state',
-		'Type': 'varchar(10)',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'zip',
-		'Type': 'varchar(5)',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-	{
-		'Field': 'zip4',
-		'Type': 'varchar(4)',
-		'Null': 'YES',
-		'Key': '',
-		'Default': null,
-		'Extra': '',
-	},
-];
+function multiKeyDescribe () {
+	return [
+		{
+			'Field': 'member_id',
+			'Type': 'int(11) unsigned',
+			'Null': 'NO',
+			'Key': 'PRI',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'type',
+			'Type': 'enum(\'Profile\',\'Billing\',\'Shipping\',\'Other\')',
+			'Null': 'NO',
+			'Key': 'PRI',
+			'Default': 'Profile',
+			'Extra': '',
+		},
+		{
+			'Field': 'address_1',
+			'Type': 'tinytext',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'address_2',
+			'Type': 'tinytext',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'city',
+			'Type': 'varchar(100)',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'state',
+			'Type': 'varchar(10)',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'zip',
+			'Type': 'varchar(5)',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+		{
+			'Field': 'zip4',
+			'Type': 'varchar(4)',
+			'Null': 'YES',
+			'Key': '',
+			'Default': null,
+			'Extra': '',
+		},
+	];
+}

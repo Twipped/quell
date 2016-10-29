@@ -1,4 +1,6 @@
 
+var suite = require('tapsuite');
+var test = require('tap').test;
 var quell = require('../');
 
 function logError (err) {
@@ -12,8 +14,8 @@ function logError (err) {
 }
 
 
-exports['load, 3 arg'] = function (test) {
-	test.expect(5);
+test('load, 3 arg', (test) => {
+	test.plan(5);
 	var Model = quell('users');
 	var model = new Model();
 
@@ -31,13 +33,13 @@ exports['load, 3 arg'] = function (test) {
 	model.load('bob', 'name', (err, actual) => {
 		test.equal(actual, model);
 		test.strictEqual(err, null);
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['load, 2 arg, no callback'] = function (test) {
-	test.expect(4);
+test('load, 2 arg, no callback', (test) => {
+	test.plan(4);
 	var Model = quell('users');
 	var model = new Model();
 
@@ -54,17 +56,17 @@ exports['load, 2 arg, no callback'] = function (test) {
 
 	model.load('bob', 'name').then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['load, 2 arg with callback'] = function (test) {
-	test.expect(4);
+test('load, 2 arg with callback', (test) => {
+	test.plan(4);
 	var Model = quell('users');
 	var model = new Model();
 
@@ -81,13 +83,13 @@ exports['load, 2 arg with callback'] = function (test) {
 	model.load('bob', (err, actual) => {
 		test.strictEqual(err, null);
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['load, 1 arg, no callback'] = function (test) {
-	test.expect(3);
+test('load, 1 arg, no callback', (test) => {
+	test.plan(3);
 	var Model = quell('users');
 	var model = new Model();
 
@@ -103,17 +105,17 @@ exports['load, 1 arg, no callback'] = function (test) {
 
 	model.load('bob').then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['load, 1 arg, no callback, plain object'] = function (test) {
-	test.expect(3);
+test('load, 1 arg, no callback, plain object', (test) => {
+	test.plan(3);
 	var Model = quell('users');
 	var model = new Model();
 
@@ -129,17 +131,17 @@ exports['load, 1 arg, no callback, plain object'] = function (test) {
 
 	model.load({ id: 1, name: 'john doe' }).then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['load, 1 arg with callback'] = function (test) {
-	test.expect(3);
+test('load, 1 arg with callback', (test) => {
+	test.plan(3);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
@@ -155,13 +157,13 @@ exports['load, 1 arg with callback'] = function (test) {
 	model.load((err, actual) => {
 		test.strictEqual(err, null);
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['load, no arguments'] = function (test) {
-	test.expect(2);
+test('load, no arguments', (test) => {
+	test.plan(2);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
@@ -176,17 +178,17 @@ exports['load, no arguments'] = function (test) {
 
 	model.load().then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['save, no arguments, exist unset, pIE returns false'] = function (test) {
-	test.expect(2);
+test('save, no arguments, exist unset, pIE returns false', (test) => {
+	test.plan(2);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
@@ -205,17 +207,17 @@ exports['save, no arguments, exist unset, pIE returns false'] = function (test) 
 
 	model.save().then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		logError(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['_loadWithExisting - fails without primaries'] = function (test) {
-	test.expect(3);
+test('_loadWithExisting - fails without primaries', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -241,16 +243,16 @@ exports['_loadWithExisting - fails without primaries'] = function (test) {
 
 	model._loadWithExisting().then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model using existing data; table has no primary keys.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithExisting - fails without primary data'] = function (test) {
-	test.expect(3);
+test('_loadWithExisting - fails without primary data', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -276,16 +278,16 @@ exports['_loadWithExisting - fails without primary data'] = function (test) {
 
 	model._loadWithExisting().then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell record, required primary key value was absent: id');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithExisting - ok'] = function (test) {
-	test.expect(4);
+test('_loadWithExisting - ok', (test) => {
+	test.plan(4);
 
 	var Model = quell('users', {
 		schema: {
@@ -312,15 +314,15 @@ exports['_loadWithExisting - ok'] = function (test) {
 
 	model._loadWithExisting().then(() => {
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, () => {
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithPrimaryKey - ok'] = function (test) {
-	test.expect(4);
+test('_loadWithPrimaryKey - ok', (test) => {
+	test.plan(4);
 
 	var Model = quell('users', {
 		schema: {
@@ -347,15 +349,15 @@ exports['_loadWithPrimaryKey - ok'] = function (test) {
 
 	model._loadWithPrimaryKey(10).then(() => {
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, () => {
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithPrimaryKey - no primaries'] = function (test) {
-	test.expect(3);
+test('_loadWithPrimaryKey - no primaries', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -382,16 +384,16 @@ exports['_loadWithPrimaryKey - no primaries'] = function (test) {
 
 	model._loadWithPrimaryKey().then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model using existing data; schema has no primary keys.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithPrimaryKey - too many primaries'] = function (test) {
-	test.expect(3);
+test('_loadWithPrimaryKey - too many primaries', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -418,17 +420,17 @@ exports['_loadWithPrimaryKey - too many primaries'] = function (test) {
 
 	model._loadWithPrimaryKey().then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model using single primary key, schema has more than one primary key.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
 
-exports['_loadWithSingleColumn - ok'] = function (test) {
-	test.expect(4);
+test('_loadWithSingleColumn - ok', (test) => {
+	test.plan(4);
 
 	var Model = quell('users', {
 		schema: {
@@ -455,15 +457,15 @@ exports['_loadWithSingleColumn - ok'] = function (test) {
 
 	model._loadWithSingleColumn(10, 'id').then(() => {
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, () => {
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithSingleColumn - bad column'] = function (test) {
-	test.expect(3);
+test('_loadWithSingleColumn - bad column', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -490,16 +492,16 @@ exports['_loadWithSingleColumn - bad column'] = function (test) {
 
 	model._loadWithSingleColumn('San Diego', 'city').then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithMultiColumn - ok'] = function (test) {
-	test.expect(4);
+test('_loadWithMultiColumn - ok', (test) => {
+	test.plan(4);
 
 	var Model = quell('users', {
 		schema: {
@@ -526,15 +528,15 @@ exports['_loadWithMultiColumn - ok'] = function (test) {
 
 	model._loadWithMultiColumn({ id: 5, name: 'john doe' }).then(() => {
 		test.ok(true, 'promise resolved');
-		test.done();
+		test.end();
 	}, () => {
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithMultiColumn - bad value'] = function (test) {
-	test.expect(3);
+test('_loadWithMultiColumn - bad value', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -561,16 +563,16 @@ exports['_loadWithMultiColumn - bad value'] = function (test) {
 
 	model._loadWithMultiColumn().then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithMultiColumn - bad value 2'] = function (test) {
-	test.expect(3);
+test('_loadWithMultiColumn - bad value 2', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -597,16 +599,16 @@ exports['_loadWithMultiColumn - bad value 2'] = function (test) {
 
 	model._loadWithMultiColumn({}).then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['_loadWithMultiColumn - invalid column'] = function (test) {
-	test.expect(3);
+test('_loadWithMultiColumn - invalid column', (test) => {
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -633,22 +635,27 @@ exports['_loadWithMultiColumn - invalid column'] = function (test) {
 
 	model._loadWithMultiColumn({ city: 'San Diego' }).then(() => {
 		test.ok(false, 'promise resolved');
-		test.done();
+		test.end();
 	}, (err) => {
 		test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
 		test.ok(true, 'promise rejected');
-		test.done();
+		test.end();
 	});
-};
+});
 
 
-exports._loadUsing = {
-	setUp (done) {
+suite('loadUsing', (s) => {
+	s.before((done) => {
 		this.backup = Object.assign({}, quell);
 		done();
-	},
+	});
 
-	'with results': function (test) {
+	s.after((done) => {
+		Object.assign(quell, this.backup);
+		done();
+	});
+
+	s.test('with results', (test) => {
 
 		var mockConnection = { query: true };
 
@@ -688,14 +695,14 @@ exports._loadUsing = {
 			test.equal(model.exists, true);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, () => {
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'without results': function (test) {
+	s.test('without results', (test) => {
 
 		var mockConnection = { query: true };
 
@@ -733,15 +740,10 @@ exports._loadUsing = {
 			test.equal(model.exists, false);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, () => {
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
-
-	tearDown (done) {
-		Object.assign(quell, this.backup);
-		done();
-	},
-};
+	});
+});

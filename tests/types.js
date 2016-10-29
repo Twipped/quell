@@ -1,7 +1,8 @@
-var provider = require('nodeunit-dataprovider');
+
+var test = require('tap').test;
 var types = require('../lib/types');
 
-exports['type base matches type called'] = function (test) {
+test('type base matches type called', (test) => {
 	test.strictEqual(types.TEXT.type,      types.TEXT().type);
 	test.strictEqual(types.TEXT.NULL,      types.TEXT().NULL);
 	test.strictEqual(types.TEXT.format,    types.TEXT().format);
@@ -9,10 +10,10 @@ exports['type base matches type called'] = function (test) {
 	test.strictEqual(types.TEXT.compare,   types.TEXT().compare);
 	test.strictEqual(types.TEXT.size,    types.TEXT().size);
 	test.strictEqual(types.TEXT.precision, types.TEXT().precision);
-	test.done();
-};
+	test.end();
+});
 
-exports['type called with new values mixed in'] = function (test) {
+test('type called with new values mixed in', (test) => {
 	var t = types.TEXT({ type: 'BARN', size: 15 });
 	test.strictEqual(t.type,      'BARN');
 	test.strictEqual(t.NULL,      types.TEXT.NULL);
@@ -21,10 +22,10 @@ exports['type called with new values mixed in'] = function (test) {
 	test.strictEqual(t.compare,   types.TEXT.compare);
 	test.strictEqual(t.size,    15);
 	test.strictEqual(t.precision, types.TEXT.precision);
-	test.done();
-};
+	test.end();
+});
 
-exports['type called with arguments'] = function (test) {
+test('type called with arguments', (test) => {
 	var t = types.INT(15, 3);
 	test.strictEqual(t.type,      'INT');
 	test.strictEqual(t.NULL,      types.INT.NULL);
@@ -33,10 +34,10 @@ exports['type called with arguments'] = function (test) {
 	test.strictEqual(t.compare,   types.INT.compare);
 	test.strictEqual(t.size,      15);
 	test.strictEqual(t.precision, 3);
-	test.done();
-};
+	test.end();
+});
 
-exports['type formatters'] = provider(
+test('type formatters', (test) => {
 	[
 		{ type: types.TEXT, input: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.', output: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.' },
 		{ type: types.TEXT(19), input: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.', output: 'Aenean eu leo quam.' },
@@ -63,15 +64,14 @@ exports['type formatters'] = provider(
 		{ type: types.DATETIME({ NULL: false }), input: 'hello', output: '0000-00-00 00:00:00' },
 		{ type: types.DATETIME, input: null, output: null },
 		{ type: types.DATETIME, input: 'now', output: types.DATETIME.format(Date.now()) },
-	],
+	].forEach((data, i) => {
+		test.equal(data.type.format(data.input), data.output, `#${i}`);
+	});
 
-	(test, data) => {
-		test.strictEqual(data.type.format(data.input), data.output);
-		test.done();
-	}
-);
+	test.end();
+});
 
-exports['type preparers'] = provider(
+test('type preparers', (test) => {
 	[
 		{ type: types.TEXT, input: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.', output: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.' },
 		{ type: types.TEXT(19), input: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.', output: 'Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur.' },
@@ -98,10 +98,9 @@ exports['type preparers'] = provider(
 		{ type: types.DATETIME({ NULL: false }), input: 'hello', output: '0000-00-00 00:00:00' },
 		{ type: types.DATETIME, input: null, output: null },
 		{ type: types.DATETIME, input: 'now', output: types.DATETIME.format(Date.now()) },
-	],
+	].forEach((data, i) => {
+		test.equal(data.type.prepare(data.input), data.output, `#${i}`);
+	});
 
-	(test, data) => {
-		test.strictEqual(data.type.prepare(data.input), data.output);
-		test.done();
-	}
-);
+	test.end();
+});

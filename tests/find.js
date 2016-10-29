@@ -1,4 +1,6 @@
 
+var suite = require('tapsuite');
+var test = require('tap').test;
 var quell = require('../');
 
 function logError (err) {
@@ -22,90 +24,96 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	};
 };
 
-exports['model.find with promise and connection'] = function (test) {
+test('model.find with promise and connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.expect(5);
+	test.plan(5);
 	Model.find({ id: 1 }).exec(con).then((actual) => {
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
 		test.ok(true);
-		test.done();
+		test.end();
 	}, (err) => {
 		console.error(err);
 		test.ok(false, 'Promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['model.find with promise and implicit connection'] = function (test) {
+test('model.find with promise and implicit connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.expect(5);
+	test.plan(5);
 	Model.connection = con;
 	Model.find({ id: 1 }).exec().then((actual) => {
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
 		test.ok(true);
-		test.done();
+		test.end();
 	}, (err) => {
 		console.error(err);
 		test.ok(false, 'Promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['model.find with promise and no connection'] = function (test) {
+test('model.find with promise and no connection', (test) => {
 	var Model = quell('users');
 
-	test.expect(1);
+	test.plan(1);
 	test.throws(() => {
 		Model.find({ id: 1 }).exec();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['model.find with callback and connection'] = function (test) {
+test('model.find with callback and connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.expect(6);
+	test.plan(6);
 	Model.find({ id: 1 }).exec(con, (err, actual) => {
 		test.equal(err, null);
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
 		test.ok(true);
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['model.find with callback and implicit connection'] = function (test) {
+test('model.find with callback and implicit connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.expect(6);
+	test.plan(6);
 	Model.connection = con;
 	Model.find({ id: 1 }).exec((err, actual) => {
 		test.equal(err, null);
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
 		test.ok(true);
-		test.done();
+		test.end();
 	});
 
-};
+});
 
 
-exports['model.loadSchema'] = {
-	setUp (done) {
+suite('model.loadSchema', (t) => {
+
+	t.before((done) => {
 		this._promiseTableSchemaBackup = quell._promiseTableSchema;
-
 		done();
-	},
+	});
 
-	'using promise': function (test) {
+
+	t.after((done) => {
+		quell._promiseTableSchema = this._promiseTableSchemaBackup;
+		done();
+	});
+
+	t.test('using promise', (test) => {
 
 		var mockConnection = {
 			query () {
@@ -134,16 +142,11 @@ exports['model.loadSchema'] = {
 			test.equal(result, Model);
 			test.deepEqual(Model.schema, mockSchema);
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
-
-	tearDown (done) {
-		quell._promiseTableSchema = this._promiseTableSchemaBackup;
-		done();
-	},
-};
+	});
+});

@@ -1,4 +1,6 @@
 
+var suite = require('tapsuite');
+var test = require('tap').test;
 var quell = require('../');
 
 function logError (err) {
@@ -11,8 +13,8 @@ function logError (err) {
 	console.log(error);
 }
 
-exports['save, no arguments, exist unset, pIE returns true'] = function (test) {
-	test.expect(2);
+test('save, no arguments, exist unset, pIE returns true', (test) => {
+	test.plan(2);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
@@ -31,17 +33,17 @@ exports['save, no arguments, exist unset, pIE returns true'] = function (test) {
 
 	model.save().then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['save, no arguments, exists true'] = function (test) {
-	test.expect(2);
+test('save, no arguments, exists true', (test) => {
+	test.plan(2);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 	model.exists = true;
@@ -62,17 +64,17 @@ exports['save, no arguments, exists true'] = function (test) {
 
 	model.save().then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['save, no arguments, exists false'] = function (test) {
-	test.expect(2);
+test('save, no arguments, exists false', (test) => {
+	test.plan(2);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 	model.exists = false;
@@ -93,17 +95,17 @@ exports['save, no arguments, exists false'] = function (test) {
 
 	model.save().then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['save, callback, exists false'] = function (test) {
-	test.expect(5);
+test('save, callback, exists false', (test) => {
+	test.plan(5);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 	model.exists = false;
@@ -128,13 +130,13 @@ exports['save, callback, exists false'] = function (test) {
 	model.save((err, actual) => {
 		test.strictEqual(err, null);
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports['save, options object, replace true, exists undefined'] = function (test) {
-	test.expect(3);
+test('save, options object, replace true, exists undefined', (test) => {
+	test.plan(3);
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 	// model.exists = true;
@@ -156,23 +158,28 @@ exports['save, options object, replace true, exists undefined'] = function (test
 
 	model.save({ replace: true }).then((actual) => {
 		test.equal(actual, model);
-		test.done();
+		test.end();
 	}, (err) => {
 		console.error(err);
 		test.ok(false, 'promise rejected');
-		test.done();
+		test.end();
 	});
 
-};
+});
 
-exports._promiseIfExists = {
-	setUp (done) {
+suite('_promiseIfExists', (s) => {
+	s.before((done) => {
 		this.backup = Object.assign({}, quell);
 		done();
-	},
+	});
 
-	'ok - found': function (test) {
-		test.expect(11);
+	s.after((done) => {
+		Object.assign(quell, this.backup);
+		done();
+	});
+
+	s.test('ok - found', (test) => {
+		test.plan(11);
 
 		var mockConnection = { query: true };
 
@@ -211,16 +218,16 @@ exports._promiseIfExists = {
 			test.equal(result, true);
 			test.equal(model.exists, true);
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'ok - not found': function (test) {
-		test.expect(11);
+	s.test('ok - not found', (test) => {
+		test.plan(11);
 
 		var mockConnection = { query: true };
 
@@ -257,15 +264,15 @@ exports._promiseIfExists = {
 			test.equal(result, false);
 			test.equal(model.exists, false);
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			logError(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'missing primaries': function (test) {
+	s.test('missing primaries', (test) => {
 
 		var mockConnection = { query: true };
 
@@ -297,14 +304,14 @@ exports._promiseIfExists = {
 			test.strictEqual(model.exists, false);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, () => {
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'no primaries, unknown state': function (test) {
+	s.test('no primaries, unknown state', (test) => {
 
 		var mockConnection = { query: true };
 
@@ -336,14 +343,14 @@ exports._promiseIfExists = {
 			test.strictEqual(model.exists, null);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, () => {
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	'no primaries, known exists': function (test) {
+	s.test('no primaries, known exists', (test) => {
 
 		var mockConnection = { query: true };
 
@@ -376,16 +383,12 @@ exports._promiseIfExists = {
 			test.strictEqual(model.exists, true);
 			test.deepEqual(model.changed, {});
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, () => {
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
-	},
+	});
 
-	tearDown (done) {
-		Object.assign(quell, this.backup);
-		done();
-	},
-};
+});
 

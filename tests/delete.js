@@ -1,4 +1,5 @@
 
+var suite = require('tapsuite');
 var quell = require('../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
@@ -12,14 +13,20 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	};
 };
 
-exports.delete = {
-	setUp (done) {
+suite('delete', (t) => {
+	t.before((done) => {
 		this.backup = Object.assign({}, quell);
 		done();
-	},
+	});
 
-	'using promise': function (test) {
-		test.expect(10);
+
+	t.after((done) => {
+		Object.assign(quell, this.backup);
+		done();
+	});
+
+	t.test('using promise', (test) => {
+		test.plan(10);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -60,17 +67,17 @@ exports.delete = {
 		model.delete().then((result) => {
 			test.equal(result, model);
 			test.ok(true, 'promise resolved');
-			test.done();
+			test.end();
 		}, (err) => {
 			console.error(err);
 			test.ok(false, 'promise rejected');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'using callback': function (test) {
-		test.expect(11);
+	t.test('using callback', (test) => {
+		test.plan(11);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -110,13 +117,13 @@ exports.delete = {
 			test.equal(err, null);
 			test.equal(result, model);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'passes sql error through from _promiseValidateSchema': function (test) {
-		test.expect(4);
+	t.test('passes sql error through from _promiseValidateSchema', (test) => {
+		test.plan(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -152,13 +159,13 @@ exports.delete = {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'passes sql error through from _promiseQueryRun': function (test) {
-		test.expect(10);
+	t.test('passes sql error through from _promiseQueryRun', (test) => {
+		test.plan(10);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -198,13 +205,13 @@ exports.delete = {
 			test.equal(err, mockError);
 			test.equal(result, undefined);
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'missing primary key': function (test) {
-		test.expect(4);
+	t.test('missing primary key', (test) => {
+		test.plan(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -238,13 +245,13 @@ exports.delete = {
 			test.equal(err.message, 'Could not delete quell record, required primary key value was absent: id');
 			test.ok(true, 'callback invoked');
 			test.ok(!result);
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'missing primary key, multikey': function (test) {
-		test.expect(4);
+	t.test('missing primary key, multikey', (test) => {
+		test.plan(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -278,13 +285,13 @@ exports.delete = {
 			test.equal(err.message, 'Could not delete quell record, required primary key value was absent: name');
 			test.ok(true, 'callback invoked');
 			test.ok(!result);
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'only uses primary key': function (test) {
-		test.expect(12);
+	t.test('only uses primary key', (test) => {
+		test.plan(12);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -323,15 +330,15 @@ exports.delete = {
 		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id'), '5');
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'multiple primaries': function (test) {
-		test.expect(12);
+	t.test('multiple primaries', (test) => {
+		test.plan(12);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -369,15 +376,15 @@ exports.delete = {
 		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id'), '5');
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'no primaries': function (test) {
-		test.expect(12);
+	t.test('no primaries', (test) => {
+		test.plan(12);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -415,15 +422,15 @@ exports.delete = {
 		model.delete((err, result) => {
 			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), 5);
+			test.equal(result.get('id'), '5');
 			test.ok(true, 'callback invoked');
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	'no primaries, no data': function (test) {
-		test.expect(4);
+	t.test('no primaries, no data', (test) => {
+		test.plan(4);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -457,13 +464,9 @@ exports.delete = {
 			test.equal(err.message, 'Could not delete quell record, no data was available to delete against.');
 			test.ok(true, 'callback invoked');
 			test.ok(!result);
-			test.done();
+			test.end();
 		});
 
-	},
+	});
 
-	tearDown (done) {
-		Object.assign(quell, this.backup);
-		done();
-	},
-};
+});
