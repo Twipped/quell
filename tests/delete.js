@@ -1,6 +1,5 @@
 
 var quell = require('../');
-var Promise = require('es6-promise').Promise;
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {

@@ -1,6 +1,5 @@
 
 var quell = require('../');
-var Promise = require('es6-promise').Promise;
 
 function logError (err) {
 	var error = {

@@ -7,8 +7,6 @@ var each = function each (collection, fn) {
 	}
 };
 
-var Promise = require('es6-promise').Promise;
-
 var singleKeyDescribe;
 var multiKeyDescribe;
 

@@ -2,6 +2,7 @@
 	"extends": "chiper/node4",
 	"rules": {
 		"no-negated-condition": "off",
-		"max-len": ["warn", 140]
+		"max-len": ["warn", 140],
+		"promise/no-native": "off"
 	}
 }
