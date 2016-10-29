@@ -41,7 +41,6 @@
     "nodeunit-dataprovider": "0.0.1"
   },
   "dependencies": {
-    "es6-promise": "^0.1.1",
     "lodash.clone": "^2.4.1",
     "moment": "^2.5.1",
     "proxmis": "^0.2.0",
