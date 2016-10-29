@@ -20,11 +20,11 @@ test('load, 3 arg', (test) => {
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithPrimaryKey = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail(false, 'Called wrong load method');
 	};
 
 	model._loadWithSingleColumn = function (value, field) {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		test.strictEqual(value, 'bob');
 		test.strictEqual(field, 'name');
 		return Promise.resolve(model);
@@ -44,25 +44,19 @@ test('load, 2 arg, no callback', (test) => {
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithPrimaryKey = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail('Called wrong load method');
 	};
 
 	model._loadWithSingleColumn = function (value, field) {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		test.strictEqual(value, 'bob');
 		test.strictEqual(field, 'name');
 		return Promise.resolve(model);
 	};
 
-	model.load('bob', 'name').then((actual) => {
+	return model.load('bob', 'name').then((actual) => {
 		test.equal(actual, model);
-		test.end();
-	}, (err) => {
-		logError(err);
-		test.ok(false, 'promise rejected');
-		test.end();
 	});
-
 });
 
 test('load, 2 arg with callback', (test) => {
@@ -71,11 +65,11 @@ test('load, 2 arg with callback', (test) => {
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail('Called wrong load method');
 	};
 
 	model._loadWithPrimaryKey = function (value) {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		test.strictEqual(value, 'bob');
 		return Promise.resolve(model);
 	};
@@ -85,7 +79,6 @@ test('load, 2 arg with callback', (test) => {
 		test.equal(actual, model);
 		test.end();
 	});
-
 });
 
 test('load, 1 arg, no callback', (test) => {
@@ -94,24 +87,18 @@ test('load, 1 arg, no callback', (test) => {
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail('Called wrong load method');
 	};
 
 	model._loadWithPrimaryKey = function (value) {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		test.strictEqual(value, 'bob');
 		return Promise.resolve(model);
 	};
 
-	model.load('bob').then((actual) => {
+	return model.load('bob').then((actual) => {
 		test.equal(actual, model);
-		test.end();
-	}, (err) => {
-		logError(err);
-		test.ok(false, 'promise rejected');
-		test.end();
 	});
-
 });
 
 test('load, 1 arg, no callback, plain object', (test) => {
@@ -120,24 +107,18 @@ test('load, 1 arg, no callback, plain object', (test) => {
 	var model = new Model();
 
 	model._loadWithExisting = model._loadWithPrimaryKey = model._loadWithSingleColumn = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail('Called wrong load method');
 	};
 
 	model._loadWithMultiColumn = function (value) {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		test.deepEqual(value, { id: 1, name: 'john doe' });
 		return Promise.resolve(model);
 	};
 
-	model.load({ id: 1, name: 'john doe' }).then((actual) => {
+	return model.load({ id: 1, name: 'john doe' }).then((actual) => {
 		test.equal(actual, model);
-		test.end();
-	}, (err) => {
-		logError(err);
-		test.ok(false, 'promise rejected');
-		test.end();
 	});
-
 });
 
 test('load, 1 arg with callback', (test) => {
@@ -146,20 +127,19 @@ test('load, 1 arg with callback', (test) => {
 	var model = new Model({ id: 1, name: 'john doe' });
 
 	model._loadWithPrimaryKey = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail('Called wrong load method');
 	};
 
 	model._loadWithExisting = function () {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		return Promise.resolve(model);
 	};
 
 	model.load((err, actual) => {
-		test.strictEqual(err, null);
+		test.error(err);
 		test.equal(actual, model);
 		test.end();
 	});
-
 });
 
 test('load, no arguments', (test) => {
@@ -168,23 +148,17 @@ test('load, no arguments', (test) => {
 	var model = new Model({ id: 1, name: 'john doe' });
 
 	model._loadWithPrimaryKey = model._loadWithMultiColumn = model._loadWithSingleColumn = function () {
-		test.ok(false, 'Called wrong load method');
+		test.fail('Called wrong load method');
 	};
 
 	model._loadWithExisting = function () {
-		test.ok(true, 'Called correct load method');
+		test.pass('Called correct load method');
 		return Promise.resolve(model);
 	};
 
-	model.load().then((actual) => {
+	return model.load().then((actual) => {
 		test.equal(actual, model);
-		test.end();
-	}, (err) => {
-		logError(err);
-		test.ok(false, 'promise rejected');
-		test.end();
 	});
-
 });
 
 test('save, no arguments, exist unset, pIE returns false', (test) => {
@@ -197,27 +171,21 @@ test('save, no arguments, exist unset, pIE returns false', (test) => {
 	};
 
 	model.update = function () {
-		test.ok(false, 'Called wrong save method');
+		test.fail('Called wrong save method');
 	};
 
 	model.insert = function () {
-		test.ok(true, 'Called correct save method');
+		test.pass('Called correct save method');
 		return Promise.resolve(model);
 	};
 
-	model.save().then((actual) => {
+	return model.save().then((actual) => {
 		test.equal(actual, model);
-		test.end();
-	}, (err) => {
-		logError(err);
-		test.ok(false, 'promise rejected');
-		test.end();
 	});
-
 });
 
 test('_loadWithExisting - fails without primaries', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -232,27 +200,24 @@ test('_loadWithExisting - fails without primaries', (test) => {
 	var model = new Model({ id: 1, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function () {
-		test.ok(false, 'called _loadUsing');
+		test.fail('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithExisting().then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model using existing data; table has no primary keys.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithExisting()
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model using existing data; table has no primary keys.');
+		});
 });
 
 test('_loadWithExisting - fails without primary data', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -267,27 +232,24 @@ test('_loadWithExisting - fails without primary data', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function () {
-		test.ok(false, 'called _loadUsing');
+		test.fail('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithExisting().then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell record, required primary key value was absent: id');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithExisting()
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell record, required primary key value was absent: id');
+		});
 });
 
 test('_loadWithExisting - ok', (test) => {
-	test.plan(4);
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -302,27 +264,21 @@ test('_loadWithExisting - ok', (test) => {
 	var model = new Model({ id: 5, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 5 });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithExisting().then(() => {
-		test.ok(true, 'promise resolved');
-		test.end();
-	}, () => {
-		test.ok(false, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithExisting();
 });
 
 test('_loadWithPrimaryKey - ok', (test) => {
-	test.plan(4);
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -337,27 +293,21 @@ test('_loadWithPrimaryKey - ok', (test) => {
 	var model = new Model({ id: 5, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
+		test.pass('called _loadUsing');
 		test.deepEqual(lookup, { id: 10 });
-		test.ok(true, 'called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithPrimaryKey(10).then(() => {
-		test.ok(true, 'promise resolved');
-		test.end();
-	}, () => {
-		test.ok(false, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithPrimaryKey(10);
 });
 
 test('_loadWithPrimaryKey - no primaries', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -372,28 +322,24 @@ test('_loadWithPrimaryKey - no primaries', (test) => {
 	var model = new Model({ id: 5, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
-	model._loadUsing = function (lookup) {
-		test.deepEqual(lookup, { id: 10 });
-		test.ok(true, 'called _loadUsing');
+	model._loadUsing = function () {
+		test.fail('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithPrimaryKey().then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model using existing data; schema has no primary keys.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithPrimaryKey()
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model using existing data; schema has no primary keys.');
+		});
 });
 
 test('_loadWithPrimaryKey - too many primaries', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -408,29 +354,25 @@ test('_loadWithPrimaryKey - too many primaries', (test) => {
 	var model = new Model({ id: 5, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 10 });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithPrimaryKey().then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model using single primary key, schema has more than one primary key.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithPrimaryKey()
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model using single primary key, schema has more than one primary key.');
+		});
 });
 
-
 test('_loadWithSingleColumn - ok', (test) => {
-	test.plan(4);
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -445,27 +387,21 @@ test('_loadWithSingleColumn - ok', (test) => {
 	var model = new Model({ id: 5, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 10 });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithSingleColumn(10, 'id').then(() => {
-		test.ok(true, 'promise resolved');
-		test.end();
-	}, () => {
-		test.ok(false, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithSingleColumn(10, 'id');
 });
 
 test('_loadWithSingleColumn - bad column', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -480,28 +416,25 @@ test('_loadWithSingleColumn - bad column', (test) => {
 	var model = new Model({ id: 5, name: 'john doe' });
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 10 });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithSingleColumn('San Diego', 'city').then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithSingleColumn('San Diego', 'city')
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
+		});
 });
 
 test('_loadWithMultiColumn - ok', (test) => {
-	test.plan(4);
+	test.plan(3);
 
 	var Model = quell('users', {
 		schema: {
@@ -516,27 +449,21 @@ test('_loadWithMultiColumn - ok', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 5, name: 'john doe' });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithMultiColumn({ id: 5, name: 'john doe' }).then(() => {
-		test.ok(true, 'promise resolved');
-		test.end();
-	}, () => {
-		test.ok(false, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithMultiColumn({ id: 5, name: 'john doe' });
 });
 
 test('_loadWithMultiColumn - bad value', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -551,28 +478,25 @@ test('_loadWithMultiColumn - bad value', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 5, name: 'john doe' });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithMultiColumn().then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithMultiColumn()
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
+		});
 });
 
 test('_loadWithMultiColumn - bad value 2', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -587,28 +511,25 @@ test('_loadWithMultiColumn - bad value 2', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 5, name: 'john doe' });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithMultiColumn({}).then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithMultiColumn({})
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model; provided data was empty or not an object.');
+		});
 });
 
 test('_loadWithMultiColumn - invalid column', (test) => {
-	test.plan(3);
+	test.plan(2);
 
 	var Model = quell('users', {
 		schema: {
@@ -623,25 +544,23 @@ test('_loadWithMultiColumn - invalid column', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema = function () {
-		test.ok(true, '_promiseValidateSchema ran');
+		test.pass('_promiseValidateSchema ran');
 		return Promise.resolve();
 	};
 
 	model._loadUsing = function (lookup) {
 		test.deepEqual(lookup, { id: 5, name: 'john doe' });
-		test.ok(true, 'called _loadUsing');
+		test.pass('called _loadUsing');
 		return Promise.resolve();
 	};
 
-	model._loadWithMultiColumn({ city: 'San Diego' }).then(() => {
-		test.ok(false, 'promise resolved');
-		test.end();
-	}, (err) => {
-		test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
-		test.ok(true, 'promise rejected');
-		test.end();
-	});
+	return model._loadWithMultiColumn({ city: 'San Diego' })
+		.then(() => test.fail('promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'Could not load quell model, city does not exist in the table schema.');
+		});
 });
+
 
 
 suite('loadUsing', (s) => {
@@ -656,6 +575,7 @@ suite('loadUsing', (s) => {
 	});
 
 	s.test('with results', (test) => {
+		test.plan(10);
 
 		var mockConnection = { query: true };
 
@@ -674,35 +594,31 @@ suite('loadUsing', (s) => {
 		var model = new Model();
 
 		quell._buildSelectQuery = function (tablename, lookup) {
+			test.pass('called _buildSelectQuery');
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, { id: 5, name: 'john doe' });
-			test.ok(true, 'build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
+			test.pass('called _promiseQueryRun');
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, mockConnection);
-			test.ok(true, 'query ran');
 			return Promise.resolve([
 				{ id: 5, name: 'john doe' },
 			]);
 		};
 
-		model._loadUsing({ id: 5, name: 'john doe' }).then((result) => {
+		return model._loadUsing({ id: 5, name: 'john doe' }).then((result) => {
 			test.equal(result, model);
 			test.equal(model.exists, true);
 			test.deepEqual(model.changed, {});
-			test.ok(true, 'promise resolved');
-			test.end();
-		}, () => {
-			test.ok(false, 'promise rejected');
-			test.end();
 		});
 	});
 
 	s.test('without results', (test) => {
+		test.plan(10);
 
 		var mockConnection = { query: true };
 
@@ -721,29 +637,24 @@ suite('loadUsing', (s) => {
 		var model = new Model();
 
 		quell._buildSelectQuery = function (tablename, lookup) {
+			test.pass('called _buildSelectQuery');
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, { id: 5, name: 'john doe' });
-			test.ok(true, 'build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
+			test.pass('called _promiseQueryRun');
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, mockConnection);
-			test.ok(true, 'query ran');
 			return Promise.resolve([]);
 		};
 
-		model._loadUsing({ id: 5, name: 'john doe' }).then((result) => {
+		return model._loadUsing({ id: 5, name: 'john doe' }).then((result) => {
 			test.equal(result, false);
 			test.equal(model.exists, false);
 			test.deepEqual(model.changed, {});
-			test.ok(true, 'promise resolved');
-			test.end();
-		}, () => {
-			test.ok(false, 'promise rejected');
-			test.end();
 		});
 	});
 });

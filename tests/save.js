@@ -23,11 +23,11 @@ test('save, no arguments, exist unset, pIE returns true', (test) => {
 	};
 
 	model.insert = function () {
-		test.ok(false, 'Called wrong save method');
+		test.fail('Called wrong save method');
 	};
 
 	model.update = function () {
-		test.ok(true, 'Called correct save method');
+		test.pass('Called correct save method');
 		return Promise.resolve(model);
 	};
 
@@ -36,7 +36,7 @@ test('save, no arguments, exist unset, pIE returns true', (test) => {
 		test.end();
 	}, (err) => {
 		console.error(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 
@@ -49,16 +49,16 @@ test('save, no arguments, exists true', (test) => {
 	model.exists = true;
 
 	model._promiseIfExists = function () {
-		test.ok(false, 'Should not have called promiseIfExists');
+		test.fail('Should not have called promiseIfExists');
 		return Promise.reject();
 	};
 
 	model.insert = function () {
-		test.ok(false, 'Called wrong save method');
+		test.fail('Called wrong save method');
 	};
 
 	model.update = function () {
-		test.ok(true, 'Called correct save method');
+		test.pass('Called correct save method');
 		return Promise.resolve(model);
 	};
 
@@ -67,7 +67,7 @@ test('save, no arguments, exists true', (test) => {
 		test.end();
 	}, (err) => {
 		console.error(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 
@@ -80,16 +80,16 @@ test('save, no arguments, exists false', (test) => {
 	model.exists = false;
 
 	model._promiseIfExists = function () {
-		test.ok(false, 'Should not have called promiseIfExists');
+		test.fail('Should not have called promiseIfExists');
 		return Promise.reject();
 	};
 
 	model.update = function () {
-		test.ok(false, 'Called wrong save method');
+		test.fail('Called wrong save method');
 	};
 
 	model.insert = function () {
-		test.ok(true, 'Called correct save method');
+		test.pass('Called correct save method');
 		return Promise.resolve(model);
 	};
 
@@ -98,7 +98,7 @@ test('save, no arguments, exists false', (test) => {
 		test.end();
 	}, (err) => {
 		console.error(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 
@@ -111,16 +111,16 @@ test('save, callback, exists false', (test) => {
 	model.exists = false;
 
 	model._promiseIfExists = function () {
-		test.ok(false, 'Should not have called promiseIfExists');
+		test.fail('Should not have called promiseIfExists');
 		return Promise.reject();
 	};
 
 	model.update = function () {
-		test.ok(false, 'Called wrong save method');
+		test.fail('Called wrong save method');
 	};
 
 	model.insert = function (options, callback) {
-		test.ok(true, 'Called correct save method');
+		test.pass('Called correct save method');
 		test.deepEqual(options, { callback });
 		test.strictEqual(typeof callback, 'function');
 		callback(null, model);
@@ -142,17 +142,17 @@ test('save, options object, replace true, exists undefined', (test) => {
 	// model.exists = true;
 
 	model._promiseIfExists = function () {
-		test.ok(false, 'Should not have called promiseIfExists');
+		test.fail('Should not have called promiseIfExists');
 		return Promise.reject();
 	};
 
 	model.update = function () {
-		test.ok(false, 'Called wrong save method');
+		test.fail('Called wrong save method');
 	};
 
 	model.insert = function (options) {
 		test.deepEqual(options, { replace: true, callback: undefined });
-		test.ok(true, 'Called correct save method');
+		test.pass('Called correct save method');
 		return Promise.resolve(model);
 	};
 
@@ -161,7 +161,7 @@ test('save, options object, replace true, exists undefined', (test) => {
 		test.end();
 	}, (err) => {
 		console.error(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 
@@ -200,7 +200,7 @@ suite('_promiseIfExists', (s) => {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, { id: 5 });
 			test.deepEqual(select, [ 'id' ]);
-			test.ok(true, 'build ran');
+			test.pass('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
@@ -208,7 +208,7 @@ suite('_promiseIfExists', (s) => {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, mockConnection);
-			test.ok(true, 'query ran');
+			test.pass('query ran');
 			return Promise.resolve([
 				{ id: 5 },
 			]);
@@ -217,11 +217,11 @@ suite('_promiseIfExists', (s) => {
 		model._promiseIfExists().then((result) => {
 			test.equal(result, true);
 			test.equal(model.exists, true);
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, (err) => {
 			logError(err);
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
@@ -248,7 +248,7 @@ suite('_promiseIfExists', (s) => {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(lookup, { id: 5 });
 			test.deepEqual(select, [ 'id' ]);
-			test.ok(true, 'build ran');
+			test.pass('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
@@ -256,18 +256,18 @@ suite('_promiseIfExists', (s) => {
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, mockConnection);
-			test.ok(true, 'query ran');
+			test.pass('query ran');
 			return Promise.resolve([]);
 		};
 
 		model._promiseIfExists().then((result) => {
 			test.equal(result, false);
 			test.equal(model.exists, false);
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, (err) => {
 			logError(err);
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
@@ -290,12 +290,12 @@ suite('_promiseIfExists', (s) => {
 		var model = new Model();
 
 		quell._buildSelectQuery = function () {
-			test.ok(false, 'build ran');
+			test.fail('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
-			test.ok(false, 'query ran');
+			test.fail('query ran');
 			return Promise.resolve([]);
 		};
 
@@ -303,10 +303,10 @@ suite('_promiseIfExists', (s) => {
 			test.strictEqual(result, false);
 			test.strictEqual(model.exists, false);
 			test.deepEqual(model.changed, {});
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, () => {
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
@@ -329,12 +329,12 @@ suite('_promiseIfExists', (s) => {
 		var model = new Model();
 
 		quell._buildSelectQuery = function () {
-			test.ok(false, 'build ran');
+			test.fail('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
-			test.ok(false, 'query ran');
+			test.fail('query ran');
 			return Promise.resolve([]);
 		};
 
@@ -342,10 +342,10 @@ suite('_promiseIfExists', (s) => {
 			test.strictEqual(result, false);
 			test.strictEqual(model.exists, null);
 			test.deepEqual(model.changed, {});
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, () => {
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
@@ -369,12 +369,12 @@ suite('_promiseIfExists', (s) => {
 		model.exists = true;
 
 		quell._buildSelectQuery = function () {
-			test.ok(false, 'build ran');
+			test.fail('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
-			test.ok(false, 'query ran');
+			test.fail('query ran');
 			return Promise.resolve([]);
 		};
 
@@ -382,10 +382,10 @@ suite('_promiseIfExists', (s) => {
 			test.strictEqual(result, true);
 			test.strictEqual(model.exists, true);
 			test.deepEqual(model.changed, {});
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, () => {
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});

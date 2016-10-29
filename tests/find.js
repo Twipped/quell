@@ -3,21 +3,11 @@ var suite = require('tapsuite');
 var test = require('tap').test;
 var quell = require('../');
 
-function logError (err) {
-	var error = {
-		error: Object.assign({
-			message: err.message,
-			stack: (err.stack || '').split('\n').slice(1).map((v) => '' + v + ''),
-		}, err),
-	};
-	console.log(error);
-}
-
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
 		query (query, data, callback) {
 			test.pass('Mysql query was called');
-			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery); }
+			if (expectedQuery !== undefined) { test.equal(query, expectedQuery); }
 			if (expectedData !== undefined) { test.deepEqual(data, expectedData); }
 			callback(null, returnValue);
 		},
@@ -51,9 +41,11 @@ test('model.find with promise and no connection', (test) => {
 	var Model = quell('users');
 
 	test.plan(1);
-	test.throws(Model.find({ id: 1 }).exec());
-
-	test.end();
+	return Model.find({ id: 1 }).exec()
+		.then(() => test.fail('Promise should have rejected'))
+		.catch((err) => {
+			test.equal(err.message, 'You must provide a node-mysql connection or pool for this query to use.');
+		});
 });
 
 test('model.find with callback and connection', (test) => {
@@ -101,7 +93,7 @@ suite('model.loadSchema', (t) => {
 
 		var mockConnection = {
 			query () {
-				test.ok(false, 'Query should not have been called');
+				test.fail('Query should not have been called');
 			},
 		};
 
@@ -122,15 +114,9 @@ suite('model.loadSchema', (t) => {
 			connection: mockConnection,
 		});
 
-		Model.loadSchema().then((result) => {
+		return Model.loadSchema().then((result) => {
 			test.equal(result, Model);
 			test.deepEqual(Model.schema, mockSchema);
-			test.ok(true, 'promise resolved');
-			test.end();
-		}, (err) => {
-			logError(err);
-			test.ok(false, 'promise rejected');
-			test.end();
 		});
 	});
 });

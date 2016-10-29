@@ -40,7 +40,7 @@
     "eslint-plugin-promise": "~3.3.0",
     "handlebars": "~4.0.5",
     "tap": "~8.0.0",
-    "tapsuite": "~1.0.1",
+    "tapsuite": "~1.0.1"
   },
   "dependencies": {
     "lodash.clone": "~4.5.0",

@@ -5,9 +5,9 @@ var quell = require('../');
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
 		query (query, data, callback) {
-			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery); }
+			test.pass('Mysql query was called');
+			if (expectedQuery !== undefined) { test.equal(query, expectedQuery); }
 			if (expectedData !== undefined) { test.deepEqual(data, expectedData); }
-			test.ok(true, 'Mysql query was called');
 			callback(null, returnValue);
 		},
 	};
@@ -24,8 +24,8 @@ test('create model', (test) => {
 
 	test.equal(typeof m, 'function');
 	test.equal(typeof m.find, 'function');
-	test.strictEqual(m.prototype.tablename, 'users');
-	test.strictEqual(m.prototype.schema, undefined);
+	test.equal(m.prototype.tablename, 'users');
+	test.equal(m.prototype.schema, undefined);
 
 	test.end();
 });
@@ -58,7 +58,7 @@ test('initialize model', (test) => {
 	var Model = quell('users', {
 		connection: mockConnection(),
 		initialize () {
-			test.ok(true, 'Initialized');
+			test.pass('Initialized');
 		},
 	});
 
@@ -109,8 +109,8 @@ test('model initialize with plain object', (test) => {
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, 'john doe');
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, 'john doe');
 	test.deepEqual(model.changed, {});
 	test.deepEqual(model._previousData, {});
 
@@ -123,8 +123,8 @@ test('model set plain object', (test) => {
 
 	model.set({ id: 1, name: 'john doe' });
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, 'john doe');
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, 'john doe');
 	test.deepEqual(model.changed, { id: 1, name: 'john doe' });
 	test.deepEqual(model._previousData, {});
 
@@ -137,8 +137,8 @@ test('model initialized with plain object sets new values', (test) => {
 
 	model.set('name', 'jane doe');
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, 'jane doe');
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, 'jane doe');
 	test.deepEqual(model.changed, { name: 'jane doe' });
 	test.deepEqual(model._previousData, { id: 1, name: 'john doe' });
 
@@ -151,8 +151,8 @@ test('model initialized with plain object sets nothing', (test) => {
 
 	model.set();
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, 'john doe');
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, 'john doe');
 	test.deepEqual(model.changed, {});
 	test.deepEqual(model._previousData, {});
 
@@ -165,8 +165,8 @@ test('model initialized with plain object unsets value', (test) => {
 
 	model.unset('name');
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, undefined);
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, undefined);
 	test.deepEqual(model.changed, { name: undefined });
 	test.deepEqual(model._previousData, { id: 1, name: 'john doe' });
 
@@ -179,8 +179,8 @@ test('model initialized with plain object sets null value', (test) => {
 
 	model.set('name', null);
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, null);
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, null);
 	test.deepEqual(model.changed, { name: null });
 	test.deepEqual(model._previousData, { id: 1, name: 'john doe' });
 
@@ -193,8 +193,8 @@ test('model initialized with plain object sets same value, silently', (test) => 
 
 	model.set('name', 'john doe', { silent: true });
 
-	test.strictEqual(model.data.id, 1);
-	test.strictEqual(model.data.name, 'john doe');
+	test.equal(model.data.id, 1);
+	test.equal(model.data.name, 'john doe');
 	test.deepEqual(model.changed, {});
 	test.deepEqual(model._previousData, { id: 1, name: 'john doe' });
 
@@ -205,9 +205,9 @@ test('model initialized with plain object, gets value', (test) => {
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
-	test.strictEqual(model.get('name'), 'john doe');
+	test.equal(model.get('name'), 'john doe');
 
-	test.strictEqual(model.data.name, 'john doe');
+	test.equal(model.data.name, 'john doe');
 
 	test.end();
 
@@ -217,7 +217,7 @@ test('model initialized with plain object checks for value existence', (test) =>
 	var Model = quell('users');
 	var model = new Model({ id: 1, name: 'john doe' });
 
-	test.strictEqual(model.has('name'), true);
+	test.equal(model.has('name'), true);
 
 	test.end();
 });

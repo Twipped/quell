@@ -84,11 +84,11 @@ test('_promiseTableSchema 1', (test) => {
 		test.deepEqual(actual.primaries, expected.primaries);
 		test.deepEqual(actual.autoincrement, expected.autoincrement);
 		test.strictEqual(actual.loaded, expected.loaded);
-		test.ok(true, 'promise resolved');
+		test.pass('promise resolved');
 		test.end();
 	}, (err) => {
 		logError(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 
@@ -134,11 +134,11 @@ test('_promiseTableSchema 2', (test) => {
 		test.deepEqual(actual.primaries, expected.primaries);
 		test.deepEqual(actual.autoincrement, expected.autoincrement);
 		test.strictEqual(actual.loaded, expected.loaded);
-		test.ok(true, 'promise resolved');
+		test.pass('promise resolved');
 		test.end();
 	}, (err) => {
 		logError(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 
@@ -162,7 +162,7 @@ test('_promiseValidateSchema, valid', (test) => {
 
 	var mockConnection = {
 		query () {
-			test.ok(false, 'Query should not have been called');
+			test.fail('Query should not have been called');
 		},
 	};
 
@@ -185,11 +185,11 @@ test('_promiseValidateSchema, valid', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema().then(() => {
-		test.ok(true, 'promise resolved');
+		test.pass('promise resolved');
 		test.end();
 	}, (err) => {
 		logError(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 });
@@ -198,7 +198,7 @@ test('_promiseValidateSchema, valid (generated)', (test) => {
 
 	var mockConnection = {
 		query () {
-			test.ok(false, 'Query should not have been called');
+			test.fail('Query should not have been called');
 		},
 	};
 
@@ -222,11 +222,11 @@ test('_promiseValidateSchema, valid (generated)', (test) => {
 	var model = new Model();
 
 	model._promiseValidateSchema().then(() => {
-		test.ok(true, 'promise resolved');
+		test.pass('promise resolved');
 		test.end();
 	}, (err) => {
 		logError(err);
-		test.ok(false, 'promise rejected');
+		test.fail('promise rejected');
 		test.end();
 	});
 });
@@ -262,7 +262,7 @@ suite('_promiseValidateSchema, invalid', (s) => {
 
 		var mockConnection = {
 			query () {
-				test.ok(false, 'Query should not have been called');
+				test.fail('Query should not have been called');
 			},
 		};
 
@@ -283,11 +283,11 @@ suite('_promiseValidateSchema, invalid', (s) => {
 		var model = new Model();
 
 		model._promiseValidateSchema().then(() => {
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, (err) => {
 			logError(err);
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
@@ -296,7 +296,7 @@ suite('_promiseValidateSchema, invalid', (s) => {
 
 		var mockConnection = {
 			query () {
-				test.ok(false, 'Query should not have been called');
+				test.fail('Query should not have been called');
 			},
 		};
 
@@ -308,11 +308,11 @@ suite('_promiseValidateSchema, invalid', (s) => {
 		var model = new Model();
 
 		model._promiseValidateSchema().then(() => {
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, (err) => {
 			logError(err);
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
@@ -321,7 +321,7 @@ suite('_promiseValidateSchema, invalid', (s) => {
 
 		var mockConnection = {
 			query () {
-				test.ok(false, 'Query should not have been called');
+				test.fail('Query should not have been called');
 			},
 		};
 
@@ -332,11 +332,11 @@ suite('_promiseValidateSchema, invalid', (s) => {
 		var model = new Model();
 
 		model._promiseValidateSchema().then(() => {
-			test.ok(true, 'promise resolved');
+			test.pass('promise resolved');
 			test.end();
 		}, (err) => {
 			logError(err);
-			test.ok(false, 'promise rejected');
+			test.fail('promise rejected');
 			test.end();
 		});
 	});
