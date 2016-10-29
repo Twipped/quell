@@ -16,9 +16,9 @@ function logError (err) {
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
 		query (query, data, callback) {
+			test.pass('Mysql query was called');
 			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery); }
 			if (expectedData !== undefined) { test.deepEqual(data, expectedData); }
-			test.ok(true, 'Mysql query was called');
 			callback(null, returnValue);
 		},
 	};
@@ -28,15 +28,9 @@ test('model.find with promise and connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.plan(5);
-	Model.find({ id: 1 }).exec(con).then((actual) => {
+	test.plan(4);
+	return Model.find({ id: 1 }).exec(con).then((actual) => {
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
-		test.ok(true);
-		test.end();
-	}, (err) => {
-		console.error(err);
-		test.ok(false, 'Promise rejected');
-		test.end();
 	});
 
 });
@@ -45,16 +39,10 @@ test('model.find with promise and implicit connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.plan(5);
+	test.plan(4);
 	Model.connection = con;
-	Model.find({ id: 1 }).exec().then((actual) => {
+	return Model.find({ id: 1 }).exec().then((actual) => {
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
-		test.ok(true);
-		test.end();
-	}, (err) => {
-		console.error(err);
-		test.ok(false, 'Promise rejected');
-		test.end();
 	});
 
 });
@@ -63,9 +51,7 @@ test('model.find with promise and no connection', (test) => {
 	var Model = quell('users');
 
 	test.plan(1);
-	test.throws(() => {
-		Model.find({ id: 1 }).exec();
-	});
+	test.throws(Model.find({ id: 1 }).exec());
 
 	test.end();
 });
@@ -74,11 +60,10 @@ test('model.find with callback and connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.plan(6);
+	test.plan(5);
 	Model.find({ id: 1 }).exec(con, (err, actual) => {
-		test.equal(err, null);
+		test.error(err);
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
-		test.ok(true);
 		test.end();
 	});
 
@@ -88,12 +73,11 @@ test('model.find with callback and implicit connection', (test) => {
 	var Model = quell('users');
 	var con = mockConnection(test, 'SELECT * FROM `users` WHERE id = ?', [ 1 ], [ { id: 1, name: 'john doe' } ]);
 
-	test.plan(6);
+	test.plan(5);
 	Model.connection = con;
 	Model.find({ id: 1 }).exec((err, actual) => {
 		test.equal(err, null);
 		test.deepEqual(actual[0].data, { id: 1, name: 'john doe' });
-		test.ok(true);
 		test.end();
 	});
 
