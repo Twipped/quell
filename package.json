@@ -5,6 +5,7 @@
   "main": "lib/quell.js",
   "scripts": {
     "test": "tap tests/unit",
+    "test:int": "tap tests/integration",
     "test:cover": "tap --coverage tests/unit",
     "test:travis": "npm run lint && tap --coverage tests/unit",
     "lint": "eslint ./",
@@ -39,7 +40,12 @@
     "eslint-plugin-node": "~2.1.3",
     "eslint-plugin-promise": "~3.3.0",
     "handlebars": "~4.0.5",
+    "mktmpio": "~1.0.0-9",
+    "mysql": "*",
+    "mysql2": "*",
+    "promise-each": "~2.2.0",
     "tap": "~8.0.0",
+    "tapdate": "~1.1.0",
     "tapsuite": "~1.0.1"
   },
   "dependencies": {
