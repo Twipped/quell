@@ -1,7 +1,7 @@
 
 var suite = require('tapsuite');
 var test = require('tap').test;
-var quell = require('../');
+var quell = require('../../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {

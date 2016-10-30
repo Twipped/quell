@@ -1,19 +1,19 @@
 
 var suite = require('tapsuite');
-var quell = require('../');
+var quell = require('../../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue) {
 	return {
 		query (query, data, callback) {
-			test.pass('Mysql query was called');
 			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery); }
 			if (expectedData !== undefined) { test.deepEqual(data, expectedData); }
+			test.pass('Mysql query was called');
 			callback(null, returnValue);
 		},
 	};
 };
 
-suite('insert', (s) => {
+suite('update', (s) => {
 	s.before((done) => {
 		this.backup = Object.assign({}, quell);
 		done();
@@ -40,32 +40,39 @@ suite('insert', (s) => {
 			},
 		});
 
-		var model = new Model({ name: 'john doe', email: undefined });
+		var model = new Model({ id: 5, name: 'john doe', email: undefined });
 
-		model._promiseValidateSchema = function () {
-			test.pass('called _promiseValidateSchema');
-			return Promise.resolve();
-		};
-
-		quell._buildInsertQuery = function (tablename, write, replace) {
-			test.pass('called _buildInsertQuery');
+		quell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, { name: 'john doe' }, 'written data');
-			test.equal(replace, undefined);
+			test.deepEqual(lookup, { id: 5 });
+			test.pass('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
-			test.pass('called _promiseQueryRun');
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
+			test.pass('query ran');
 			return Promise.resolve({ insertId: 5 });
 		};
 
-		return model.insert().then((result) => {
+		model._promiseValidateSchema = function () {
+			test.pass('_promiseValidateSchema ran');
+			return Promise.resolve();
+		};
+
+
+
+		model.update().then((result) => {
 			test.equal(result, model);
-			test.equal(result.get('id'), '5');
+			test.pass('promise resolved');
+			test.end();
+		}, (err) => {
+			console.error(err);
+			test.fail('promise rejected');
+			test.end();
 		});
 
 	});
@@ -85,39 +92,125 @@ suite('insert', (s) => {
 			},
 		});
 
-		var model = new Model({ name: 'john doe' });
+		var model = new Model({ id: 5, name: 'john doe' });
+
+		quell._buildUpdateQuery = function (tablename, write, lookup) {
+			test.strictEqual(tablename, 'users');
+			test.deepEqual(write, { name: 'john doe' }, 'written data');
+			test.deepEqual(lookup, { id: 5 });
+			test.pass('build ran');
+			return { query: 'QUERY', data: [ 22 ] };
+		};
+
+		quell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [ 22 ]);
+			test.equal(mysql, Model.connection);
+			test.pass('query ran');
+			return Promise.resolve({ insertId: 5 });
+		};
 
 		model._promiseValidateSchema = function () {
 			test.pass('_promiseValidateSchema ran');
 			return Promise.resolve();
 		};
 
-		quell._buildInsertQuery = function (tablename, write, replace) {
-			test.pass('called _buildInsertQuery');
-			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, { name: 'john doe' }, 'written data');
-			test.equal(replace, undefined);
-			return { query: 'QUERY', data: [ 22 ] };
-		};
-
-		quell._promiseQueryRun = function (query, data, mysql) {
-			test.pass('called _promiseQueryRun');
-			test.equal(query, 'QUERY');
-			test.deepEqual(data, [ 22 ]);
-			test.equal(mysql, Model.connection);
-			return Promise.resolve({ insertId: 5 });
-		};
-
-		model.insert((err, result) => {
-			test.error(err);
+		model.update((err, result) => {
+			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id'), '5');
+			test.pass('callback invoked');
 			test.end();
 		});
 
 	});
 
 	s.test('passes sql error through from _promiseValidateSchema', (test) => {
+		test.plan(4);
+
+		var Model = quell('users', {
+			connection: mockConnection(),
+			schema: {
+				columns: {
+					id: quell.INT(),
+					name: quell.VARCHAR(),
+				},
+				primaries: [ 'id' ],
+				autoincrement: 'id',
+			},
+		});
+
+		var model = new Model({ id: 5, name: 'john doe' });
+		var mockError = { error: 'THIS IS AN ERROR' };
+
+		quell._buildUpdateQuery = function () {
+			test.fail('build ran');
+			return { query: 'QUERY', data: [ 22 ] };
+		};
+
+		quell._promiseQueryRun = function () {
+			test.fail('query ran');
+			return Promise.resolve();
+		};
+
+		model._promiseValidateSchema = function () {
+			test.pass('_promiseValidateSchema ran');
+			return Promise.reject(mockError);
+		};
+
+		model.update((err, result) => {
+			test.equal(err, mockError);
+			test.equal(result, undefined);
+			test.pass('callback invoked');
+			test.end();
+		});
+
+	});
+
+	s.test('passes sql error through from _promiseQueryRun', (test) => {
+		test.plan(8);
+
+		var Model = quell('users', {
+			connection: mockConnection(),
+			schema: {
+				columns: {
+					id: quell.INT(),
+					name: quell.VARCHAR(),
+				},
+				primaries: [ 'id' ],
+				autoincrement: 'id',
+			},
+		});
+
+		var model = new Model({ id: 5, name: 'john doe' });
+		var mockError = { error: 'THIS IS AN ERROR' };
+
+		quell._buildUpdateQuery = function () {
+			test.pass('build ran');
+			return { query: 'QUERY', data: [ 22 ] };
+		};
+
+		quell._promiseQueryRun = function (query, data, mysql) {
+			test.equal(query, 'QUERY');
+			test.deepEqual(data, [ 22 ]);
+			test.equal(mysql, Model.connection);
+			test.pass('query ran');
+			return Promise.reject(mockError);
+		};
+
+		model._promiseValidateSchema = function () {
+			return Promise.resolve();
+		};
+
+		model.update((err, result) => {
+			test.equal(err, mockError);
+			test.equal(result, undefined);
+			test.pass('callback invoked');
+			test.end();
+		});
+
+	});
+
+	s.test('missing primary key', (test) => {
 		test.plan(3);
 
 		var Model = quell('users', {
@@ -128,127 +221,36 @@ suite('insert', (s) => {
 					name: quell.VARCHAR(),
 				},
 				primaries: [ 'id' ],
-				autoincrement: 'id',
 			},
 		});
 
 		var model = new Model({ name: 'john doe' });
-		var mockError = { error: 'THIS IS AN ERROR' };
 
-		quell._buildInsertQuery = function () {
-			test.fail('called _buildInsertQuery');
+		quell._buildUpdateQuery = function () {
+			test.fail('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function () {
-			test.fail('called _promiseQueryRun');
-			return Promise.resolve({ insertId: 5 });
-		};
-
-		model._promiseValidateSchema = function () {
-			test.pass('called _promiseValidateSchema');
-			return Promise.reject(mockError);
-		};
-
-		model.insert((err, result) => {
-			test.equal(err, mockError);
-			test.equal(result, undefined);
-			test.end();
-		});
-
-	});
-
-	s.test('passes sql error through from _promiseQueryRun', (test) => {
-		test.plan(6);
-
-		var Model = quell('users', {
-			connection: mockConnection(),
-			schema: {
-				columns: {
-					id: quell.INT(),
-					name: quell.VARCHAR(),
-				},
-				primaries: [ 'id' ],
-				autoincrement: 'id',
-			},
-		});
-
-		var model = new Model({ name: 'john doe' });
-		var mockError = { error: 'THIS IS AN ERROR' };
-
-		model._promiseValidateSchema = function () {
-			test.pass('called _promiseValidateSchema');
+			test.fail('query ran');
 			return Promise.resolve();
 		};
 
-		quell._buildInsertQuery = function () {
-			test.pass('called _buildInsertQuery');
-			return { query: 'QUERY', data: [ 22 ] };
-		};
-
-		quell._promiseQueryRun = function (query, data, mysql) {
-			test.pass('called _promiseQueryRun');
-			test.deepEqual(data, [ 22 ]);
-			test.equal(mysql, Model.connection);
-			return Promise.reject(mockError);
-		};
-
-		return model.insert()
-			.then(() => test.fail('promise should have rejected'))
-			.catch((err) => {
-				test.equal(err, mockError);
-			});
-
-	});
-
-	s.test('without autoincrement', (test) => {
-		test.plan(12);
-
-		var Model = quell('users', {
-			connection: mockConnection(),
-			schema: {
-				columns: {
-					id: quell.INT(),
-					name: quell.VARCHAR(),
-				},
-				primaries: [ 'id' ],
-			},
-		});
-
-		var model = new Model({ name: 'john doe' });
-
 		model._promiseValidateSchema = function () {
-			test.pass('called _promiseValidateSchema');
+			test.pass('_promiseValidateSchema ran');
 			return Promise.resolve();
 		};
 
-		quell._buildInsertQuery = function (tablename, write, replace) {
-			test.pass('called _buildInsertQuery');
-			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, { name: 'john doe' }, 'written data');
-			test.equal(replace, undefined);
-			return { query: 'QUERY', data: [ 22 ] };
-		};
-
-		quell._promiseQueryRun = function (query, data, mysql) {
-			test.pass('called _promiseQueryRun');
-			test.equal(query, 'QUERY');
-			test.deepEqual(data, [ 22 ]);
-			test.equal(mysql, Model.connection);
-			return Promise.resolve({ insertId: 5 });
-		};
-
-		model.insert((err, result) => {
-			test.error(err);
-			test.equal(result, model);
-			test.equal(result.get('id'), null);
+		model.update((err) => {
+			test.equal(err.message, 'Could not update quell record, required primary key value was absent: id');
+			test.pass('callback invoked');
 			test.end();
 		});
 
 	});
 
 	s.test('ignores non-schema data and autoincrement fields', (test) => {
-		test.plan(12);
+		test.plan(13);
 
 		var Model = quell('users', {
 			connection: mockConnection(),
@@ -264,78 +266,32 @@ suite('insert', (s) => {
 
 		var model = new Model({ id: 5, name: 'john doe', city: 'San Diego' });
 
-		model._promiseValidateSchema = function () {
-			test.pass('called _promiseValidateSchema');
-			return Promise.resolve();
-		};
-
-		quell._buildInsertQuery = function (tablename, write, replace) {
-			test.pass('called _promiseQueryRun');
+		quell._buildUpdateQuery = function (tablename, write, lookup) {
 			test.strictEqual(tablename, 'users');
 			test.deepEqual(write, { name: 'john doe' }, 'written data');
-			test.equal(replace, undefined);
+			test.deepEqual(lookup, { id: 5 });
+			test.pass('build ran');
 			return { query: 'QUERY', data: [ 22 ] };
 		};
 
 		quell._promiseQueryRun = function (query, data, mysql) {
-			test.pass('called _promiseQueryRun');
 			test.equal(query, 'QUERY');
 			test.deepEqual(data, [ 22 ]);
 			test.equal(mysql, Model.connection);
-			return Promise.resolve({ insertId: 5 });
+			test.pass('query ran');
+			return Promise.resolve();
 		};
-
-		model.insert((err, result) => {
-			test.error(err);
-			test.equal(result, model);
-			test.equal(result.get('id'), '5');
-			test.end();
-		});
-
-	});
-
-	s.test('as replace', (test) => {
-		test.plan(12);
-
-		var Model = quell('users', {
-			connection: mockConnection(),
-			schema: {
-				columns: {
-					id: quell.INT(),
-					name: quell.VARCHAR(),
-				},
-				primaries: [ 'id' ],
-				autoincrement: 'id',
-			},
-		});
-
-		var model = new Model({ id: 5, name: 'john doe' });
 
 		model._promiseValidateSchema = function () {
-			test.pass('called _promiseValidateSchema');
+			test.pass('_promiseValidateSchema ran');
 			return Promise.resolve();
 		};
 
-		quell._buildInsertQuery = function (tablename, write, replace) {
-			test.pass('called _promiseQueryRun');
-			test.strictEqual(tablename, 'users');
-			test.deepEqual(write, { id: 5, name: 'john doe' }, 'written data');
-			test.equal(replace, true);
-			return { query: 'QUERY', data: [ 22 ] };
-		};
-
-		quell._promiseQueryRun = function (query, data, mysql) {
-			test.pass('called _promiseQueryRun');
-			test.equal(query, 'QUERY');
-			test.deepEqual(data, [ 22 ]);
-			test.equal(mysql, Model.connection);
-			return Promise.resolve();
-		};
-
-		model.insert({ replace: true }, (err, result) => {
-			test.error(err);
+		model.update((err, result) => {
+			test.equal(err, null);
 			test.equal(result, model);
-			test.equal(result.get('id', false), 5);
+			test.equal(result.get('id'), '5');
+			test.pass('callback invoked');
 			test.end();
 		});
 

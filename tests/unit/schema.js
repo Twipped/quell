@@ -1,7 +1,7 @@
 
 var suite = require('tapsuite');
 var test = require('tap').test;
-var quell = require('../');
+var quell = require('../../');
 var each = function each (collection, fn) {
 	if (Array.isArray(collection)) return collection.forEach(fn);
 	if (collection && typeof collection === 'object') {

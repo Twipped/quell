@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var types = require('../lib/types');
+var types = require('../../lib/types');
 
 test('type base matches type called', (test) => {
 	test.strictEqual(types.TEXT.type,      types.TEXT().type);

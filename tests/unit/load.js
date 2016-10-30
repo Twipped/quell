@@ -1,7 +1,7 @@
 
 var suite = require('tapsuite');
 var test = require('tap').test;
-var quell = require('../');
+var quell = require('../../');
 
 function logError (err) {
 	var error = {
