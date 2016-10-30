@@ -45,6 +45,7 @@
   "dependencies": {
     "lodash.clone": "~4.5.0",
     "moment": "^2.5.1",
+    "moment-parseformat": "~2.1.4",
     "proxmis": "~1.0.0",
     "queryize": "^2.0.0"
   },
