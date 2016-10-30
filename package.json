@@ -7,7 +7,7 @@
     "test": "tap tests/unit",
     "test:int": "tap tests/integration",
     "test:cover": "tap --coverage tests/unit",
-    "test:travis": "npm run lint && tap --coverage tests/unit",
+    "test:travis": "npm run lint && tap --coverage tests/unit tests/integration",
     "lint": "eslint ./",
     "docs": "node docs/index.js"
   },
