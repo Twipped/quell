@@ -3,17 +3,6 @@ var suite = require('tapsuite');
 var test = require('tap').test;
 var quell = require('../../');
 
-function logError (err) {
-	var error = {
-		error: Object.assign({
-			message: err.message,
-			stack: (err.stack || '').split('\n').slice(1).map((v) => '' + v + ''),
-		}, err),
-	};
-	console.log(error);
-}
-
-
 test('load, 3 arg', (test) => {
 	test.plan(5);
 	var Model = quell('users');
