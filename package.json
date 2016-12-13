@@ -4,9 +4,9 @@
   "description": "A no-frills active record implementation for node-mysql.",
   "main": "lib/quell.js",
   "scripts": {
-    "test": "tap tests/unit",
+    "test": "eslint ./ && tap tests/unit tests/integration",
     "test:int": "tap tests/integration",
-    "test:cover": "tap --coverage tests/unit",
+    "test:cover": "tap --coverage tests/unit tests/integration",
     "test:travis": "npm run lint && tap --coverage tests/unit tests/integration",
     "lint": "eslint ./",
     "docs": "node docs/index.js"
