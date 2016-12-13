@@ -202,7 +202,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="#reference">API Reference</a></li>
 				</ul>
-				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/quell" class="ico-github"></a></p>
 				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
 			</div>
 		</div>
@@ -225,10 +225,14 @@
 					<a href="https://www.gittip.com/chipersoft"><img src="http://img.shields.io/gittip/chipersoft.svg?style=flat" alt="Gittip" height="18"></a>
 				</p>
 
-				<pre class="prettyprint"><code class="language-javascript">var quell = require('quell');
-quell.connection = require('mysql').createConnection('mysql://dev@localhost/testdb');
-var Book = quell('books');
-var Author = quell('authors');
+				<pre class="prettyprint"><code class="language-javascript">var mysql = require('mysql');
+var pool = mysql.createPool({ /* MySQL Connection Settings */});
+
+var quell = require('quell');
+
+var Book   = quell('books', { connection: pool });
+var Author = quell('authors', { connection: pool });
+
 
 var tperry = new Author({
   firstname: 'Terry',
@@ -470,8 +474,8 @@ var User = quell('users', {
   if (!options.tablename || typeof options.tablename !== 'string') { throw new TypeError('Tablename must be a string.'); }
 
   var model = function () {
-    if (model.connection) {
-      this.connection = model.connection;
+    if (!this.connection) {
+      this.connection = model.prototype.connection || options.connection || quell.connection || false;
     }
     modelBase.apply(this, arguments);
   };
@@ -1092,43 +1096,44 @@ performing the insert.</p>
   }
 
   var self = this;
-  return this._promiseValidateSchema().then(() => {
-    var write = {};
-    var  fields = Object.keys(self.data);
+  return this._promiseValidateSchema()
+    .then(() => {
+      var write = {};
+      var  fields = Object.keys(self.data);
 
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      const type = self.schema.columns[field];
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
+        const type = self.schema.columns[field];
 
-      if (type && typeof self.data[field] !== 'undefined' && (options.replace || self.schema.autoincrement !== field)) {
-        write[field] = type.prepare(self.data[field]);
+        if (type && typeof self.data[field] !== 'undefined' && (options.replace || self.schema.autoincrement !== field)) {
+          write[field] = type.prepare(self.data[field]);
+        }
       }
-    }
 
-    return quell._buildInsertQuery(self.tablename, write, options.replace);
-  })
-  .then((query) => quell._promiseQueryRun(
-    query.query,
-    query.data,
-    (options && options.connection) || self.connection || quell.connection
-  ))
-  .then((result) => {
-    if (self.schema.autoincrement && result && result.insertId !== undefined) {
-      self.data[self.schema.autoincrement] = result.insertId;
-    }
+      return quell._buildInsertQuery(self.tablename, write, options.replace);
+    })
+    .then((query) => quell._promiseQueryRun(
+      query.query,
+      query.data,
+      (options && options.connection) || self.connection || quell.connection
+    ))
+    .then((result) => {
+      if (self.schema.autoincrement && result && result.insertId !== undefined) {
+        self.data[self.schema.autoincrement] = result.insertId;
+      }
 
-    if (options.callback) {
-      options.callback(null, self);
-    }
+      if (options.callback) {
+        options.callback(null, self);
+      }
 
-    return self;
-  }).catch((err) => {
-    if (options.callback) {
-      callback(err);
-    }
+      return self;
+    }).catch((err) => {
+      if (options.callback) {
+        callback(err);
+      }
 
-    return Promise.reject(err);
-  });
+      return Promise.reject(err);
+    });
 },</code></pre>
 							</div>
 						</div>
@@ -1180,64 +1185,65 @@ performing the update.</p>
   }
 
   var self = this;
-  return this._promiseValidateSchema().then(() => {
-    var lookup = {};
-    var lookupCount = 0;
-    var write = {};
-    var fields = Object.keys(self.data);
+  return this._promiseValidateSchema()
+    .then(() => {
+      var lookup = {};
+      var lookupCount = 0;
+      var write = {};
+      var fields = Object.keys(self.data);
 
-    if (typeof options.using === 'object') {
-      lookup = options.using;
-      lookupCount = Object.keys(lookup).length;
-    } else {
+      if (typeof options.using === 'object') {
+        lookup = options.using;
+        lookupCount = Object.keys(lookup).length;
+      } else {
 
-      for (let i = 0; i < self.schema.primaries.length; i++) {
-        const field = self.schema.primaries[i];
+        for (let i = 0; i < self.schema.primaries.length; i++) {
+          const field = self.schema.primaries[i];
+          const type = self.schema.columns[field];
+
+          if (!self.has(field)) {
+            throw new Error('Could not update quell record, required primary key value was absent: ' + field);
+          } else {
+            lookup[field] = type.prepare(self.data[field]);
+            lookupCount++;
+          }
+        }
+
+      }
+
+      if (!lookupCount) {
+        throw new Error('Could not update quell record, no primary keys was available to update against.');
+      }
+
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i];
         const type = self.schema.columns[field];
 
-        if (!self.has(field)) {
-          throw new Error('Could not update quell record, required primary key value was absent: ' + field);
-        } else {
-          lookup[field] = type.prepare(self.data[field]);
-          lookupCount++;
+        if (type && typeof self.data[field] !== 'undefined' && (options.replace || self.schema.autoincrement !== field)) {
+          write[field] = type.prepare(self.data[field]);
         }
       }
 
-    }
-
-    if (!lookupCount) {
-      throw new Error('Could not update quell record, no primary keys was available to update against.');
-    }
-
-    for (let i = 0; i < fields.length; i++) {
-      const field = fields[i];
-      const type = self.schema.columns[field];
-
-      if (type && typeof self.data[field] !== 'undefined' && (options.replace || self.schema.autoincrement !== field)) {
-        write[field] = type.prepare(self.data[field]);
+      return quell._buildUpdateQuery(self.tablename, write, lookup);
+    })
+    .then((query) => quell._promiseQueryRun(
+      query.query,
+      query.data,
+      (options && options.connection) || self.connection || quell.connection
+    ))
+    .then(() => {
+      if (options.callback) {
+        options.callback(null, self);
       }
-    }
 
-    return quell._buildUpdateQuery(self.tablename, write, lookup);
-  })
-  .then((query) => quell._promiseQueryRun(
-    query.query,
-    query.data,
-    (options && options.connection) || self.connection || quell.connection
-  ))
-  .then(() => {
-    if (options.callback) {
-      options.callback(null, self);
-    }
+      return self;
+    }).catch((err) => {
+      if (options.callback) {
+        callback(err);
+      }
 
-    return self;
-  }).catch((err) => {
-    if (options.callback) {
-      callback(err);
-    }
-
-    return Promise.reject(err);
-  });
+      return Promise.reject(err);
+    });
 },</code></pre>
 							</div>
 						</div>
@@ -1290,68 +1296,69 @@ performing the delete.</p>
   }
 
   var self = this;
-  return this._promiseValidateSchema().then(() => {
-    var lookup = {};
-    var lookupCount = 0;
-    var fields = self.schema.primaries;
+  return this._promiseValidateSchema()
+    .then(() => {
+      var lookup = {};
+      var lookupCount = 0;
+      var fields = self.schema.primaries;
 
-    if (typeof options.using === 'object') {
-      lookup = options.using;
-      lookupCount = Object.keys(lookup).length;
-      // If the schema has no primary keys, use any column data we have.
-    } else if (fields.length) {
-      for (let i = 0; i < fields.length; i++) {
-        const field = fields[i];
-        const type = self.schema.columns[field];
+      if (typeof options.using === 'object') {
+        lookup = options.using;
+        lookupCount = Object.keys(lookup).length;
+        // If the schema has no primary keys, use any column data we have.
+      } else if (fields.length) {
+        for (let i = 0; i < fields.length; i++) {
+          const field = fields[i];
+          const type = self.schema.columns[field];
 
-        if (!self.has(field)) {
-          throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
-        } else {
-          lookup[field] = type.prepare(self.data[field]);
-          lookupCount++;
+          if (!self.has(field)) {
+            throw new Error('Could not delete quell record, required primary key value was absent: ' + field);
+          } else {
+            lookup[field] = type.prepare(self.data[field]);
+            lookupCount++;
+          }
+        }
+      } else {
+        fields = Object.keys(self.schema.columns);
+
+        for (let i = 0; i < fields.length; i++) {
+          const field = fields[i];
+          const type = self.schema.columns[field];
+
+          if (self.has(field)) {
+            lookup[field] = type.prepare(self.data[field]);
+            lookupCount++;
+          }
         }
       }
-    } else {
-      fields = Object.keys(self.schema.columns);
 
-      for (let i = 0; i < fields.length; i++) {
-        const field = fields[i];
-        const type = self.schema.columns[field];
-
-        if (self.has(field)) {
-          lookup[field] = type.prepare(self.data[field]);
-          lookupCount++;
-        }
+      if (!lookupCount) {
+        throw new Error('Could not delete quell record, no data was available to delete against.');
       }
-    }
-
-    if (!lookupCount) {
-      throw new Error('Could not delete quell record, no data was available to delete against.');
-    }
 
 
-    return quell._buildDeleteQuery(self.tablename, lookup);
-  })
-  .then((query) => quell._promiseQueryRun(
-    query.query,
-    query.data,
-    (options && options.connection) || self.connection || quell.connection
-  ))
-  .then(() => {
-    self.exists = false;
+      return quell._buildDeleteQuery(self.tablename, lookup);
+    })
+    .then((query) => quell._promiseQueryRun(
+      query.query,
+      query.data,
+      (options && options.connection) || self.connection || quell.connection
+    ))
+    .then(() => {
+      self.exists = false;
 
-    if (options.callback) {
-      options.callback(null, self);
-    }
+      if (options.callback) {
+        options.callback(null, self);
+      }
 
-    return self;
-  }).catch((err) => {
-    if (options.callback) {
-      callback(err);
-    }
+      return self;
+    }).catch((err) => {
+      if (options.callback) {
+        callback(err);
+      }
 
-    return Promise.reject(err);
-  });
+      return Promise.reject(err);
+    });
 },</code></pre>
 							</div>
 						</div>
@@ -1743,7 +1750,7 @@ Object.assign(modelBase.prototype, Record);</code></pre>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">quell._buildSelectQuery = function (tablename, lookup, select) {
   var q = queryize()
-    .select(select || undefined)
+    .select(select || '*')
     .from(tablename)
     .where(lookup);
 
@@ -1915,11 +1922,7 @@ Object.assign(modelBase.prototype, Record);</code></pre>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">quell._promiseQueryRun = function (query, data, mysql) {
   var callback = proxmis();
-  if (typeof mysql.execute === 'function') {
-    mysql.execute(query, data, callback);
-  } else {
-    mysql.query(query, data, callback);
-  }
+  mysql.query(query, data, callback);
   return callback;
 };</code></pre>
 							</div>
@@ -1955,11 +1958,8 @@ Object.assign(modelBase.prototype, Record);</code></pre>
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">quell._promiseTableSchema = function (tablename, mysql) {
-  var defer = proxmis();
 
-  mysql.query('DESCRIBE ' + tablename, defer);
-
-  return defer.then((results) => {
+  return this._promiseQueryRun('DESCRIBE ' + tablename, null, mysql).then((results) => {
     var schema = {
       columns: {},
       primaries: [],
@@ -2077,26 +2077,23 @@ Object.assign(modelBase.prototype, Record);</code></pre>
     }
 
     if (!conn) {
-      throw new Error('You must provide a node-mysql connection or pool for this query to use.');
-    }
-
-    var defer = proxmis();
-    exec.call(q, conn, defer);
-
-    return defer.then((results) => {
-      results = results.map((row) => new self(row)); // eslint-disable-line new-cap
-
-      if (callback) {
-        callback(null, results);
-      }
-
-      return results;
-    }, (err) => {
+      const err = new Error('You must provide a node-mysql connection or pool for this query to use.');
       if (callback) {
         callback(err);
       }
       return Promise.reject(err);
+    }
+
+    var defer = proxmis(callback);
+    exec.call(q, conn, (err, results) => {
+      if (err) return defer(err);
+
+      results = results.map((row) => new self(row)); // eslint-disable-line new-cap
+
+      defer(null, results);
     });
+
+    return defer.promise;
   };
 
   return q;
@@ -2447,6 +2444,10 @@ var DATETIME = {
   format (o) {
     var NULL = this.NULL ? null : '0000-00-00 00:00:00';
 
+    if (o === undefined) {
+      return undefined;
+    }
+
     if (o === null) {
       return NULL;
     }
@@ -2455,8 +2456,12 @@ var DATETIME = {
       return moment().format(this.mask);
     }
 
-    if (!(o instanceof Date)) {
-      o = new Date(o);
+    if (o instanceof Date) {
+      o = moment(o);
+    } else if (typeof o === 'string') {
+      o = moment(o, momentParse(o));
+    } else if (typeof o === 'number') {
+      o = moment(new Date(o));
     }
 
     o = moment(o).format(this.mask);

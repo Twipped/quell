@@ -202,7 +202,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="#reference">API Reference</a></li>
 				</ul>
-				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/quell" class="ico-github"></a></p>
 				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
 			</div>
 		</div>
@@ -225,10 +225,14 @@
 					<a href="https://www.gittip.com/chipersoft"><img src="http://img.shields.io/gittip/chipersoft.svg?style=flat" alt="Gittip" height="18"></a>
 				</p>
 
-				<pre class="prettyprint"><code class="language-javascript">var quell = require('quell');
-quell.connection = require('mysql').createConnection('mysql://dev@localhost/testdb');
-var Book = quell('books');
-var Author = quell('authors');
+				<pre class="prettyprint"><code class="language-javascript">var mysql = require('mysql');
+var pool = mysql.createPool({ /* MySQL Connection Settings */});
+
+var quell = require('quell');
+
+var Book   = quell('books', { connection: pool });
+var Author = quell('authors', { connection: pool });
+
 
 var tperry = new Author({
   firstname: 'Terry',
